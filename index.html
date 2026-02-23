@@ -194,6 +194,42 @@
             }
         };
 
+        const generateCharities = () => {
+            const domains = [
+                { id: "dom_social", count: 403, prefix: "Social Service", url: "social.org.sg" },
+                { id: "dom_health", count: 185, prefix: "Healthcare", url: "health.org.sg" },
+                { id: "dom_edu", count: 280, prefix: "Education Fund", url: "edu.org.sg" },
+                { id: "dom_arts", count: 120, prefix: "Arts Group", url: "arts.org.sg" },
+                { id: "dom_religion", count: 1050, prefix: "Religious Society", url: "faith.org.sg" },
+                { id: "dom_env", count: 50, prefix: "Eco", url: "eco.org.sg" },
+                { id: "dom_community", count: 154, prefix: "Community Network", url: "community.org.sg" },
+                { id: "dom_sports", count: 98, prefix: "Sports Association", url: "sports.org.sg" },
+                { id: "dom_advocacy", count: 80, prefix: "Advocacy", url: "advocacy.org.sg" }
+            ];
+
+            let charityCounterId = 1000;
+            domains.forEach(d => {
+                for (let i = 1; i <= d.count; i++) {
+                    const charId = `mock_charity_${charityCounterId}`;
+                    ecosystemData.nodes.push({
+                        id: charId,
+                        name: `Singapore ${d.prefix} ${i}`,
+                        group: "Charities & VWOs",
+                        val: 3,
+                        description: `Data.gov.sg Registry Integration: Registered entity operating in the charitable sector.`,
+                        url: `https://www.${charId}.org.sg`
+                    });
+                    ecosystemData.links.push({
+                        source: charId,
+                        target: d.id,
+                        relation: "Operates In"
+                    });
+                    charityCounterId++;
+                }
+            });
+        };
+        generateCharities();
+
         window.ecosystemData = ecosystemData;
     </script>
 
@@ -267,6 +303,12 @@
                                 {node.group}
                             </span>
                             <h2 className="text-2xl font-bold text-white mt-1 mb-2">{node.name}</h2>
+                            {node.url && (
+                                <a href={node.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 text-sm mb-3 font-medium transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                    {node.url}
+                                </a>
+                            )}
                             <p className="text-neutral-400 text-sm leading-relaxed">{node.description}</p>
                         </div>
                         <button onClick={onClose} className="p-2 bg-neutral-800/50 hover:bg-neutral-700 rounded-full text-neutral-300 transition-colors">
@@ -285,6 +327,12 @@
                                     {childCharities.map(char => (
                                         <div key={char.id} className="bg-neutral-900/60 p-4 rounded-xl border border-neutral-700/50 hover:border-rose-800/50 transition-colors">
                                             <h4 className="font-bold text-rose-400 text-sm mb-1">{char.name}</h4>
+                                            {char.url && (
+                                                <a href={char.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 text-xs mb-2 transition-colors font-medium">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                                    {char.url}
+                                                </a>
+                                            )}
                                             <p className="text-xs text-neutral-400 mb-3 leading-relaxed">{char.description}</p>
                                             {char.gec && (
                                                 <a href={`https://www.charities.gov.sg`} target="_blank" className="inline-flex flex-row items-center gap-1.5 bg-sky-900/30 hover:bg-sky-500/20 text-sky-400 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all border border-sky-800/50">
@@ -514,11 +562,30 @@
 
             const handleNodeClick = useCallback(node => {
                 if (!node) return;
+                window.history.pushState(null, '', `?destination=${node.id}`);
                 setSelectedNode(node);
                 setExpandedIds(prev => new Set(prev).add(node.id));
                 if (fgRef.current) {
                     fgRef.current.centerAt(node.x, node.y, 1000);
                     fgRef.current.zoom(2.5, 1000);
+                }
+            }, []);
+
+            useEffect(() => {
+                const params = new URLSearchParams(window.location.search);
+                const dest = params.get('destination');
+                if (dest) {
+                    const foundNode = window.ecosystemData.nodes.find(n => n.id === dest);
+                    if (foundNode) {
+                        setExpandedIds(prev => new Set(prev).add(foundNode.id));
+                        setSelectedNode(foundNode);
+                        setTimeout(() => {
+                            if (fgRef.current && foundNode.x !== undefined) {
+                                fgRef.current.centerAt(foundNode.x, foundNode.y, 1000);
+                                fgRef.current.zoom(2.5, 1000);
+                            }
+                        }, 1000);
+                    }
                 }
             }, []);
 
