@@ -110,12 +110,14 @@
 
                 { "id": "charity_awwa", "name": "AWWA", "group": "Charities & VWOs", "val": 6, "description": "Large multi-service VWO serving early childhood, health, and senior care." },
                 { "id": "charity_nkf", "name": "NKF", "group": "Charities & VWOs", "val": 6, "description": "National Kidney Foundation. One of the largest health charities providing dialysis." },
-                { "id": "charity_minds", "name": "MINDS", "group": "Charities & VWOs", "val": 6, "description": "Movement for the Intellectually Disabled of Singapore. Leading disability agency." },
+                { "id": "charity_kdf", "name": "KDF", "group": "Charities & VWOs", "val": 6, "description": "Kidney Dialysis Foundation. Provides subsidized dialysis treatment for needy members of the community.", "url": "https://www.kdf.org.sg" },
+                { "id": "charity_minds", "name": "MINDS", "group": "Charities & VWOs", "val": 6, "description": "Movement for the Intellectually Disabled of Singapore. Leading disability agency.", "url": "https://www.minds.org.sg" },
                 { "id": "charity_spca", "name": "SPCA", "group": "Charities & VWOs", "val": 5, "description": "Society for the Prevention of Cruelty to Animals. Promotes animal welfare." },
                 { "id": "charity_sso", "name": "SSO", "group": "Charities & VWOs", "val": 5, "description": "Singapore Symphony Orchestra. Flagship arts organization." },
 
                 { "id": "gec_awwa", "name": "AWWA GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. Validated independent board dynamics." },
                 { "id": "gec_nkf", "name": "NKF GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. Highly stringent after historical restructuring." },
+                { "id": "gec_kdf", "name": "KDF GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. Clear financial and operational transparencies." },
                 { "id": "gec_minds", "name": "MINDS GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. High compliance on conflict of interest declarations." },
                 { "id": "gec_spca", "name": "SPCA GEC Review", "group": "Governance Checklists", "val": 4, "description": "Intermediate Tier Checklist submitted. Clear operational and HR transparencies." },
                 { "id": "gec_sso", "name": "SSO GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. Financials robustly governed underneath MCCY audits." }
@@ -167,6 +169,10 @@
                 { "source": "charity_nkf", "target": "gec_nkf", "relation": "Submits (Advanced Tier)" },
                 { "source": "gec_nkf", "target": "reg_council", "relation": "Reviewed By" },
 
+                { "source": "charity_kdf", "target": "dom_health", "relation": "Operates In" },
+                { "source": "charity_kdf", "target": "gec_kdf", "relation": "Submits (Advanced Tier)" },
+                { "source": "gec_kdf", "target": "reg_council", "relation": "Reviewed By" },
+
                 { "source": "charity_minds", "target": "dom_edu", "relation": "Operates In" },
                 { "source": "charity_minds", "target": "gec_minds", "relation": "Submits (Advanced Tier)" },
                 { "source": "gec_minds", "target": "reg_council", "relation": "Reviewed By" },
@@ -194,41 +200,62 @@
             }
         };
 
-        const generateCharities = () => {
-            const domains = [
-                { id: "dom_social", count: 403, prefix: "Social Service", url: "social.org.sg" },
-                { id: "dom_health", count: 185, prefix: "Healthcare", url: "health.org.sg" },
-                { id: "dom_edu", count: 280, prefix: "Education Fund", url: "edu.org.sg" },
-                { id: "dom_arts", count: 120, prefix: "Arts Group", url: "arts.org.sg" },
-                { id: "dom_religion", count: 1050, prefix: "Religious Society", url: "faith.org.sg" },
-                { id: "dom_env", count: 50, prefix: "Eco", url: "eco.org.sg" },
-                { id: "dom_community", count: 154, prefix: "Community Network", url: "community.org.sg" },
-                { id: "dom_sports", count: 98, prefix: "Sports Association", url: "sports.org.sg" },
-                { id: "dom_advocacy", count: 80, prefix: "Advocacy", url: "advocacy.org.sg" }
+        const injectRealCharities = () => {
+            const realCharities = [
+                // Social
+                { id: "char_touch", name: "TOUCH Community Services", group: "Charities & VWOs", val: 5, domain: "dom_social", url: "https://www.touch.org.sg", description: "Multi-service organisation helping the disadvantaged." },
+                { id: "char_care", name: "Care Corner Singapore", group: "Charities & VWOs", val: 5, domain: "dom_social", url: "https://www.carecorner.org.sg", description: "Providing social services to the lonely and vulnerable." },
+                { id: "char_thk", name: "Thye Hua Kwan Moral Charities", group: "Charities & VWOs", val: 6, domain: "dom_social", url: "https://www.thkmc.org.sg", description: "Provides multiple community-based services and programmes." },
+                { id: "char_lions", name: "Lions Befrienders", group: "Charities & VWOs", val: 4, domain: "dom_social", url: "https://www.lionsbefrienders.org.sg", description: "Dedicated to the social, emotional, and physical well-being of seniors." },
+                // Health
+                { id: "char_scs", name: "Singapore Cancer Society", group: "Charities & VWOs", val: 5, domain: "dom_health", url: "https://www.singaporecancersociety.org.sg", description: "Dedicated to minimising cancer and maximising lives." },
+                { id: "char_hca", name: "HCA Hospice", group: "Charities & VWOs", val: 5, domain: "dom_health", url: "https://www.hca.org.sg", description: "Singapore's largest home hospice care provider." },
+                { id: "char_assisi", name: "Assisi Hospice", group: "Charities & VWOs", val: 5, domain: "dom_health", url: "https://www.assisihospice.org.sg", description: "Provides palliative care to patients with life-limiting illnesses." },
+                // Edu
+                { id: "char_rainbow", name: "Rainbow Centre", group: "Charities & VWOs", val: 5, domain: "dom_edu", url: "https://www.rainbowcentre.org.sg", description: "Empowering persons with disabilities to thrive in inclusive communities." },
+                { id: "char_mda", name: "Yayasan MENDAKI", group: "Charities & VWOs", val: 6, domain: "dom_edu", url: "https://www.mendaki.org.sg", description: "Pioneer Self-Help Group for the Malay/Muslim community." },
+                { id: "char_cdac", name: "CDAC", group: "Charities & VWOs", val: 5, domain: "dom_edu", url: "https://www.cdac.org.sg", description: "Chinese Development Assistance Council." },
+                { id: "char_sinda", name: "SINDA", group: "Charities & VWOs", val: 5, domain: "dom_edu", url: "https://www.sinda.org.sg", description: "Singapore Indian Development Association." },
+                // Arts
+                { id: "char_wildrice", name: "Wild Rice", group: "Charities & VWOs", val: 4, domain: "dom_arts", url: "https://www.wildrice.com.sg", description: "Leading professional theatre company in Singapore." },
+                { id: "char_practice", name: "The Theatre Practice", group: "Charities & VWOs", val: 4, domain: "dom_arts", url: "https://www.practice.org.sg", description: "Bilingual theatre company established in 1965." },
+                { id: "char_sdt", name: "Singapore Ballet", group: "Charities & VWOs", val: 4, domain: "dom_arts", url: "https://singaporeballet.org", description: "Singapore's premier professional dance company." },
+                // Env
+                { id: "char_acres", name: "ACRES", group: "Charities & VWOs", val: 4, domain: "dom_env", url: "https://acres.org.sg", description: "Animal Concerns Research and Education Society." },
+                { id: "char_nss", name: "Nature Society (Singapore)", group: "Charities & VWOs", val: 4, domain: "dom_env", url: "https://www.nss.org.sg", description: "Dedicated to the appreciation and conservation of Singapore's natural heritage." },
+                { id: "char_wws", name: "Waterways Watch Society", group: "Charities & VWOs", val: 4, domain: "dom_env", url: "https://www.wws.org.sg", description: "Environmental NGO focused on protecting reservoirs and waterways." },
+                // Community
+                { id: "char_cfs", name: "Community Foundation of Singapore", group: "Charities & VWOs", val: 5, domain: "dom_community", url: "https://www.cf.org.sg", description: "Encouraging a culture of giving in Singapore." },
+                // Sports
+                { id: "char_sdsc", name: "Singapore Disability Sports Council", group: "Charities & VWOs", val: 4, domain: "dom_sports", url: "https://sdsc.org.sg", description: "National sports body for persons with disabilities." },
+                { id: "char_sportcares", name: "SportCares", group: "Charities & VWOs", val: 4, domain: "dom_sports", url: "https://www.sportsingapore.gov.sg/SportCares", description: "Uses sport as a force for social good." },
+                // Advocacy
+                { id: "char_aware", name: "AWARE", group: "Charities & VWOs", val: 5, domain: "dom_advocacy", url: "https://www.aware.org.sg", description: "Association of Women for Action and Research." },
+                { id: "char_twc2", name: "TWC2", group: "Charities & VWOs", val: 4, domain: "dom_advocacy", url: "https://twc2.org.sg", description: "Transient Workers Count Too, advocating for migrant workers' rights." },
+                { id: "char_home", name: "HOME", group: "Charities & VWOs", val: 4, domain: "dom_advocacy", url: "https://www.home.org.sg", description: "Humanitarian Organization for Migration Economics." },
+                // Religion
+                { id: "char_jamiyah", name: "Jamiyah Singapore", group: "Charities & VWOs", val: 5, domain: "dom_religion", url: "https://jamiyah.org.sg", description: "Providing welfare services to all regardless of race or faith." },
+                { id: "char_tzuchi", name: "Tzu Chi Foundation", group: "Charities & VWOs", val: 5, domain: "dom_religion", url: "https://www.tzuchi.org.sg", description: "Buddhist compassion relief delivering humanitarian aid." },
+                { id: "char_cws", name: "Catholic Welfare Services", group: "Charities & VWOs", val: 5, domain: "dom_religion", url: "https://www.catholicwelfare.org.sg", description: "Alleviating poverty and distress." }
             ];
 
-            let charityCounterId = 1000;
-            domains.forEach(d => {
-                for (let i = 1; i <= d.count; i++) {
-                    const charId = `mock_charity_${charityCounterId}`;
-                    ecosystemData.nodes.push({
-                        id: charId,
-                        name: `Singapore ${d.prefix} ${i}`,
-                        group: "Charities & VWOs",
-                        val: 3,
-                        description: `Data.gov.sg Registry Integration: Registered entity operating in the charitable sector.`,
-                        url: `https://www.${charId}.org.sg`
-                    });
-                    ecosystemData.links.push({
-                        source: charId,
-                        target: d.id,
-                        relation: "Operates In"
-                    });
-                    charityCounterId++;
-                }
+            realCharities.forEach(c => {
+                ecosystemData.nodes.push({
+                    id: c.id,
+                    name: c.name,
+                    group: c.group,
+                    val: c.val,
+                    description: c.description,
+                    url: c.url
+                });
+                ecosystemData.links.push({
+                    source: c.id,
+                    target: c.domain,
+                    relation: "Operates In"
+                });
             });
         };
-        generateCharities();
+        injectRealCharities();
 
         window.ecosystemData = ecosystemData;
     </script>
