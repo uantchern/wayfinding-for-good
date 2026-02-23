@@ -106,7 +106,19 @@
                 { "id": "iss_digi", "name": "Digitalisation", "group": "Governance & Issues Nodes", "val": 5, "description": "The challenge and journey of moving paper-based operations into the cloud." },
                 { "id": "iss_transp", "name": "Transparency", "group": "Governance & Issues Nodes", "val": 5, "description": "A core tenet pushed by the Charity Council to build donor trust." },
                 { "id": "iss_founder", "name": "Founder Syndrome", "group": "Governance & Issues Nodes", "val": 4, "description": "An organizational challenge where a founder maintains disproportionate power and influence." },
-                { "id": "iss_esg", "name": "ESG", "group": "Governance & Issues Nodes", "val": 4, "description": "Environmental, Social, and Governance criteria that charities are increasingly adopting." }
+                { "id": "iss_esg", "name": "ESG", "group": "Governance & Issues Nodes", "val": 4, "description": "Environmental, Social, and Governance criteria that charities are increasingly adopting." },
+
+                { "id": "charity_awwa", "name": "AWWA", "group": "Charities & VWOs", "val": 6, "description": "Large multi-service VWO serving early childhood, health, and senior care." },
+                { "id": "charity_nkf", "name": "NKF", "group": "Charities & VWOs", "val": 6, "description": "National Kidney Foundation. One of the largest health charities providing dialysis." },
+                { "id": "charity_minds", "name": "MINDS", "group": "Charities & VWOs", "val": 6, "description": "Movement for the Intellectually Disabled of Singapore. Leading disability agency." },
+                { "id": "charity_spca", "name": "SPCA", "group": "Charities & VWOs", "val": 5, "description": "Society for the Prevention of Cruelty to Animals. Promotes animal welfare." },
+                { "id": "charity_sso", "name": "SSO", "group": "Charities & VWOs", "val": 5, "description": "Singapore Symphony Orchestra. Flagship arts organization." },
+
+                { "id": "gec_awwa", "name": "AWWA GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. Validated independent board dynamics." },
+                { "id": "gec_nkf", "name": "NKF GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. Highly stringent after historical restructuring." },
+                { "id": "gec_minds", "name": "MINDS GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. High compliance on conflict of interest declarations." },
+                { "id": "gec_spca", "name": "SPCA GEC Review", "group": "Governance Checklists", "val": 4, "description": "Intermediate Tier Checklist submitted. Clear operational and HR transparencies." },
+                { "id": "gec_sso", "name": "SSO GEC Review", "group": "Governance Checklists", "val": 4, "description": "Advanced Tier Checklist submitted. Financials robustly governed underneath MCCY audits." }
             ],
             "links": [
                 { "source": "dom_social", "target": "reg_msf", "relation": "Sector Administrator" },
@@ -145,7 +157,27 @@
                 { "source": "dom_advocacy", "target": "iss_founder", "relation": "Common Pitfall" },
                 { "source": "dom_env", "target": "iss_esg", "relation": "Champion" },
                 { "source": "dom_social", "target": "iss_founder", "relation": "Common Pitfall" },
-                { "source": "eco_temasek", "target": "iss_esg", "relation": "Strategic Pillar" }
+                { "source": "eco_temasek", "target": "iss_esg", "relation": "Strategic Pillar" },
+
+                { "source": "charity_awwa", "target": "dom_social", "relation": "Operates In" },
+                { "source": "charity_awwa", "target": "gec_awwa", "relation": "Submits (Advanced Tier)" },
+                { "source": "gec_awwa", "target": "reg_council", "relation": "Reviewed By" },
+
+                { "source": "charity_nkf", "target": "dom_health", "relation": "Operates In" },
+                { "source": "charity_nkf", "target": "gec_nkf", "relation": "Submits (Advanced Tier)" },
+                { "source": "gec_nkf", "target": "reg_council", "relation": "Reviewed By" },
+
+                { "source": "charity_minds", "target": "dom_edu", "relation": "Operates In" },
+                { "source": "charity_minds", "target": "gec_minds", "relation": "Submits (Advanced Tier)" },
+                { "source": "gec_minds", "target": "reg_council", "relation": "Reviewed By" },
+
+                { "source": "charity_spca", "target": "dom_env", "relation": "Operates In" },
+                { "source": "charity_spca", "target": "gec_spca", "relation": "Submits (Intermediate Tier)" },
+                { "source": "gec_spca", "target": "reg_council", "relation": "Reviewed By" },
+
+                { "source": "charity_sso", "target": "dom_arts", "relation": "Operates In" },
+                { "source": "charity_sso", "target": "gec_sso", "relation": "Submits (Advanced Tier)" },
+                { "source": "gec_sso", "target": "reg_council", "relation": "Reviewed By" }
             ],
             "logs": {
                 "grant_tech_go": [
@@ -203,6 +235,8 @@
             "Ecosystem Players": "#ec4899",
             "Grants & Funding Nodes": "#10b981",
             "Governance & Issues Nodes": "#f59e0b",
+            "Charities & VWOs": "#f43f5e",
+            "Governance Checklists": "#0ea5e9",
         };
 
         const SidePanel = ({ node, logs, onAddLog, onClose }) => {
