@@ -402,7 +402,7 @@
                         <h1 className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 tracking-tight">
                             Wayfinding for Good
                         </h1>
-                        <p className="text-neutral-400 text-xs sm:text-sm max-w-md hidden sm:block">
+                        <p className="text-neutral-400 text-xs sm:text-sm max-w-md">
                             "You don’t pick the path because of the destination; you discover the destination because of the path."
                         </p>
                     </div>
@@ -602,18 +602,24 @@
             }, []);
 
             const handleLegendClick = useCallback((group) => {
-                const groupNodes = window.ecosystemData.nodes.filter(n => n.group === group);
+                const customNodes = [...window.ecosystemData.nodes, { id: "root_ecosystem", name: "Singapore Charity Ecosystem", group: "Ecosystem Root", val: 12, description: "The core anchor mapping out the paths to social good." }];
+                const groupNodes = customNodes.filter(n => n.group === group);
                 if (groupNodes.length > 0) {
                     setExpandedIds(prev => {
                         const next = new Set(prev);
-                        // If root doesn't exist, we must still respect connections
                         groupNodes.forEach(n => next.add(n.id));
                         return next;
                     });
                     setSelectedNode(null);
                     setTimeout(() => {
                         if (fgRef.current) {
-                            fgRef.current.zoomToFit(1000, 50);
+                            const isMobile = window.innerWidth < 640;
+                            if (group === "Ecosystem Root") {
+                                fgRef.current.centerAt(0, 0, 1000);
+                                fgRef.current.zoom(isMobile ? 0.8 : 1.5, 1000);
+                            } else {
+                                fgRef.current.zoomToFit(1000, isMobile ? 50 : 100);
+                            }
                         }
                     }, 800);
                 }
@@ -642,7 +648,8 @@
 
                 const baseColor = GROUP_COLORS[node.group] || "#cccccc";
                 ctx.beginPath();
-                const r = (node.val || 5) * 0.8;
+                const isMobile = window.innerWidth < 640;
+                const r = (node.val || 5) * (isMobile ? 1.6 : 1.0);
                 ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
                 ctx.fillStyle = isSelected || isSearched ? "#ffffff" : baseColor;
                 ctx.fill();
