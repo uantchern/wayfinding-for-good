@@ -230,6 +230,7 @@
         );
 
         const GROUP_COLORS = {
+            "Ecosystem Root": "#ffffff",
             "Top-Level Domain": "#3b82f6",
             "Stakeholders & Regulators": "#8b5cf6",
             "Ecosystem Players": "#ec4899",
@@ -239,7 +240,7 @@
             "Governance Checklists": "#0ea5e9",
         };
 
-        const SidePanel = ({ node, logs, onAddLog, onClose }) => {
+        const SidePanel = ({ node, logs, childCharities = [], onAddLog, onClose }) => {
             const [newLogText, setNewLogText] = useState("");
             const [authorName, setAuthorName] = useState("");
 
@@ -274,7 +275,30 @@
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
-                        <div className="flex items-center gap-2 mb-6">
+                        {childCharities && childCharities.length > 0 && (
+                            <div className="mb-8 p-5 bg-rose-950/20 rounded-2xl border border-rose-900/30">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-rose-400"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                                    <h3 className="text-lg font-semibold text-rose-100">Charities & Organizations</h3>
+                                </div>
+                                <div className="space-y-3">
+                                    {childCharities.map(char => (
+                                        <div key={char.id} className="bg-neutral-900/60 p-4 rounded-xl border border-neutral-700/50 hover:border-rose-800/50 transition-colors">
+                                            <h4 className="font-bold text-rose-400 text-sm mb-1">{char.name}</h4>
+                                            <p className="text-xs text-neutral-400 mb-3 leading-relaxed">{char.description}</p>
+                                            {char.gec && (
+                                                <a href={`https://www.charities.gov.sg/manage-your-charity/setting-up-a-charity/Pages/Governance-Evaluation-Checklist.aspx`} target="_blank" className="inline-flex flex-row items-center gap-1.5 bg-sky-900/30 hover:bg-sky-500/20 text-sky-400 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all border border-sky-800/50">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z" /><path d="M14 3v5h5M16 13H8M16 17H8M10 9H8" /></svg>
+                                                    View {char.gec.name} (PDF)
+                                                </a>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex items-center gap-2 mb-6 mt-2">
                             <MapPinIcon />
                             <h3 className="text-lg font-semibold text-white">Wayfinder's Log</h3>
                         </div>
@@ -381,20 +405,80 @@
             const [selectedNode, setSelectedNode] = useState(null);
             const [searchQuery, setSearchQuery] = useState("");
             const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
+            const [expandedIds, setExpandedIds] = useState(new Set(["root_ecosystem"]));
 
             const fgRef = useRef();
 
-            useEffect(() => {
-                setGraphData({
-                    nodes: window.ecosystemData.nodes,
-                    links: window.ecosystemData.links
+            const childCharities = useMemo(() => {
+                if (!selectedNode) return [];
+                const links = window.ecosystemData.links;
+                const connectedIds = links.filter(l => {
+                    const s = typeof l.source === 'object' ? l.source.id : l.source;
+                    const t = typeof l.target === 'object' ? l.target.id : l.target;
+                    return s === selectedNode.id || t === selectedNode.id;
+                }).map(l => {
+                    const s = typeof l.source === 'object' ? l.source.id : l.source;
+                    const t = typeof l.target === 'object' ? l.target.id : l.target;
+                    return s === selectedNode.id ? t : s;
                 });
+
+                const charities = window.ecosystemData.nodes.filter(n => connectedIds.includes(n.id) && n.group === "Charities & VWOs");
+                return charities.map(charity => {
+                    const charLinks = window.ecosystemData.links.filter(l => {
+                        const s = typeof l.source === 'object' ? l.source.id : l.source;
+                        const t = typeof l.target === 'object' ? l.target.id : l.target;
+                        return s === charity.id || t === charity.id;
+                    });
+                    const charConnectedIds = charLinks.map(l => {
+                        const s = typeof l.source === 'object' ? l.source.id : l.source;
+                        const t = typeof l.target === 'object' ? l.target.id : l.target;
+                        return s === charity.id ? t : s;
+                    });
+                    const gec = window.ecosystemData.nodes.find(n => charConnectedIds.includes(n.id) && n.group === "Governance Checklists");
+                    return { ...charity, gec };
+                });
+            }, [selectedNode]);
+
+            useEffect(() => {
+                const initGraph = () => {
+                    const customNodes = [...window.ecosystemData.nodes, { id: "root_ecosystem", name: "Singapore Charity Ecosystem", group: "Ecosystem Root", val: 12, description: "The core anchor mapping out the paths to social good." }];
+                    const tlds = window.ecosystemData.nodes.filter(n => n.group === "Top-Level Domain");
+                    const customLinks = [...window.ecosystemData.links, ...tlds.map(n => ({ source: "root_ecosystem", target: n.id, relation: "Domain" }))];
+
+                    let nodesVisible = new Set(["root_ecosystem"]);
+                    let linksVisible = [];
+
+                    expandedIds.forEach(id => {
+                        nodesVisible.add(id);
+                        customLinks.forEach(link => {
+                            const s = typeof link.source === 'object' ? link.source.id : link.source;
+                            const t = typeof link.target === 'object' ? link.target.id : link.target;
+                            if (s === id) { nodesVisible.add(t); linksVisible.push(link); }
+                            else if (t === id) { nodesVisible.add(s); linksVisible.push(link); }
+                        });
+                    });
+
+                    const excludeGroups = ["Charities & VWOs", "Governance Checklists"];
+                    const finalNodes = customNodes.filter(n => nodesVisible.has(n.id) && !excludeGroups.includes(n.group));
+                    const finalNodeIds = new Set(finalNodes.map(n => n.id));
+                    const finalLinks = linksVisible.filter(l => {
+                        const s = typeof l.source === 'object' ? l.source.id : l.source;
+                        const t = typeof l.target === 'object' ? l.target.id : l.target;
+                        return finalNodeIds.has(s) && finalNodeIds.has(t);
+                    });
+
+                    const uniqueLinks = finalLinks.filter((v, i, a) => a.findIndex(v2 => (typeof v2.source === 'object' ? v2.source.id : v2.source) === (typeof v.source === 'object' ? v.source.id : v.source) && (typeof v2.target === 'object' ? v2.target.id : v2.target) === (typeof v.target === 'object' ? v.target.id : v.target)) === i);
+
+                    setGraphData({ nodes: finalNodes, links: uniqueLinks });
+                };
+
+                initGraph();
                 setLogsData(window.ecosystemData.logs);
 
                 const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
                 window.addEventListener('resize', handleResize);
                 return () => window.removeEventListener('resize', handleResize);
-            }, []);
+            }, [expandedIds]);
 
             useEffect(() => {
                 if (!fgRef.current || !graphData.nodes.length) return;
@@ -413,6 +497,7 @@
             const handleNodeClick = useCallback(node => {
                 if (!node) return;
                 setSelectedNode(node);
+                setExpandedIds(prev => new Set(prev).add(node.id));
                 if (fgRef.current) {
                     fgRef.current.centerAt(node.x, node.y, 1000);
                     fgRef.current.zoom(2.5, 1000);
@@ -537,6 +622,7 @@
                     <SidePanel
                         node={selectedNode}
                         logs={selectedNode ? logsData[selectedNode.id] : []}
+                        childCharities={childCharities}
                         onAddLog={handleAddLog}
                         onClose={() => setSelectedNode(null)}
                     />
