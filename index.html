@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wayfinding for Good</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0a0a;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        canvas {
+            image-rendering: optimizeQuality;
+        }
+    </style>
+
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+    <!-- Babel Standalone (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- React Force Graph 2D -->
+    <script src="https://unpkg.com/react-force-graph-2d"></script>
+</head>
+
+<body class="bg-neutral-950 text-white font-sans antialiased">
+
+    <!-- React Root -->
+    <div id="root" class="w-full h-screen"></div>
+
+    <!-- Data Injection -->
+    <script>
+        const ecosystemData = {
+            "nodes": [
+                { "id": "dom_social", "name": "Social & Human Services", "group": "Top-Level Domain", "val": 10, "description": "Sector focusing on marginalized groups, families, elderly, and those needing social assistance." },
+                { "id": "dom_health", "name": "Health & Healthcare", "group": "Top-Level Domain", "val": 10, "description": "The ecosystem of charities, hospitals, and VWOs focused on physical and mental well-being in Singapore." },
+                { "id": "dom_edu", "name": "Education", "group": "Top-Level Domain", "val": 10, "description": "Organizations dedicated to advancing knowledge, schools, and academic scholarships." },
+                { "id": "dom_arts", "name": "Arts/Culture/Heritage", "group": "Top-Level Domain", "val": 8, "description": "Preservation of culture, arts groups, museums, and historical heritage." },
+                { "id": "dom_religion", "name": "Religion", "group": "Top-Level Domain", "val": 8, "description": "Faith-based organizations, places of worship, and religiously motivated charitable groups." },
+                { "id": "dom_env", "name": "Environment & Animal Welfare", "group": "Top-Level Domain", "val": 8, "description": "Protection of nature, sustainability tracking, and animal rescue and care." },
+                { "id": "dom_community", "name": "Community & Citizenship", "group": "Top-Level Domain", "val": 8, "description": "Fostering community bonds, active citizenry, and neighborhood groups." },
+                { "id": "dom_sports", "name": "Sports", "group": "Top-Level Domain", "val": 8, "description": "Promotion of sports excellence, fitness inclusion, and athletic development." },
+                { "id": "dom_advocacy", "name": "Advocacy", "group": "Top-Level Domain", "val": 8, "description": "Think-tanks and advocacy groups driving particular causes and public awareness." },
+
+                { "id": "reg_coc", "name": "Commissioner of Charities (COC)", "group": "Stakeholders & Regulators", "val": 9, "description": "The principal regulator of charities in Singapore. Oversees the Charities Act and promotes governance." },
+                { "id": "reg_mccy", "name": "Ministry of Culture, Community and Youth (MCCY)", "group": "Stakeholders & Regulators", "val": 9, "description": "The ministry housing the COC and driving policies related to community, arts, and charities." },
+                { "id": "reg_council", "name": "Charity Council", "group": "Stakeholders & Regulators", "val": 7, "description": "An independent body appointed to promote good governance and publish the Code of Governance." },
+                { "id": "reg_moe", "name": "MOE", "group": "Stakeholders & Regulators", "val": 8, "description": "Ministry of Education. Sector administrator for educational charities." },
+                { "id": "reg_moh", "name": "MOH", "group": "Stakeholders & Regulators", "val": 8, "description": "Ministry of Health. Sector administrator for healthcare charities." },
+                { "id": "reg_msf", "name": "MSF", "group": "Stakeholders & Regulators", "val": 8, "description": "Ministry of Social and Family Development. Sector administrator for social service agencies." },
+                { "id": "reg_pa", "name": "People's Association (PA)", "group": "Stakeholders & Regulators", "val": 7, "description": "Sector administrator for community and citizenship organizations." },
+                { "id": "reg_sportsg", "name": "SportSG", "group": "Stakeholders & Regulators", "val": 7, "description": "Sector administrator for sports-related charities and organizations." },
+
+                { "id": "eco_ncss", "name": "NCSS", "group": "Ecosystem Players", "val": 8, "description": "National Council of Social Service. The umbrella body for social service agencies." },
+                { "id": "eco_tote", "name": "Tote Board", "group": "Ecosystem Players", "val": 8, "description": "A statutory board channelling gaming revenue back into the community via grants and funding." },
+                { "id": "eco_temasek", "name": "Temasek Foundation", "group": "Ecosystem Players", "val": 7, "description": "A philanthropic organization driving social infrastructure and resilience." },
+                { "id": "eco_chest", "name": "Community Chest", "group": "Ecosystem Players", "val": 7, "description": "The fund-raising and engagement arm of NCSS. Channels raised funds to agencies." },
+                { "id": "eco_giving", "name": "Giving.sg", "group": "Ecosystem Players", "val": 6, "description": "The national platform for donating, volunteering, and fundraising in Singapore." },
+
+                { "id": "grant_ccf", "name": "VWO-Charities Capability Fund (CCF)", "group": "Grants & Funding Nodes", "val": 6, "description": "Funding to enhance governance, management, and operational efficiency of charities." },
+                { "id": "grant_tote_ssf", "name": "Tote Board Social Service Fund", "group": "Grants & Funding Nodes", "val": 6, "description": "Critical broad-based funding for social service programmes." },
+                { "id": "grant_tech_go", "name": "Tech-and-GO!", "group": "Grants & Funding Nodes", "val": 5, "description": "A specialized grant by NCSS enabling agencies to adopt technology and digitalize." },
+                { "id": "grant_sg60", "name": "SG60 Matching Grants", "group": "Grants & Funding Nodes", "val": 5, "description": "Dollar-for-dollar matching programs rolled out to spur localized giving." },
+
+                { "id": "iss_ipc", "name": "IPC Status", "group": "Governance & Issues Nodes", "val": 6, "description": "Institutions of a Public Character. Allows donors to receive tax deductions." },
+                { "id": "iss_act", "name": "Charities Act", "group": "Governance & Issues Nodes", "val": 5, "description": "The overarching legislation dictating compliance, registration, and reporting." },
+                { "id": "iss_digi", "name": "Digitalisation", "group": "Governance & Issues Nodes", "val": 5, "description": "The challenge and journey of moving paper-based operations into the cloud." },
+                { "id": "iss_transp", "name": "Transparency", "group": "Governance & Issues Nodes", "val": 5, "description": "A core tenet pushed by the Charity Council to build donor trust." },
+                { "id": "iss_founder", "name": "Founder Syndrome", "group": "Governance & Issues Nodes", "val": 4, "description": "An organizational challenge where a founder maintains disproportionate power and influence." },
+                { "id": "iss_esg", "name": "ESG", "group": "Governance & Issues Nodes", "val": 4, "description": "Environmental, Social, and Governance criteria that charities are increasingly adopting." }
+            ],
+            "links": [
+                { "source": "dom_social", "target": "reg_msf", "relation": "Sector Administrator" },
+                { "source": "reg_msf", "target": "eco_ncss", "relation": "Oversees" },
+                { "source": "eco_ncss", "target": "eco_chest", "relation": "Parent Body" },
+                { "source": "eco_ncss", "target": "grant_tech_go", "relation": "Administers" },
+
+                { "source": "dom_health", "target": "reg_moh", "relation": "Sector Administrator" },
+                { "source": "reg_moh", "target": "eco_ncss", "relation": "Collaborates" },
+
+                { "source": "dom_edu", "target": "reg_moe", "relation": "Sector Administrator" },
+                { "source": "dom_arts", "target": "reg_mccy", "relation": "Sector Administrator" },
+                { "source": "dom_community", "target": "reg_pa", "relation": "Sector Administrator" },
+                { "source": "dom_sports", "target": "reg_sportsg", "relation": "Sector Administrator" },
+
+                { "source": "reg_mccy", "target": "reg_coc", "relation": "Houses" },
+                { "source": "reg_coc", "target": "reg_council", "relation": "Appoints" },
+                { "source": "reg_coc", "target": "iss_act", "relation": "Enforces" },
+                { "source": "reg_coc", "target": "iss_ipc", "relation": "Approves" },
+
+                { "source": "reg_council", "target": "iss_transp", "relation": "Promotes" },
+                { "source": "reg_council", "target": "grant_ccf", "relation": "Fund Source" },
+                { "source": "grant_ccf", "target": "iss_transp", "relation": "Supports Capacity Building" },
+
+                { "source": "eco_tote", "target": "grant_tote_ssf", "relation": "Provides" },
+                { "source": "eco_tote", "target": "eco_ncss", "relation": "Key Funder" },
+                { "source": "eco_tote", "target": "reg_mccy", "relation": "Reports to" },
+
+                { "source": "eco_temasek", "target": "dom_social", "relation": "Funder" },
+                { "source": "eco_giving", "target": "reg_coc", "relation": "Regulated under" },
+
+                { "source": "iss_ipc", "target": "dom_health", "relation": "Highly Sough After" },
+                { "source": "iss_ipc", "target": "dom_social", "relation": "Highly Sough After" },
+
+                { "source": "grant_tech_go", "target": "iss_digi", "relation": "Solves" },
+                { "source": "dom_advocacy", "target": "iss_founder", "relation": "Common Pitfall" },
+                { "source": "dom_env", "target": "iss_esg", "relation": "Champion" },
+                { "source": "dom_social", "target": "iss_founder", "relation": "Common Pitfall" },
+                { "source": "eco_temasek", "target": "iss_esg", "relation": "Strategic Pillar" }
+            ],
+            "logs": {
+                "grant_tech_go": [
+                    { "id": "log_1", "author": "Agency Admin", "date": "2025-11-12", "comment": "The approval process took about 3 months. Ensure your vendor proposals are finalized before applying." },
+                    { "id": "log_2", "author": "Digital Consultant", "date": "2026-01-05", "comment": "Great resources for smaller charities looking to implement a CRM system." }
+                ],
+                "iss_founder": [
+                    { "id": "log_3", "author": "Sector Observer", "date": "2025-08-22", "comment": "Crucial to have independent board members to mitigate this risk early on." },
+                    { "id": "log_4", "author": "VWO Board Member", "date": "2026-02-10", "comment": "We utilized the CCF grant to bring in external consultants to facilitate leadership transition. Highly recommend." }
+                ],
+                "iss_ipc": [
+                    { "id": "log_5", "author": "Fundraising Exec", "date": "2025-10-01", "comment": "Donors almost always ask for IPC status. If you are new, plan a 2-year roadmap to achieve it." }
+                ]
+            }
+        };
+
+        window.ecosystemData = ecosystemData;
+    </script>
+
+    <!-- React App Script (Transpiled In-Browser) -->
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+        const CloseIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        );
+
+        const SearchIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        );
+
+        const SendIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        );
+
+        const MapPinIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+        );
+
+        const GROUP_COLORS = {
+            "Top-Level Domain": "#3b82f6",
+            "Stakeholders & Regulators": "#8b5cf6",
+            "Ecosystem Players": "#ec4899",
+            "Grants & Funding Nodes": "#10b981",
+            "Governance & Issues Nodes": "#f59e0b",
+        };
+
+        const SidePanel = ({ node, logs, onAddLog, onClose }) => {
+            const [newLogText, setNewLogText] = useState("");
+            const [authorName, setAuthorName] = useState("");
+
+            const handleLogSubmit = (e) => {
+                e.preventDefault();
+                if (!newLogText.trim() || !authorName.trim()) return;
+                onAddLog(node.id, {
+                    author: authorName,
+                    comment: newLogText
+                });
+                setNewLogText("");
+            };
+
+            if (!node) return null;
+
+            return (
+                <div className={`fixed top-0 right-0 h-full w-full md:w-[420px] bg-neutral-900/80 backdrop-blur-2xl border-l border-neutral-800 shadow-2xl z-50 transform transition-transform duration-500 ease-in-out ${node ? "translate-x-0" : "translate-x-full"} flex flex-col`}>
+                    <div className="p-6 border-b border-neutral-800/50 flex justify-between items-start">
+                        <div>
+                            <span
+                                className="text-xs font-semibold tracking-wider uppercase px-2 py-1 rounded-full mb-3 inline-block"
+                                style={{ color: GROUP_COLORS[node.group], backgroundColor: `${GROUP_COLORS[node.group]}20` }}
+                            >
+                                {node.group}
+                            </span>
+                            <h2 className="text-2xl font-bold text-white mt-1 mb-2">{node.name}</h2>
+                            <p className="text-neutral-400 text-sm leading-relaxed">{node.description}</p>
+                        </div>
+                        <button onClick={onClose} className="p-2 bg-neutral-800/50 hover:bg-neutral-700 rounded-full text-neutral-300 transition-colors">
+                            <CloseIcon />
+                        </button>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+                        <div className="flex items-center gap-2 mb-6">
+                            <MapPinIcon />
+                            <h3 className="text-lg font-semibold text-white">Wayfinder's Log</h3>
+                        </div>
+
+                        <div className="space-y-4">
+                            {logs && logs.length > 0 ? (
+                                logs.map((log) => (
+                                    <div key={log.id} className="bg-neutral-800/40 p-4 rounded-xl border border-neutral-800 relative">
+                                        <div className="absolute -left-2 top-4 w-4 h-[2px] bg-neutral-800"></div>
+                                        <div className="flex justify-between items-end mb-2">
+                                            <span className="font-medium text-emerald-400 text-sm">{log.author}</span>
+                                            <span className="text-xs text-neutral-500">{log.date}</span>
+                                        </div>
+                                        <p className="text-neutral-300 text-sm">{log.comment}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center p-8 bg-neutral-800/20 rounded-xl border border-neutral-800 border-dashed">
+                                    <p className="text-neutral-500 text-sm">No breadcrumbs left here yet. Be the first to guide a future wayfinder!</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="p-6 border-t border-neutral-800/50 bg-neutral-900">
+                        <form onSubmit={handleLogSubmit} className="space-y-3">
+                            <input
+                                type="text"
+                                placeholder="Your Designation (e.g. Agency Admin)"
+                                value={authorName}
+                                onChange={(e) => setAuthorName(e.target.value)}
+                                className="w-full bg-neutral-950 border border-neutral-800 text-white text-sm rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-500 transition-colors"
+                                required
+                            />
+                            <div className="relative">
+                                <textarea
+                                    placeholder="Leave your tactical tip or insight..."
+                                    value={newLogText}
+                                    onChange={(e) => setNewLogText(e.target.value)}
+                                    className="w-full bg-neutral-950 border border-neutral-800 text-white text-sm rounded-lg px-4 py-3 min-h-[100px] focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+                                    required
+                                />
+                                <button
+                                    type="submit"
+                                    className="absolute bottom-3 right-3 p-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md transition-colors"
+                                    disabled={!newLogText.trim() || !authorName.trim()}
+                                >
+                                    <SendIcon />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        const Header = ({ searchQuery, setSearchQuery }) => {
+            return (
+                <header className="absolute top-0 left-0 w-full z-10 p-6 flex justify-between items-center pointer-events-none">
+                    <div className="flex flex-col gap-1 pointer-events-auto">
+                        <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 tracking-tight">
+                            Wayfinding for Good
+                        </h1>
+                        <p className="text-neutral-400 text-sm max-w-md">
+                            "You don’t pick the path because of the destination; you discover the destination because of the path."
+                        </p>
+                    </div>
+
+                    <div className="pointer-events-auto relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
+                            <SearchIcon />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Search the ecosystem..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="bg-neutral-900/60 backdrop-blur-md border border-neutral-700 text-white text-sm rounded-full pl-10 pr-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all shadow-lg"
+                        />
+                    </div>
+                </header>
+            );
+        }
+
+        const Legend = () => {
+            return (
+                <div className="absolute bottom-6 left-6 z-10 bg-neutral-900/60 backdrop-blur-md border border-neutral-800 p-4 rounded-xl pointer-events-auto">
+                    <h4 className="text-neutral-300 text-xs font-semibold uppercase tracking-wider mb-3">Ecosystem Legend</h4>
+                    <div className="flex flex-col gap-2">
+                        {Object.entries(GROUP_COLORS).map(([group, color]) => (
+                            <div key={group} className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: color, boxShadow: `0 0 8px ${color}` }}></div>
+                                <span className="text-neutral-400 text-xs">{group}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [graphData, setGraphData] = useState({ nodes: [], links: [] });
+            const [logsData, setLogsData] = useState({});
+            const [selectedNode, setSelectedNode] = useState(null);
+            const [searchQuery, setSearchQuery] = useState("");
+            const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
+
+            const fgRef = useRef();
+
+            useEffect(() => {
+                setGraphData({
+                    nodes: window.ecosystemData.nodes,
+                    links: window.ecosystemData.links
+                });
+                setLogsData(window.ecosystemData.logs);
+
+                const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
+                window.addEventListener('resize', handleResize);
+                return () => window.removeEventListener('resize', handleResize);
+            }, []);
+
+            useEffect(() => {
+                if (!fgRef.current || !graphData.nodes.length) return;
+
+                let foundNode = null;
+                if (searchQuery.length > 2) {
+                    foundNode = graphData.nodes.find(n => n.name.toLowerCase().includes(searchQuery.toLowerCase()));
+                }
+
+                if (foundNode) {
+                    fgRef.current.centerAt(foundNode.x, foundNode.y, 1000);
+                    fgRef.current.zoom(3, 1000);
+                }
+            }, [searchQuery, graphData]);
+
+            const handleNodeClick = useCallback(node => {
+                if (!node) return;
+                setSelectedNode(node);
+                if (fgRef.current) {
+                    fgRef.current.centerAt(node.x, node.y, 1000);
+                    fgRef.current.zoom(2.5, 1000);
+                }
+            }, []);
+
+            const handleBackgroundClick = useCallback(() => {
+                setSelectedNode(null);
+            }, []);
+
+            const handleAddLog = (nodeId, logData) => {
+                const newLog = {
+                    id: `log_${Date.now()}`,
+                    date: new Date().toISOString().split('T')[0],
+                    ...logData
+                };
+
+                setLogsData(prev => ({
+                    ...prev,
+                    [nodeId]: [...(prev[nodeId] || []), newLog]
+                }));
+            };
+
+            const nodeCanvasObject = useCallback((node, ctx, globalScale) => {
+                const label = node.name;
+                const fontSize = 14 / globalScale;
+                ctx.font = `${fontSize}px Inter, sans-serif`;
+                const textWidth = ctx.measureText(label).width;
+                const isSelected = selectedNode && selectedNode.id === node.id;
+                const isSearched = searchQuery.length > 2 && node.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+                const baseColor = GROUP_COLORS[node.group] || "#cccccc";
+                ctx.beginPath();
+                const r = (node.val || 5) * 0.8;
+                ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+                ctx.fillStyle = isSelected || isSearched ? "#ffffff" : baseColor;
+                ctx.fill();
+
+                ctx.shadowBlur = isSelected ? 20 : (isSearched ? 15 : 10);
+                ctx.shadowColor = isSelected ? "#ffffff" : baseColor;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = 'rgba(10, 10, 10, 0.8)';
+                ctx.fillRect(node.x - textWidth / 2 - 2, node.y + r + 2, textWidth + 4, fontSize + 4);
+
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = isSelected || isSearched ? '#ffffff' : '#e5e5e5';
+                ctx.fillText(label, node.x, node.y + r + 4);
+
+            }, [selectedNode, searchQuery]);
+
+            const linkCanvasObject = useCallback((link, ctx, globalScale) => {
+                const start = link.source;
+                const end = link.target;
+
+                if (!start || !end || !start.x || !start.y) return;
+
+                ctx.beginPath();
+                ctx.moveTo(start.x, start.y);
+                ctx.lineTo(end.x, end.y);
+
+                let linkColor = "rgba(75, 85, 99, 0.4)";
+                const isRelated = selectedNode && (start.id === selectedNode.id || end.id === selectedNode.id);
+
+                if (isRelated) {
+                    linkColor = "rgba(16, 185, 129, 0.8)";
+                    ctx.lineWidth = 1.5 / globalScale;
+                } else {
+                    ctx.lineWidth = 0.5 / globalScale;
+                }
+
+                ctx.strokeStyle = linkColor;
+                ctx.stroke();
+
+                if (globalScale > 2.5 || isRelated) {
+                    const relLabel = link.relation;
+                    const fontSize = 10 / globalScale;
+                    ctx.font = `${fontSize}px Inter, sans-serif`;
+                    const midX = start.x + (end.x - start.x) / 2;
+                    const midY = start.y + (end.y - start.y) / 2;
+
+                    ctx.fillStyle = isRelated ? "#34d399" : "#9ca3af";
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(relLabel, midX, midY);
+                }
+            }, [selectedNode]);
+
+            return (
+                <div className="w-full h-screen bg-neutral-950 overflow-hidden relative font-sans">
+                    <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+                    <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+                    <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
+                    {graphData.nodes.length > 0 && (
+                        <div className="w-full h-full cursor-grab active:cursor-grabbing">
+                            <ForceGraph2D
+                                ref={fgRef}
+                                width={dimensions.width}
+                                height={dimensions.height}
+                                graphData={graphData}
+                                nodeLabel=""
+                                linkDirectionalArrowLength={3.5}
+                                linkDirectionalArrowRelPos={1}
+                                linkColor={() => "transparent"}
+                                nodeCanvasObject={nodeCanvasObject}
+                                linkCanvasObject={linkCanvasObject}
+                                onNodeClick={handleNodeClick}
+                                onBackgroundClick={handleBackgroundClick}
+                                d3VelocityDecay={0.4}
+                                d3AlphaDecay={0.01}
+                                cooldownTicks={100}
+                            />
+                        </div>
+                    )}
+
+                    <Legend />
+
+                    <SidePanel
+                        node={selectedNode}
+                        logs={selectedNode ? logsData[selectedNode.id] : []}
+                        onAddLog={handleAddLog}
+                        onClose={() => setSelectedNode(null)}
+                    />
+                </div>
+            );
+        };
+
+        const rootStyle = { width: '100%', height: '100%', margin: 0, padding: 0 };
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
