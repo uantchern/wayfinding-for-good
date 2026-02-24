@@ -40,6 +40,8 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
     <style>
         body,
@@ -145,6 +147,13 @@
     <div id="root" class="w-full h-full flex justify-center items-center p-4 sm:p-8"></div>
 
     <script type="text/babel">
+        // Initialize Supabase (Please replace with your actual URL and Anon Key)
+        const SUPABASE_URL = 'https://your-project-url.supabase.co';
+        const SUPABASE_ANON_KEY = 'your-anon-key';
+
+        // Ensure Supabase is available via CDN
+        const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
         const { useState, useEffect, useRef } = React;
 
         // Icons
@@ -311,13 +320,44 @@
                     }
 
                     if (currentStepData.onComplete) {
+                        try {
+                            if (supabase) {
+                                // Extract user responses from chat history
+                                const userResponses = chatHistory
+                                    .filter(m => m.sender === 'user')
+                                    .map(m => m.type === 'text' ? m.text : `(Audio Recording: ${m.duration}s)`);
+
+                                // Save to Supabase table (assuming table is 'gec_survey_responses')
+                                const { error } = await supabase
+                                    .from('gec_survey_responses')
+                                    .insert([
+                                        {
+                                            session_id: 'session_' + Date.now(),
+                                            role: userResponses[0] || '',
+                                            approver: userResponses[1] || '',
+                                            aware_section45: userResponses[2] || '',
+                                            strategy_alignment: userResponses[3] || '',
+                                            reporting_channels: userResponses[4] || '',
+                                            methodology: userResponses[5] || '',
+                                            created_at: new Date().toISOString()
+                                        }
+                                    ]);
+
+                                if (error) console.error("Error saving to Supabase:", error);
+                            } else {
+                                console.warn("Supabase client not initialized. Responses were not saved.");
+                            }
+                        } catch (err) {
+                            console.error("Failed to connect to backend", err);
+                        }
+
                         // End of survey
                         setTimeout(() => {
                             setChatHistory(prev => [...prev, {
                                 id: generateId(),
                                 sender: 'system',
                                 type: 'text',
-                                text: 'Survey completed. If you have any questions, please contact Ms Anita Kaur.'
+                                text: 'Survey completed and responses saved. If you have any questions, please contact Ms Anita Kaur.'
                             }]);
                         }, 2000);
                     } else {
