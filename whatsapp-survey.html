@@ -273,6 +273,8 @@
             const messagesEndRef = useRef(null);
             const timerRef = useRef(null);
             const isPausedRef = useRef(isPaused);
+            const transcriptRef = useRef("");
+            const recognitionRef = useRef(null);
 
             useEffect(() => {
                 isPausedRef.current = isPaused;
@@ -325,7 +327,7 @@
                                 // Extract user responses from chat history
                                 const userResponses = chatHistory
                                     .filter(m => m.sender === 'user')
-                                    .map(m => m.type === 'text' ? m.text : `(Audio Recording: ${m.duration}s)`);
+                                    .map(m => m.text);
 
                                 // Save to Supabase table (assuming table is 'gec_survey_responses')
                                 const { error } = await supabase
@@ -391,19 +393,61 @@
 
             const toggleRecording = () => {
                 if (isRecording) {
-                    // Stop recording and send
+                    // Stop recording
+                    if (recognitionRef.current) {
+                        try { recognitionRef.current.stop(); } catch (e) { }
+                    }
                     clearInterval(timerRef.current);
                     setIsRecording(false);
                     const finalTime = recordTime;
                     setRecordTime(0);
 
+                    const finalTranscript = transcriptRef.current.trim();
+                    transcriptRef.current = "";
+
                     if (finalTime > 0) {
-                        handleUserReply({ type: 'audio', duration: finalTime });
+                        handleUserReply({
+                            type: 'audio',
+                            duration: finalTime,
+                            text: finalTranscript ? `[Auto-Transcribed]: ${finalTranscript}` : `(Audio Recording: ${finalTime}s - No Speech Detected)`
+                        });
                     }
                 } else {
                     // Start recording
                     setIsRecording(true);
                     setRecordTime(1);
+                    transcriptRef.current = "";
+
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (SpeechRecognition) {
+                        const recognition = new SpeechRecognition();
+                        recognition.continuous = true;
+                        recognition.interimResults = false;
+                        recognition.lang = 'en-US';
+
+                        recognition.onresult = (event) => {
+                            let currentTranscript = '';
+                            for (let i = event.resultIndex; i < event.results.length; i++) {
+                                currentTranscript += event.results[i][0].transcript;
+                            }
+                            transcriptRef.current += currentTranscript + " ";
+                        };
+
+                        recognition.onerror = (event) => {
+                            console.error("Speech recognition error:", event.error);
+                        };
+
+                        try {
+                            recognition.start();
+                            recognitionRef.current = recognition;
+                        } catch (e) {
+                            console.error("Microphone access denied or error:", e);
+                        }
+                    } else {
+                        console.warn("Speech recognition not supported in this browser.");
+                        transcriptRef.current = "[Browser does not support Native Speech Recognition]";
+                    }
+
                     timerRef.current = setInterval(() => {
                         setRecordTime(prev => prev + 1);
                     }, 1000);
