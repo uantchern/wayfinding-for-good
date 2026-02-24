@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Governance over Outcomes and Impact</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.3s ease-out forwards',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #050505;
+            color: white;
+            overflow: hidden;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .bot-bubble {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom-left-radius: 4px;
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2);
+            border-bottom-right-radius: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #9ca3af;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 20px;
+        }
+
+        .audio-bar {
+            width: 3px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 2px;
+            animation: sound 0ms -800ms linear infinite alternate;
+        }
+
+        .playing .audio-bar {
+            animation-duration: 400ms;
+        }
+
+        @keyframes sound {
+            0% {
+                height: 3px;
+            }
+
+            100% {
+                height: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root" class="w-full h-full flex justify-center items-center p-4 sm:p-8"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Icons
+        const SendIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        );
+
+        const MicIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+        );
+
+        const PlayIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+        );
+
+        const SURVEY_STEPS = {
+            INIT: {
+                messages: [
+                    { text: "⚖️ Welcome to the Governance over Outcomes and Impact Survey.", delay: 800 },
+                    { text: "To begin, please select your role in completing this survey:", delay: 1500 }
+                ],
+                options: ["Board Member", "Management / Executive Director", "Administrative Staff"],
+                nextStep: 'APPROVER'
+            },
+            APPROVER: {
+                messages: [
+                    { text: "Who will grant final approval of these responses before official submission?", delay: 1000 }
+                ],
+                options: ["Board Governance Committee", "Full Board of Directors", "Management Only"],
+                nextStep: 'AWARENESS'
+            },
+            AWARENESS: {
+                messages: [
+                    { text: "Please confirm: Are you fully aware of the legal penalties under Section 45 of the Charities Act regarding false or misleading declarations?", delay: 1200 }
+                ],
+                options: ["Yes, I acknowledge.", "No, I need more information."],
+                nextStep: 'STRATEGY_ALIGNMENT'
+            },
+            STRATEGY_ALIGNMENT: {
+                messages: [
+                    { text: "Thank you. We will now move to Strategic Alignment.", delay: 1000 },
+                    { text: "🎤 Please reply with a short voice recording (1-2 mins): How do the Board and Management currently ensure they share an agreed understanding of the Charity's Why (Purpose), What (Outcomes), and How (Operations)?", delay: 2000 }
+                ],
+                requiresAudio: true,
+                nextStep: 'REPORTING_CHANNELS'
+            },
+            REPORTING_CHANNELS: {
+                messages: [
+                    { text: "Next, let's cover Monitoring & Reporting (Code ID 1.3).", delay: 1000 },
+                    { text: "Please type out your primary external reporting channels used to communicate your progress to stakeholders (e.g., Annual Report, Sustainability Report, Website).", delay: 1500 }
+                ],
+                requiresText: true,
+                nextStep: 'METHODOLOGY'
+            },
+            METHODOLOGY: {
+                messages: [
+                    { text: "🎤 Please reply with a short voice recording:", delay: 1000 },
+                    { text: "Which methodology do you use to measure impact and track progress? (e.g., Theory of Change (TOC), Social Enterprise Framework (SEF), Quality of Life (QOL), or a custom method). Please briefly describe how it is applied.", delay: 2000 }
+                ],
+                requiresAudio: true,
+                nextStep: 'END'
+            },
+            END: {
+                messages: [
+                    { text: "⚖️ Thank you. Your responses have been secured.", delay: 1500 }
+                ],
+                onComplete: true
+            }
+        };
+
+        const generateId = () => Math.random().toString(36).substr(2, 9);
+
+        const TypingIndicator = () => (
+            <div className="flex space-x-1 p-3 bot-bubble rounded-2xl rounded-bl-sm w-16 mb-4 mt-2">
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+            </div>
+        );
+
+        const AudioWaveform = ({ duration = 12 }) => {
+            const bars = Array.from({ length: 20 });
+            return (
+                <div className="flex items-center gap-2">
+                    <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                        <PlayIcon />
+                    </button>
+                    <div className="audio-wave">
+                        {bars.map((_, i) => (
+                            <div key={i} className="audio-bar" style={{ height: `${Math.max(3, Math.random() * 16)}px` }}></div>
+                        ))}
+                    </div>
+                    <span className="text-xs text-white/70 ml-2">0:{duration.toString().padStart(2, '0')}</span>
+                </div>
+            )
+        }
+
+        const App = () => {
+            const [chatHistory, setChatHistory] = useState([]);
+            const [currentStepId, setCurrentStepId] = useState('INIT');
+            const [isBotTyping, setIsBotTyping] = useState(false);
+            const [showInput, setShowInput] = useState(false);
+            const [inputText, setInputText] = useState("");
+            const [isRecording, setIsRecording] = useState(false);
+            const [recordTime, setRecordTime] = useState(0);
+            const [isPaused, setIsPaused] = useState(false);
+
+            const messagesEndRef = useRef(null);
+            const timerRef = useRef(null);
+            const isPausedRef = useRef(isPaused);
+
+            useEffect(() => {
+                isPausedRef.current = isPaused;
+            }, [isPaused]);
+
+            const currentStepData = SURVEY_STEPS[currentStepId];
+
+            // Scroll to bottom
+            useEffect(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, [chatHistory, isBotTyping, showInput]);
+
+            // Process bot messages for a step
+            useEffect(() => {
+                if (!currentStepData) return;
+
+                let isCancelled = false;
+                setShowInput(false);
+                setIsBotTyping(true);
+
+                const processMessages = async () => {
+                    for (const msg of currentStepData.messages) {
+                        setIsBotTyping(true);
+
+                        let waited = 0;
+                        while (waited < msg.delay || isPausedRef.current) {
+                            if (isCancelled) return;
+                            await new Promise(r => setTimeout(r, 100));
+                            if (!isPausedRef.current) waited += 100;
+                        }
+
+                        if (isCancelled) return;
+
+                        setIsBotTyping(false);
+                        setChatHistory(prev => [...prev, { id: generateId(), sender: 'bot', text: msg.text, type: 'text' }]);
+
+                        // Brief pause between messages if there are more
+                        let waitBetween = 0;
+                        while (waitBetween < 400 || isPausedRef.current) {
+                            if (isCancelled) return;
+                            await new Promise(r => setTimeout(r, 100));
+                            if (!isPausedRef.current) waitBetween += 100;
+                        }
+                        if (isCancelled) return;
+                    }
+
+                    if (currentStepData.onComplete) {
+                        // End of survey
+                        setTimeout(() => {
+                            setChatHistory(prev => [...prev, {
+                                id: generateId(),
+                                sender: 'system',
+                                type: 'text',
+                                text: 'Survey completed. If you have any questions, please contact Ms Anita Kaur.'
+                            }]);
+                        }, 2000);
+                    } else {
+                        setShowInput(true);
+                    }
+                };
+
+                processMessages();
+
+                return () => { isCancelled = true; };
+            }, [currentStepId]);
+
+            const handleUserReply = (replyObj) => {
+                setShowInput(false);
+                setChatHistory(prev => [...prev, { id: generateId(), sender: 'user', ...replyObj }]);
+
+                // Move to next step
+                setTimeout(() => {
+                    if (currentStepData.nextStep) {
+                        setCurrentStepId(currentStepData.nextStep);
+                    }
+                }, 500);
+            };
+
+            const handleTextSubmit = (e) => {
+                e.preventDefault();
+                if (!inputText.trim()) return;
+                handleUserReply({ text: inputText, type: 'text' });
+                setInputText("");
+            };
+
+            const toggleRecording = () => {
+                if (isRecording) {
+                    // Stop recording and send
+                    clearInterval(timerRef.current);
+                    setIsRecording(false);
+                    const finalTime = recordTime;
+                    setRecordTime(0);
+
+                    if (finalTime > 0) {
+                        handleUserReply({ type: 'audio', duration: finalTime });
+                    }
+                } else {
+                    // Start recording
+                    setIsRecording(true);
+                    setRecordTime(1);
+                    timerRef.current = setInterval(() => {
+                        setRecordTime(prev => prev + 1);
+                    }, 1000);
+                }
+            };
+
+            const formatTime = (secs) => {
+                const m = Math.floor(secs / 60);
+                const s = secs % 60;
+                return `${m}:${s.toString().padStart(2, '0')}`;
+            };
+
+            return (
+                <div className="w-full max-w-md h-full max-h-[850px] glass-panel rounded-3xl overflow-hidden flex flex-col relative shadow-2xl animate-fade-in relative z-10">
+                    {/* Header */}
+                    <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-black/40 backdrop-blur-md z-20">
+                        <div className="flex items-center gap-3">
+                            <div className="relative">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg">
+                                    <span className="text-white font-bold text-lg">G</span>
+                                </div>
+                                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-[#151515] rounded-full"></div>
+                            </div>
+                            <div>
+                                <h2 className="text-white font-semibold text-sm">Shared Services for Charities (SSC)</h2>
+                                <p className="text-emerald-400 text-xs flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full inline-block animate-pulse"></span>
+                                    Online | Ms Anita Kaur
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => setIsPaused(!isPaused)} className="text-white/70 hover:text-white transition-colors text-xs font-semibold px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-full border border-white/10">
+                                {isPaused ? '▶ Resume' : '⏸ Pause'}
+                            </button>
+                            <button className="text-white/50 hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Chat Area */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide bg-black/20">
+                        <div className="text-center my-4">
+                            <span className="text-xs text-white/40 bg-white/5 px-2 py-1 rounded-full backdrop-blur-sm">Today</span>
+                        </div>
+
+                        {chatHistory.map((msg) => (
+                            <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}>
+                                {msg.sender === 'system' ? (
+                                    <div className="w-full mt-6 bg-neutral-800/80 border border-white/10 p-4 rounded-xl shadow-lg text-center">
+                                        <p className="text-white/80 text-sm leading-relaxed">{msg.text}</p>
+                                    </div>
+                                ) : (
+                                    <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.sender === 'user'
+                                        ? 'user-bubble text-white mr-1'
+                                        : 'bot-bubble text-neutral-200 ml-1'
+                                        }`}>
+                                        {msg.type === 'text' && <p>{msg.text}</p>}
+                                        {msg.type === 'audio' && <AudioWaveform duration={msg.duration} />}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+
+                        {isBotTyping && <TypingIndicator />}
+                        <div ref={messagesEndRef} className="h-4"></div>
+                    </div>
+
+                    {/* Input Area */}
+                    <div className="p-4 bg-black/40 backdrop-blur-md border-t border-white/10 min-h-[80px] flex items-end">
+                        {isPaused ? (
+                            <div className="w-full h-[50px] flex items-center justify-center animate-fade-in">
+                                <span className="text-white/50 text-sm font-semibold tracking-wider uppercase">Survey Paused</span>
+                            </div>
+                        ) : showInput ? (
+                            <div className="w-full w-full animate-fade-in">
+                                {currentStepData.options ? (
+                                    <div className="flex flex-col gap-2">
+                                        {currentStepData.options.map((opt, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => handleUserReply({ type: 'text', text: opt })}
+                                                className="w-full py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/10 text-emerald-400 text-sm font-medium rounded-xl transition-all text-center"
+                                            >
+                                                {opt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                ) : currentStepData.requiresAudio ? (
+                                    <div className="w-full flex justify-center items-center py-2 h-[50px]">
+                                        {isRecording ? (
+                                            <div className="flex items-center w-full bg-red-500/20 border border-red-500/30 rounded-full py-2 px-4 justify-between animate-pulse-fast">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                                                    <span className="text-red-400 font-mono text-sm">{formatTime(recordTime)}</span>
+                                                </div>
+                                                <button onClick={toggleRecording} className="text-white/80 hover:text-white bg-red-500/20 px-3 py-1 rounded-full text-xs font-semibold">
+                                                    Done
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                onClick={toggleRecording}
+                                                className="flex flex-col items-center gap-2 group"
+                                            >
+                                                <div className="w-14 h-14 bg-gradient-to-tr from-emerald-600 to-emerald-400 rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform text-white">
+                                                    <MicIcon />
+                                                </div>
+                                                <span className="text-xs text-white/50 tracking-wide uppercase font-semibold">Tap to Record</span>
+                                            </button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleTextSubmit} className="relative flex items-center">
+                                        <input
+                                            type="text"
+                                            value={inputText}
+                                            onChange={(e) => setInputText(e.target.value)}
+                                            placeholder="Type your reply..."
+                                            className="w-full bg-black/50 border border-white/10 rounded-full py-3 pl-4 pr-12 text-sm text-white focus:outline-none focus:border-emerald-500/50 transition-colors"
+                                            autoFocus
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={!inputText.trim()}
+                                            className={`absolute right-2 p-2 rounded-full transition-colors ${inputText.trim() ? 'bg-emerald-500 text-white' : 'text-white/30'}`}
+                                        >
+                                            <SendIcon />
+                                        </button>
+                                    </form>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="w-full h-[50px] flex items-center opacity-50 pointer-events-none">
+                                <div className="w-full bg-black/50 border border-white/5 rounded-full py-3 px-4 text-sm text-white/30 truncate">
+                                    Survey in progress...
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
