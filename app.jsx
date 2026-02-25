@@ -1,369 +1,319 @@
-const { useState, useEffect, useRef, useCallback, useMemo } = React;
+const { useState, useEffect } = React;
 
-// --- Icons (SVGs) ---
-const CloseIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-);
+// -----------------------------------------------------------------------------
+// Icons (Using Lucide via global window object or raw SVGs as fallback)
+// -----------------------------------------------------------------------------
+const ShieldIcon = () => <i data-lucide="shield" className="w-6 h-6"></i>;
+const HeartIcon = () => <i data-lucide="heart" className="w-6 h-6 text-emerald-400"></i>;
+const SettingsIcon = () => <i data-lucide="settings" className="w-6 h-6 text-blue-400"></i>;
+const AIIcon = () => <i data-lucide="cpu" className="w-6 h-6 text-emerald-400"></i>;
+const TagIcon = () => <i data-lucide="tag" className="w-5 h-5"></i>;
+const FileTextIcon = () => <i data-lucide="file-text" className="w-5 h-5"></i>;
+const ActivityIcon = () => <i data-lucide="activity" className="w-5 h-5"></i>;
+const FlameIcon = () => <i data-lucide="flame" className="w-8 h-8 text-white"></i>;
+const ChevronRightIcon = () => <i data-lucide="chevron-right" className="w-4 h-4"></i>;
 
-const SearchIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-);
+// -----------------------------------------------------------------------------
+// Data & Content
+// -----------------------------------------------------------------------------
 
-const SendIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"></line>
-        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-    </svg>
-);
-
-const MapPinIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-        <circle cx="12" cy="10" r="3"></circle>
-    </svg>
-);
-
-// --- Theme & Colors ---
-const GROUP_COLORS = {
-    "Top-Level Domain": "#3b82f6", // Blue
-    "Stakeholders & Regulators": "#8b5cf6", // Purple
-    "Ecosystem Players": "#ec4899", // Pink
-    "Grants & Funding Nodes": "#10b981", // Emerald
-    "Governance & Issues Nodes": "#f59e0b", // Amber
+const PRESET_RESPONSES = {
+    "Our donors are aging out": [
+        "If you could legally turn a 15-year-old into a philanthropist today, what radical offering would you design?",
+        "What happens if you stop asking for money altogether and instead ask for digital activism? How does your revenue model adapt?",
+        "If the concept of 'legacy giving' is dead, what is the new cultural currency for Gen Z?"
+    ],
+    "We have high staff turnover": [
+        "What if your organization’s metric for success was employee well-being instead of programs delivered?",
+        "If you were forced to replace 50% of management with AI, which human competencies become hyper-lucrative?",
+        "How would your mission change if terms of employment were strictly limited to 18-month 'impact tours'?"
+    ],
+    "DEFAULT": [
+        "What is the most uncomfortable truth about this struggle that your board refuses to discuss?",
+        "If this problem was abruptly 'solved' by a competitor overnight, what does your relevance look like tomorrow?",
+        "How would your approach change if you had $10M to fix this, versus $100?"
+    ]
 };
 
-// --- Components ---
+// -----------------------------------------------------------------------------
+// Components
+// -----------------------------------------------------------------------------
 
-const SidePanel = ({ node, logs, onAddLog, onClose }) => {
-    const [newLogText, setNewLogText] = useState("");
-    const [authorName, setAuthorName] = useState("");
+const Navbar = () => (
+    <nav className="absolute top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-transparent pointer-events-none">
+        <div className="text-xl font-bold tracking-tighter text-white pointer-events-auto flex items-center gap-2">
+            charity<span className="text-emerald-400">Ops</span>
+        </div>
+        <div className="flex gap-6 pointer-events-auto text-sm font-medium text-neutral-400">
+            <a href="#" className="hover:text-emerald-400 transition-colors">OS Logic</a>
+            <a href="#" className="hover:text-emerald-400 transition-colors">Engine</a>
+            <a href="#" className="hover:text-emerald-400 transition-colors">Lab</a>
+        </div>
+    </nav>
+);
 
-    const handleLogSubmit = (e) => {
+const Hero = () => (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 border-b border-neutral-900">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[128px] pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[128px] pointer-events-none"></div>
+
+        <div className="z-10 text-center max-w-5xl px-6 relative">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-neutral-900/50 backdrop-blur-md border border-neutral-800 mb-10 shadow-2xl">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-xs font-mono text-emerald-300/80 tracking-widest uppercase">System Online: CharityOps Engine is Active</span>
+            </div>
+
+            <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.95]">
+                You Protect the Heart. <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 drop-shadow-[0_0_40px_rgba(16,185,129,0.3)]">
+                    CharityOps Powers the Engine.
+                </span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-neutral-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+                CharityOps provides the AI-driven infrastructure and strategic operational expertise that charities need to deliver impact.
+            </p>
+
+
+            {/* GovernUp Highlight */}
+            <div className="p-8 md:p-10 border border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-3xl max-w-3xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8 text-center md:text-left backdrop-blur-sm relative overflow-hidden group hover:border-emerald-500/40 transition-colors shadow-2xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[50px] pointer-events-none group-hover:bg-emerald-500/20 transition-colors"></div>
+                <div className="w-20 h-20 shrink-0 bg-black/50 border border-emerald-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all">
+                    <ShieldIcon />
+                </div>
+                <div className="flex-1">
+                    <div className="inline-block border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4 rounded">Flagship Solution</div>
+                    <h3 className="text-3xl font-bold text-white mb-3 tracking-tight">GovernUp</h3>
+                    <p className="text-neutral-400 text-base leading-relaxed mb-6">
+                        Case study: The GovernUp solution powered by CharityOps
+                    </p>
+                    <button className="text-emerald-400 font-bold text-sm tracking-widest uppercase flex items-center justify-center md:justify-start gap-2 group/btn w-full md:w-auto">
+                        Read here <span className="group-hover/btn:translate-x-1 transition-transform"><ChevronRightIcon /></span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+);
+
+
+const MeetEngine = () => (
+    <section className="py-32 px-6 max-w-[1400px] mx-auto border-t border-neutral-900 relative">
+        <div className="bg-black border border-neutral-800 rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative shadow-2xl">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+
+                {/* Visual Representation of Engine OS */}
+                <div className="order-2 lg:order-1 bg-[#050505] border border-neutral-800 rounded-2xl p-6 md:p-8 backdrop-blur-xl font-mono text-xs md:text-sm leading-8 text-emerald-500/80 shadow-[0_0_50px_rgba(16,185,129,0.05)] h-[500px] flex flex-col relative overflow-hidden">
+                    <div className="flex gap-3 mb-6 border-b border-neutral-900 pb-4 items-center relative z-10 w-full uppercase tracking-widest text-[10px] text-neutral-600">
+                        <span className="w-3 h-3 rounded-full bg-neutral-800 flex items-center justify-center text-[7px] text-neutral-500">×</span>
+                        <span className="w-3 h-3 rounded-full bg-neutral-800"></span>
+                        <span className="w-3 h-3 rounded-full bg-neutral-800"></span>
+                        <span className="ml-auto">system.charityops.process</span>
+                    </div>
+
+                    <div className="flex-1 relative overflow-hidden">
+                        <div className="code-scroll absolute top-0 w-full whitespace-pre-wrap">
+                            {`> booting cognitive layer... [200 OK]
+> initializing sentiment nodes... ONLINE
+> CONNECTING TO CRM... HANDSHAKE SECURE 
+
+[SYS] NEW DATA ARRIVED: Q3_Revenue_Export.csv
+> Parsing 12,042 ledger rows... 0.12s
+> RUNNING COMPLIANCE PROTOCOL...
+  [!] Warning: Misattributed fund #9802
+  [-] Auto-correcting via historical patterns.
+> CLEAR. ZERO CRITICAL FLAGS OUTSTANDING.
+
+[SYS] AWAITING DOCUMENT UPLOAD...
+> Ingesting: "Q3_Board_Retreat_Audio_Log.mp3"
+> Transcribing (183 mins)... 1.4s
+> Extracting Action Items:
+   1. Finalize corporate sponsor matrix.
+   2. Audit Q2 program delivery metrics.
+> Summarization complete. 1-page PDF generated.
+> Syncing to Board Drive... DONE.
+
+> AWAITING COMMAND_`}
+                            <br /><br /><br />
+                            {`> booting cognitive layer... [200 OK]
+> initializing sentiment nodes... ONLINE
+> CONNECTING TO CRM... HANDSHAKE SECURE 
+
+[SYS] NEW DATA ARRIVED: Q3_Revenue_Export.csv
+> Parsing 12,042 ledger rows... 0.12s
+> RUNNING COMPLIANCE PROTOCOL...
+  [!] Warning: Misattributed fund #9802
+  [-] Auto-correcting via historical patterns.
+> CLEAR. ZERO CRITICAL FLAGS OUTSTANDING.
+
+[SYS] AWAITING DOCUMENT UPLOAD...
+> Ingesting: "Q3_Board_Retreat_Audio_Log.mp3"
+> Transcribing (183 mins)... 1.4s
+> Extracting Action Items:
+   1. Finalize corporate sponsor matrix.
+   2. Audit Q2 program delivery metrics.
+> Summarization complete. 1-page PDF generated.
+> Syncing to Board Drive... DONE.
+
+> AWAITING COMMAND_`}
+                        </div>
+                    </div>
+                    <div className="absolute top-[80px] left-0 w-full h-12 bg-gradient-to-b from-[#050505] to-transparent z-10"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#050505] to-transparent z-10 flex items-end px-8 pb-8">
+                        <span className="animate-pulse w-3 h-5 bg-emerald-500/50 inline-block mb-1"></span>
+                    </div>
+                </div>
+
+                <div className="order-1 lg:order-2">
+                    <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">The AI Operations Officer.</h2>
+                    <div className="inline-block border text-emerald-400 border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 font-mono text-xs uppercase tracking-widest mb-8 rounded">
+                        CHARITYOPS_AOO // Not a Chatbot
+                    </div>
+                    <p className="text-neutral-400 text-lg md:text-xl leading-relaxed mb-10 font-light">
+                        CharityOps is the autonomous engine running your back-office. Designed to seamlessly integrate into your workflow, the platform handles the heavy lifting so your human team can focus on empathy and impact.
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+);
+
+const StrategyLab = () => {
+    const [input, setInput] = useState("");
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [prompts, setPrompts] = useState([]);
+
+    const handleStorm = (e) => {
         e.preventDefault();
-        if (!newLogText.trim() || !authorName.trim()) return;
-        onAddLog(node.id, {
-            author: authorName,
-            comment: newLogText
-        });
-        setNewLogText("");
+        if (!input.trim()) return;
+
+        setIsGenerating(true);
+        setPrompts([]);
+
+        setTimeout(() => {
+            let key = "DEFAULT";
+            const lowerInput = input.toLowerCase();
+            if (lowerInput.includes("aging") || lowerInput.includes("donor")) key = "Our donors are aging out";
+            if (lowerInput.includes("turnover") || lowerInput.includes("staff") || lowerInput.includes("burnout")) key = "We have high staff turnover";
+
+            setPrompts(PRESET_RESPONSES[key] || PRESET_RESPONSES["DEFAULT"]);
+            setIsGenerating(false);
+        }, 1500);
     };
 
-    if (!node) return null;
-
     return (
-        <div className={`fixed top-0 right-0 h-full w-full md:w-[420px] bg-neutral-900/80 backdrop-blur-2xl border-l border-neutral-800 shadow-2xl z-50 transform transition-transform duration-500 ease-in-out ${node ? "translate-x-0" : "translate-x-full"} flex flex-col`}>
-            {/* Header */}
-            <div className="p-6 border-b border-neutral-800/50 flex justify-between items-start">
-                <div>
-                    <span
-                        className="text-xs font-semibold tracking-wider uppercase px-2 py-1 rounded-full mb-3 inline-block"
-                        style={{ color: GROUP_COLORS[node.group], backgroundColor: `${GROUP_COLORS[node.group]}20` }}
-                    >
-                        {node.group}
-                    </span>
-                    <h2 className="text-2xl font-bold text-white mt-1 mb-2">{node.name}</h2>
-                    <p className="text-neutral-400 text-sm leading-relaxed">{node.description}</p>
-                </div>
-                <button onClick={onClose} className="p-2 bg-neutral-800/50 hover:bg-neutral-700 rounded-full text-neutral-300 transition-colors">
-                    <CloseIcon />
-                </button>
-            </div>
+        <section className="bg-black border-y border-neutral-900 py-32 md:py-40 px-6 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-60"></div>
 
-            {/* Wayfinder's Log */}
-            <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
-                <div className="flex items-center gap-2 mb-6">
-                    <MapPinIcon />
-                    <h3 className="text-lg font-semibold text-white">Wayfinder's Log</h3>
+            <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 xl:grid-cols-2 gap-16 lg:gap-20 items-center">
+
+                {/* Left: Text Content */}
+                <div className="order-1">
+                    <div className="inline-flex items-center gap-3 border border-emerald-500/40 bg-emerald-500/5 text-emerald-400 px-4 py-2 font-mono text-xs uppercase tracking-widest mb-10 rounded">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                        The Strategy Lab
+                    </div>
+                    <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
+                        Fail <br />
+                        On <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-cyan-400 decoration-emerald-500/50">Purpose</span>
+                    </h2>
+                    <p className="text-xl text-neutral-400 mb-8 max-w-lg leading-relaxed font-light">
+                        Innovation requires broken norms. Our board retreats provide the psychological safety and structural rigor needed to tear down sacred cows. We visually and physically separate the creative mess of strategy from the clinical governance of the back-office.
+                    </p>
+                    <p className="text-lg text-emerald-400/80 font-mono tracking-wide leading-relaxed max-w-lg">
+                        {'>'} Try the question storming engine to see how CharityOps reframes your challenges.
+                    </p>
                 </div>
 
-                <div className="space-y-4">
-                    {logs && logs.length > 0 ? (
-                        logs.map((log) => (
-                            <div key={log.id} className="bg-neutral-800/40 p-4 rounded-xl border border-neutral-800 relative">
-                                <div className="absolute -left-2 top-4 w-4 h-[2px] bg-neutral-800"></div>
-                                <div className="flex justify-between items-end mb-2">
-                                    <span className="font-medium text-emerald-400 text-sm">{log.author}</span>
-                                    <span className="text-xs text-neutral-500">{log.date}</span>
-                                </div>
-                                <p className="text-neutral-300 text-sm">{log.comment}</p>
+                {/* Right: Interactive Widget */}
+                <div className="order-2 w-full max-w-2xl mx-auto xl:mx-0 xl:ml-auto">
+                    <div className="bg-gradient-to-br from-[#0a0a0a] to-black border border-neutral-800 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-2xl">
+                        <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+                        <div className="mb-8">
+                            <div className="mb-6 inline-flex w-14 h-14 bg-neutral-900 border border-neutral-800 items-center justify-center rounded-2xl shadow-inner text-emerald-500">
+                                <AIIcon />
                             </div>
-                        ))
-                    ) : (
-                        <div className="text-center p-8 bg-neutral-800/20 rounded-xl border border-neutral-800 border-dashed">
-                            <p className="text-neutral-500 text-sm">No breadcrumbs left here yet. Be the first to guide a future wayfinder!</p>
+                            <h3 className="text-2xl font-bold mb-3 tracking-tight text-white">Interactive Question Storming</h3>
+                            <p className="text-neutral-400 text-sm font-light leading-relaxed">
+                                Input a common charity struggle below, and the CharityOps Engine will generate three provocative questions.
+                            </p>
                         </div>
-                    )}
-                </div>
-            </div>
 
-            {/* Comment Form */}
-            <div className="p-6 border-t border-neutral-800/50 bg-neutral-900">
-                <form onSubmit={handleLogSubmit} className="space-y-3">
-                    <input
-                        type="text"
-                        placeholder="Your Designation (e.g. Agency Admin)"
-                        value={authorName}
-                        onChange={(e) => setAuthorName(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 text-white text-sm rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-500 transition-colors"
-                        required
-                    />
-                    <div className="relative">
-                        <textarea
-                            placeholder="Leave your tactical tip or insight..."
-                            value={newLogText}
-                            onChange={(e) => setNewLogText(e.target.value)}
-                            className="w-full bg-neutral-950 border border-neutral-800 text-white text-sm rounded-lg px-4 py-3 min-h-[100px] focus:outline-none focus:border-emerald-500 transition-colors resize-none"
-                            required
-                        />
-                        <button
-                            type="submit"
-                            className="absolute bottom-3 right-3 p-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md transition-colors"
-                            disabled={!newLogText.trim() || !authorName.trim()}
-                        >
-                            <SendIcon />
-                        </button>
+                        <form onSubmit={handleStorm} className="relative z-10 group mb-8">
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl blur opacity-20 group-focus-within:opacity-40 transition duration-500"></div>
+                            <div className="relative flex flex-col sm:flex-row items-center bg-black border border-neutral-700 rounded-lg p-1.5 gap-2 shadow-2xl">
+                                <input
+                                    type="text"
+                                    placeholder="e.g. 'Our donors are aging out'"
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)}
+                                    className="flex-1 w-full bg-transparent text-white px-4 py-3 outline-none placeholder:text-neutral-600 text-sm"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={isGenerating || !input.trim()}
+                                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-md transition-colors flex items-center justify-center w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.2)] whitespace-nowrap text-xs"
+                                >
+                                    {isGenerating ? (
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    ) : "Ask"}
+                                </button>
+                            </div>
+                        </form>
+
+                        {/* Outputs */}
+                        <div className="space-y-3 min-h-[150px]">
+                            {prompts.map((prompt, i) => (
+                                <div key={i} className="animate-in fade-in slide-in-from-bottom-2 bg-[#050505] border border-neutral-800/80 p-5 rounded-xl flex gap-4 items-start shadow-sm" style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'both' }}>
+                                    <div className="text-emerald-500/40 font-mono font-black text-lg leading-none select-none mt-0.5">0{i + 1}</div>
+                                    <div className="text-neutral-300 text-sm leading-relaxed flex-1 font-light">{prompt}</div>
+                                </div>
+                            ))}
+                            {!isGenerating && prompts.length === 0 && (
+                                <div className="flex items-center justify-center h-[150px] border border-dashed border-neutral-800 rounded-xl text-neutral-600 font-mono text-xs tracking-widest bg-black/40">
+                                    AWAITING INPUT...
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </form>
+                </div>
+
             </div>
-        </div>
+        </section>
     );
 };
 
-const Header = ({ searchQuery, setSearchQuery }) => {
-    return (
-        <header className="absolute top-0 left-0 w-full z-10 p-6 flex justify-between items-center pointer-events-none">
-            <div className="flex flex-col gap-1 pointer-events-auto">
-                <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 tracking-tight">
-                    Wayfinding for Good
-                </h1>
-                <p className="text-neutral-400 text-sm max-w-md">
-                    "You don’t pick the path because of the destination; you discover the destination because of the path."
-                </p>
-            </div>
-
-            <div className="pointer-events-auto relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
-                    <SearchIcon />
-                </div>
-                <input
-                    type="text"
-                    placeholder="Search the ecosystem..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-neutral-900/60 backdrop-blur-md border border-neutral-700 text-white text-sm rounded-full pl-10 pr-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all shadow-lg"
-                />
-            </div>
-        </header>
-    );
-}
-
-const Legend = () => {
-    return (
-        <div className="absolute bottom-6 left-6 z-10 bg-neutral-900/60 backdrop-blur-md border border-neutral-800 p-4 rounded-xl pointer-events-auto">
-            <h4 className="text-neutral-300 text-xs font-semibold uppercase tracking-wider mb-3">Ecosystem Legend</h4>
-            <div className="flex flex-col gap-2">
-                {Object.entries(GROUP_COLORS).map(([group, color]) => (
-                    <div key={group} className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: color, boxShadow: `0 0 8px ${color}` }}></div>
-                        <span className="text-neutral-400 text-xs">{group}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
+const Footer = () => (
+    <footer className="py-12 px-6 border-t border-neutral-900 bg-black text-center text-neutral-500 text-sm font-mono tracking-widest uppercase">
+        CharityOps &copy; {new Date().getFullYear()} // System Version 1.0.0
+    </footer>
+);
 
 const App = () => {
-    const [graphData, setGraphData] = useState({ nodes: [], links: [] });
-    const [logsData, setLogsData] = useState({});
-    const [selectedNode, setSelectedNode] = useState(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
-
-    const fgRef = useRef();
-
+    // Re-initialize Lucide Icons when components render
     useEffect(() => {
-        // Load data from globals
-        setGraphData({
-            nodes: window.ecosystemData.nodes,
-            links: window.ecosystemData.links
-        });
-        setLogsData(window.ecosystemData.logs);
-
-        const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    // Filter nodes based on search highlighting
-    useEffect(() => {
-        if (!fgRef.current || !graphData.nodes.length) return;
-
-        let foundNode = null;
-        if (searchQuery.length > 2) {
-            foundNode = graphData.nodes.find(n => n.name.toLowerCase().includes(searchQuery.toLowerCase()));
-        }
-
-        if (foundNode) {
-            // Pan and zoom to node
-            fgRef.current.centerAt(foundNode.x, foundNode.y, 1000);
-            fgRef.current.zoom(3, 1000);
-        }
-    }, [searchQuery, graphData]);
-
-    const handleNodeClick = useCallback(node => {
-        if (!node) return;
-        setSelectedNode(node);
-        // Pan and zoom slightly
-        if (fgRef.current) {
-            fgRef.current.centerAt(node.x, node.y, 1000);
-            fgRef.current.zoom(2.5, 1000);
+        if (window.lucide) {
+            window.lucide.createIcons();
         }
     }, []);
-
-    const handleBackgroundClick = useCallback(() => {
-        setSelectedNode(null);
-    }, []);
-
-    const handleAddLog = (nodeId, logData) => {
-        const newLog = {
-            id: `log_${Date.now()}`,
-            date: new Date().toISOString().split('T')[0],
-            ...logData
-        };
-
-        setLogsData(prev => ({
-            ...prev,
-            [nodeId]: [...(prev[nodeId] || []), newLog]
-        }));
-    };
-
-    // Rendering Graph properties
-    const nodeCanvasObject = useCallback((node, ctx, globalScale) => {
-        const label = node.name;
-        const fontSize = 14 / globalScale;
-        ctx.font = `${fontSize}px Inter, sans-serif`;
-        const textWidth = ctx.measureText(label).width;
-        const isSelected = selectedNode && selectedNode.id === node.id;
-        const isSearched = searchQuery.length > 2 && node.name.toLowerCase().includes(searchQuery.toLowerCase());
-
-        // Node circle
-        const baseColor = GROUP_COLORS[node.group] || "#cccccc";
-        ctx.beginPath();
-        // Emphasize scale somewhat on hover or selection
-        const r = (node.val || 5) * 0.8;
-        ctx.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
-        ctx.fillStyle = isSelected || isSearched ? "#ffffff" : baseColor;
-        ctx.fill();
-
-        // Glow effect
-        ctx.shadowBlur = isSelected ? 20 : (isSearched ? 15 : 10);
-        ctx.shadowColor = isSelected ? "#ffffff" : baseColor;
-        ctx.stroke();
-        ctx.shadowBlur = 0; // reset
-
-        // Label bg
-        ctx.fillStyle = 'rgba(10, 10, 10, 0.8)';
-        ctx.fillRect(node.x - textWidth / 2 - 2, node.y + r + 2, textWidth + 4, fontSize + 4);
-
-        // Label text
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        ctx.fillStyle = isSelected || isSearched ? '#ffffff' : '#e5e5e5';
-        ctx.fillText(label, node.x, node.y + r + 4);
-
-    }, [selectedNode, searchQuery]);
-
-    const linkCanvasObject = useCallback((link, ctx, globalScale) => {
-        const start = link.source;
-        const end = link.target;
-
-        if (!start || !end || !start.x || !start.y) return;
-
-        // Draw Line
-        ctx.beginPath();
-        ctx.moveTo(start.x, start.y);
-        ctx.lineTo(end.x, end.y);
-
-        // Determine link color (fade if something is selected and not involved)
-        let linkColor = "rgba(75, 85, 99, 0.4)"; // neutral-600
-        const isRelated = selectedNode && (start.id === selectedNode.id || end.id === selectedNode.id);
-
-        if (isRelated) {
-            linkColor = "rgba(16, 185, 129, 0.8)"; // emerald emphasis
-            ctx.lineWidth = 1.5 / globalScale;
-        } else {
-            ctx.lineWidth = 0.5 / globalScale;
-        }
-
-        ctx.strokeStyle = linkColor;
-        ctx.stroke();
-
-        // Draw Relation Label if zoomed in enough or related
-        if (globalScale > 2.5 || isRelated) {
-            const relLabel = link.relation;
-            const fontSize = 10 / globalScale;
-            ctx.font = `${fontSize}px Inter, sans-serif`;
-            const midX = start.x + (end.x - start.x) / 2;
-            const midY = start.y + (end.y - start.y) / 2;
-
-            ctx.fillStyle = isRelated ? "#34d399" : "#9ca3af";
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(relLabel, midX, midY);
-        }
-    }, [selectedNode]);
-
 
     return (
-        <div className="w-full h-screen bg-neutral-950 overflow-hidden relative font-sans">
-            {/* Gradient Background Effect */}
-            <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-900/20 rounded-full blur-[120px] pointer-events-none"></div>
-            <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
-
-            <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-            {graphData.nodes.length > 0 && (
-                <div className="w-full h-full cursor-grab active:cursor-grabbing">
-                    <ForceGraph2D
-                        ref={fgRef}
-                        width={dimensions.width}
-                        height={dimensions.height}
-                        graphData={graphData}
-                        nodeLabel="" // We custom render label
-                        linkDirectionalArrowLength={3.5}
-                        linkDirectionalArrowRelPos={1}
-                        linkColor={() => "transparent"} // We draw link ourselves
-                        nodeCanvasObject={nodeCanvasObject}
-                        linkCanvasObject={linkCanvasObject}
-                        onNodeClick={handleNodeClick}
-                        onBackgroundClick={handleBackgroundClick}
-                        d3VelocityDecay={0.4}
-                        d3AlphaDecay={0.01}
-                        cooldownTicks={100}
-                    />
-                </div>
-            )}
-
-            <Legend />
-
-            <SidePanel
-                node={selectedNode}
-                logs={selectedNode ? logsData[selectedNode.id] : []}
-                onAddLog={handleAddLog}
-                onClose={() => setSelectedNode(null)}
-            />
-        </div>
+        <React.Fragment>
+            <Navbar />
+            <Hero />
+            <StrategyLab />
+            <MeetEngine />
+            <Footer />
+        </React.Fragment>
     );
 };
 
-const rootStyle = { width: '100%', height: '100%', margin: 0, padding: 0 };
-const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
