@@ -12,6 +12,7 @@ const FileTextIcon = () => <i data-lucide="file-text" className="w-5 h-5"></i>;
 const ActivityIcon = () => <i data-lucide="activity" className="w-5 h-5"></i>;
 const FlameIcon = () => <i data-lucide="flame" className="w-8 h-8 text-white"></i>;
 const ChevronRightIcon = () => <i data-lucide="chevron-right" className="w-4 h-4"></i>;
+const MapIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-400 opacity-80 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>;
 
 // -----------------------------------------------------------------------------
 // Data & Content
@@ -298,6 +299,48 @@ const StrategyLab = () => {
     );
 };
 
+const WayfindingSection = () => (
+    <section className="py-32 px-6 max-w-[1400px] mx-auto border-t border-neutral-900 relative">
+        <div className="bg-gradient-to-br from-[#050505] to-[#0a0a0a] border border-neutral-800 rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative shadow-2xl">
+            <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none transform -translate-y-1/2"></div>
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className="order-2 lg:order-1 flex justify-center">
+                    {/* Abstract map/compass representation */}
+                    <div className="relative w-64 h-64 md:w-80 md:h-80">
+                        <div className="absolute inset-0 border border-emerald-500/20 rounded-full animate-[spin_60s_linear_infinite]"></div>
+                        <div className="absolute inset-4 border border-cyan-500/20 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
+                        <div className="absolute inset-8 border border-dashed border-neutral-700/50 rounded-full animate-[spin_50s_linear_infinite]"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <MapIcon />
+                        </div>
+                        {/* Nodes */}
+                        <div className="absolute top-10 left-10 w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse"></div>
+                        <div className="absolute bottom-16 right-12 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(6,182,212,0.8)] animate-pulse" style={{ animationDelay: '1s' }}></div>
+                        <div className="absolute top-1/2 right-4 w-4 h-4 bg-emerald-500 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.8)] animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                    </div>
+                </div>
+
+                <div className="order-1 lg:order-2">
+                    <div className="inline-flex items-center gap-3 border border-cyan-500/40 bg-cyan-500/5 text-cyan-400 px-4 py-2 font-mono text-xs uppercase tracking-widest mb-8 rounded">
+                        <ActivityIcon />
+                        Ecosystem Mapping
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1] text-white">Navigate the <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Charity Sector.</span></h2>
+                    <p className="text-neutral-400 text-lg md:text-xl leading-relaxed mb-10 font-light">
+                        Lost in the complexities of the Singapore charity landscape? The Wayfinding App visualizes the ecosystem, showing you the vital connections between regulators, IPCs, funding nodes, and more.
+                    </p>
+
+                    <a href="https://raw.githack.com/uantchern/wayfinding-for-good/main/index.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] group w-full sm:w-auto text-sm tracking-wide uppercase">
+                        Launch Wayfinding App
+                        <span className="group-hover:translate-x-1 transition-transform"><ChevronRightIcon /></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+);
+
 const Footer = () => (
     <footer className="py-12 px-6 border-t border-neutral-900 bg-black text-center text-neutral-500 text-sm font-mono tracking-widest uppercase">
         CharityOps &copy; {new Date().getFullYear()} // System Version 1.0.0
@@ -318,6 +361,7 @@ const App = () => {
             <Hero />
             <StrategyLab />
             <MeetEngine />
+            <WayfindingSection />
             <Footer />
         </React.Fragment>
     );
