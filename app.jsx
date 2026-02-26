@@ -219,9 +219,11 @@ const StrategyLab = () => {
                         The Strategy Lab
                     </div>
                     <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
-                        Fail <br />
-                        On <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-cyan-400 decoration-emerald-500/50">Purpose</span>
+                        <a href="https://failonpurpose.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                            Fail <br />
+                            On <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-cyan-400 decoration-emerald-500/50">Purpose</span>
+                        </a>
                     </h2>
                     <p className="text-xl text-neutral-400 mb-8 max-w-lg leading-relaxed font-light">
                         Innovation requires broken norms. Our board retreats provide the psychological safety and structural rigor needed to tear down sacred cows. We visually and physically separate the creative mess of strategy from the clinical governance of the back-office.
