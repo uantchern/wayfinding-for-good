@@ -100,7 +100,7 @@ const Hero = () => (
 
 
 const MeetEngine = () => (
-    <section className="py-32 px-6 max-w-[1400px] mx-auto border-t border-neutral-900 relative">
+    <section className="py-16 md:py-24 px-6 max-w-[1400px] mx-auto border-t border-neutral-900 relative">
         <div className="bg-black border border-neutral-800 rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative shadow-2xl">
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -208,7 +208,7 @@ const StrategyLab = () => {
     };
 
     return (
-        <section className="bg-black border-y border-neutral-900 py-32 md:py-40 px-6 relative overflow-hidden">
+        <section className="bg-black border-y border-neutral-900 py-16 md:py-24 px-6 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-60"></div>
 
             <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 xl:grid-cols-2 gap-16 lg:gap-20 items-center">
@@ -300,7 +300,7 @@ const StrategyLab = () => {
 };
 
 const WayfindingSection = () => (
-    <section className="py-32 px-6 max-w-[1400px] mx-auto border-t border-neutral-900 relative">
+    <section className="py-16 md:py-24 px-6 max-w-[1400px] mx-auto border-t border-neutral-900 relative">
         <div className="bg-gradient-to-br from-[#050505] to-[#0a0a0a] border border-neutral-800 rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative shadow-2xl">
             <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none transform -translate-y-1/2"></div>
 
