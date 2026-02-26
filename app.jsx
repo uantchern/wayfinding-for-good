@@ -331,7 +331,7 @@ const WayfindingSection = () => (
                         Lost in the complexities of the Singapore charity landscape? The Wayfinding App visualizes the ecosystem, showing you the vital connections between regulators, IPCs, funding nodes, and more.
                     </p>
 
-                    <a href="https://raw.githack.com/uantchern/wayfinding-for-good/main/index.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] group w-full sm:w-auto text-sm tracking-wide uppercase">
+                    <a href="./wayfinding.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] group w-full sm:w-auto text-sm tracking-wide uppercase">
                         Launch Wayfinding App
                         <span className="group-hover:translate-x-1 transition-transform"><ChevronRightIcon /></span>
                     </a>
