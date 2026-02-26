@@ -87,9 +87,9 @@ const Hero = () => (
                     <p className="text-neutral-400 text-base leading-relaxed mb-6">
                         Case study: The GovernUp solution powered by CharityOps
                     </p>
-                    <button className="text-emerald-400 font-bold text-sm tracking-widest uppercase flex items-center justify-center md:justify-start gap-2 group/btn w-full md:w-auto">
+                    <a href="https://www.sscharities.com/governup/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 font-bold text-sm tracking-widest uppercase flex items-center justify-center md:justify-start gap-2 group/btn w-full md:w-auto">
                         Read here <span className="group-hover/btn:translate-x-1 transition-transform"><ChevronRightIcon /></span>
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -226,9 +226,9 @@ const StrategyLab = () => {
                     <p className="text-xl text-neutral-400 mb-8 max-w-lg leading-relaxed font-light">
                         Innovation requires broken norms. Our board retreats provide the psychological safety and structural rigor needed to tear down sacred cows. We visually and physically separate the creative mess of strategy from the clinical governance of the back-office.
                     </p>
-                    <p className="text-lg text-emerald-400/80 font-mono tracking-wide leading-relaxed max-w-lg">
-                        {'>'} Try the question storming engine to see how CharityOps reframes your challenges.
-                    </p>
+                    <a href="https://uantchern.github.io/question-storming/" target="_blank" rel="noopener noreferrer" className="block text-lg text-emerald-400 hover:text-emerald-300 font-mono tracking-wide leading-relaxed max-w-lg transition-colors cursor-pointer">
+                        {'>'} Try the full question storming engine to see how CharityOps reframes your challenges.
+                    </a>
                 </div>
 
                 {/* Right: Interactive Widget */}
@@ -281,6 +281,12 @@ const StrategyLab = () => {
                                     AWAITING INPUT...
                                 </div>
                             )}
+                        </div>
+
+                        <div className="mt-8 pt-6 border-t border-neutral-800/50 flex justify-center sm:justify-end">
+                            <a href="https://uantchern.github.io/question-storming/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 font-bold text-xs tracking-widest uppercase flex items-center gap-2 group/link transition-colors">
+                                Launch Full Process Engine <span className="group-hover/link:translate-x-1 transition-transform"><ChevronRightIcon /></span>
+                            </a>
                         </div>
                     </div>
                 </div>

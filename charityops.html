@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>www.charityOps.org | The CharityOps Engine</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        neutral: {
+                            850: '#1f1f1f',
+                            950: '#0a0a0a',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .code-scroll {
+            animation: scrollup 20s linear infinite;
+        }
+
+        @keyframes scrollup {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-neutral-950 text-white font-sans antialiased overflow-x-hidden selection:bg-emerald-500 selection:text-white">
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // -----------------------------------------------------------------------------
+        // Icons (Using Lucide via global window object or raw SVGs as fallback)
+        // -----------------------------------------------------------------------------
+        const ShieldIcon = () => <i data-lucide="shield" className="w-6 h-6"></i>;
+        const HeartIcon = () => <i data-lucide="heart" className="w-6 h-6 text-emerald-400"></i>;
+        const SettingsIcon = () => <i data-lucide="settings" className="w-6 h-6 text-blue-400"></i>;
+        const AIIcon = () => <i data-lucide="cpu" className="w-6 h-6 text-emerald-400"></i>;
+        const TagIcon = () => <i data-lucide="tag" className="w-5 h-5"></i>;
+        const FileTextIcon = () => <i data-lucide="file-text" className="w-5 h-5"></i>;
+        const ActivityIcon = () => <i data-lucide="activity" className="w-5 h-5"></i>;
+        const FlameIcon = () => <i data-lucide="flame" className="w-8 h-8 text-white"></i>;
+        const ChevronRightIcon = () => <i data-lucide="chevron-right" className="w-4 h-4"></i>;
+
+        // -----------------------------------------------------------------------------
+        // Data & Content
+        // -----------------------------------------------------------------------------
+
+
+        const PRESET_RESPONSES = {
+            "Our donors are aging out": [
+                "If you could legally turn a 15-year-old into a philanthropist today, what radical offering would you design?",
+                "What happens if you stop asking for money altogether and instead ask for digital activism? How does your revenue model adapt?",
+                "If the concept of 'legacy giving' is dead, what is the new cultural currency for Gen Z?"
+            ],
+            "We have high staff turnover": [
+                "What if your organization’s metric for success was employee well-being instead of programs delivered?",
+                "If you were forced to replace 50% of management with AI, which human competencies become hyper-lucrative?",
+                "How would your mission change if terms of employment were strictly limited to 18-month 'impact tours'?"
+            ],
+            "DEFAULT": [
+                "What is the most uncomfortable truth about this struggle that your board refuses to discuss?",
+                "If this problem was abruptly 'solved' by a competitor overnight, what does your relevance look like tomorrow?",
+                "How would your approach change if you had $10M to fix this, versus $100?"
+            ]
+        };
+
+        // -----------------------------------------------------------------------------
+        // Components
+        // -----------------------------------------------------------------------------
+
+        const Navbar = () => (
+            <nav className="absolute top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-transparent pointer-events-none">
+                <div className="text-xl font-bold tracking-tighter text-white pointer-events-auto flex items-center gap-2">
+                    charity<span className="text-emerald-400">Ops</span>
+                </div>
+                <div className="flex gap-6 pointer-events-auto text-sm font-medium text-neutral-400">
+                    <a href="#" className="hover:text-emerald-400 transition-colors">OS Logic</a>
+                    <a href="#" className="hover:text-emerald-400 transition-colors">Engine</a>
+                    <a href="#" className="hover:text-emerald-400 transition-colors">Lab</a>
+                </div>
+            </nav>
+        );
+
+        const Hero = () => (
+            <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 border-b border-neutral-900">
+                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[128px] pointer-events-none"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[128px] pointer-events-none"></div>
+
+                <div className="z-10 text-center max-w-5xl px-6 relative">
+                    <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-neutral-900/50 backdrop-blur-md border border-neutral-800 mb-10 shadow-2xl">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span className="text-xs font-mono text-emerald-300/80 tracking-widest uppercase">System Online: CharityOps Engine is Active</span>
+                    </div>
+
+                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.95]">
+                        You Protect the Heart. <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 drop-shadow-[0_0_40px_rgba(16,185,129,0.3)]">
+                            CharityOps Powers the Engine.
+                        </span>
+                    </h1>
+
+                    <p className="text-xl md:text-2xl text-neutral-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+                        CharityOps provides the AI-driven infrastructure and strategic operational expertise that charities need to deliver impact.
+                    </p>
+
+
+                    {/* GovernUp Highlight */}
+                    <div className="p-8 md:p-10 border border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-3xl max-w-3xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8 text-center md:text-left backdrop-blur-sm relative overflow-hidden group hover:border-emerald-500/40 transition-colors shadow-2xl">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[50px] pointer-events-none group-hover:bg-emerald-500/20 transition-colors"></div>
+                        <div className="w-20 h-20 shrink-0 bg-black/50 border border-emerald-500/30 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all">
+                            <ShieldIcon />
+                        </div>
+                        <div className="flex-1">
+                            <div className="inline-block border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-2 py-1 font-mono text-[10px] uppercase tracking-widest mb-4 rounded">Flagship Solution</div>
+                            <h3 className="text-3xl font-bold text-white mb-3 tracking-tight">GovernUp</h3>
+                            <p className="text-neutral-400 text-base leading-relaxed mb-6">
+                                Case study: The GovernUp solution powered by CharityOps
+                            </p>
+                            <a href="https://www.sscharities.com/governup/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 font-bold text-sm tracking-widest uppercase flex items-center justify-center md:justify-start gap-2 group/btn w-full md:w-auto">
+                                Read here <span className="group-hover/btn:translate-x-1 transition-transform"><ChevronRightIcon /></span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        );
+
+
+
+
+        const MeetEngine = () => (
+            <section className="py-32 px-6 max-w-[1400px] mx-auto border-t border-neutral-900 relative">
+                <div className="bg-black border border-neutral-800 rounded-[2.5rem] p-8 md:p-16 overflow-hidden relative shadow-2xl">
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+                    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+
+                        {/* Visual Representation of Engine OS */}
+                        <div className="order-2 lg:order-1 bg-[#050505] border border-neutral-800 rounded-2xl p-6 md:p-8 backdrop-blur-xl font-mono text-xs md:text-sm leading-8 text-emerald-500/80 shadow-[0_0_50px_rgba(16,185,129,0.05)] h-[500px] flex flex-col relative overflow-hidden">
+                            <div className="flex gap-3 mb-6 border-b border-neutral-900 pb-4 items-center relative z-10 w-full uppercase tracking-widest text-[10px] text-neutral-600">
+                                <span className="w-3 h-3 rounded-full bg-neutral-800 flex items-center justify-center text-[7px] text-neutral-500">×</span>
+                                <span className="w-3 h-3 rounded-full bg-neutral-800"></span>
+                                <span className="w-3 h-3 rounded-full bg-neutral-800"></span>
+                                <span className="ml-auto">system.charityops.process</span>
+                            </div>
+
+                            <div className="flex-1 relative overflow-hidden">
+                                <div className="code-scroll absolute top-0 w-full whitespace-pre-wrap">
+                                    {`> booting cognitive layer... [200 OK]
+> initializing sentiment nodes... ONLINE
+> CONNECTING TO CRM... HANDSHAKE SECURE 
+
+[SYS] NEW DATA ARRIVED: Q3_Revenue_Export.csv
+> Parsing 12,042 ledger rows... 0.12s
+> RUNNING COMPLIANCE PROTOCOL...
+  [!] Warning: Misattributed fund #9802
+  [-] Auto-correcting via historical patterns.
+> CLEAR. ZERO CRITICAL FLAGS OUTSTANDING.
+
+[SYS] AWAITING DOCUMENT UPLOAD...
+> Ingesting: "Q3_Board_Retreat_Audio_Log.mp3"
+> Transcribing (183 mins)... 1.4s
+> Extracting Action Items:
+   1. Finalize corporate sponsor matrix.
+   2. Audit Q2 program delivery metrics.
+> Summarization complete. 1-page PDF generated.
+> Syncing to Board Drive... DONE.
+
+> AWAITING COMMAND_`}
+                                    <br /><br /><br />
+                                    {`> booting cognitive layer... [200 OK]
+> initializing sentiment nodes... ONLINE
+> CONNECTING TO CRM... HANDSHAKE SECURE 
+
+[SYS] NEW DATA ARRIVED: Q3_Revenue_Export.csv
+> Parsing 12,042 ledger rows... 0.12s
+> RUNNING COMPLIANCE PROTOCOL...
+  [!] Warning: Misattributed fund #9802
+  [-] Auto-correcting via historical patterns.
+> CLEAR. ZERO CRITICAL FLAGS OUTSTANDING.
+
+[SYS] AWAITING DOCUMENT UPLOAD...
+> Ingesting: "Q3_Board_Retreat_Audio_Log.mp3"
+> Transcribing (183 mins)... 1.4s
+> Extracting Action Items:
+   1. Finalize corporate sponsor matrix.
+   2. Audit Q2 program delivery metrics.
+> Summarization complete. 1-page PDF generated.
+> Syncing to Board Drive... DONE.
+
+> AWAITING COMMAND_`}
+                                </div>
+                            </div>
+                            <div className="absolute top-[80px] left-0 w-full h-12 bg-gradient-to-b from-[#050505] to-transparent z-10"></div>
+                            <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#050505] to-transparent z-10 flex items-end px-8 pb-8">
+                                <span className="animate-pulse w-3 h-5 bg-emerald-500/50 inline-block mb-1"></span>
+                            </div>
+                        </div>
+
+                        <div className="order-1 lg:order-2">
+                            <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-[1.1]">The AI Operations Officer.</h2>
+                            <div className="inline-block border text-emerald-400 border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 font-mono text-xs uppercase tracking-widest mb-8 rounded">
+                                CHARITYOPS_AOO // Not a Chatbot
+                            </div>
+                            <p className="text-neutral-400 text-lg md:text-xl leading-relaxed mb-10 font-light">
+                                CharityOps is the autonomous engine running your back-office. Designed to seamlessly integrate into your workflow, the platform handles the heavy lifting so your human team can focus on empathy and impact.
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        );
+
+        const StrategyLab = () => {
+            const [input, setInput] = useState("");
+            const [isGenerating, setIsGenerating] = useState(false);
+            const [prompts, setPrompts] = useState([]);
+
+            const handleStorm = (e) => {
+                e.preventDefault();
+                if (!input.trim()) return;
+
+                setIsGenerating(true);
+                setPrompts([]);
+
+                setTimeout(() => {
+                    let key = "DEFAULT";
+                    const lowerInput = input.toLowerCase();
+                    if (lowerInput.includes("aging") || lowerInput.includes("donor")) key = "Our donors are aging out";
+                    if (lowerInput.includes("turnover") || lowerInput.includes("staff") || lowerInput.includes("burnout")) key = "We have high staff turnover";
+
+                    setPrompts(PRESET_RESPONSES[key] || PRESET_RESPONSES["DEFAULT"]);
+                    setIsGenerating(false);
+                }, 1500);
+            };
+
+            return (
+                <section className="bg-black border-y border-neutral-900 py-32 md:py-40 px-6 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-60"></div>
+
+                    <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 xl:grid-cols-2 gap-16 lg:gap-20 items-center">
+
+                        {/* Left: Text Content */}
+                        <div className="order-1">
+                            <div className="inline-flex items-center gap-3 border border-emerald-500/40 bg-emerald-500/5 text-emerald-400 px-4 py-2 font-mono text-xs uppercase tracking-widest mb-10 rounded">
+                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                                The Strategy Lab
+                            </div>
+                            <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
+                                Fail <br />
+                                On <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-cyan-400 decoration-emerald-500/50">Purpose</span>
+                            </h2>
+                            <p className="text-xl text-neutral-400 mb-8 max-w-lg leading-relaxed font-light">
+                                Innovation requires broken norms. Our board retreats provide the psychological safety and structural rigor needed to tear down sacred cows. We visually and physically separate the creative mess of strategy from the clinical governance of the back-office.
+                            </p>
+                            <a href="https://uantchern.github.io/question-storming/" target="_blank" rel="noopener noreferrer" className="block text-lg text-emerald-400 hover:text-emerald-300 font-mono tracking-wide leading-relaxed max-w-lg transition-colors cursor-pointer">
+                                {'>'} Try the full question storming engine to see how CharityOps reframes your challenges.
+                            </a>
+                        </div>
+
+                        {/* Right: Interactive Widget */}
+                        <div className="order-2 w-full max-w-2xl mx-auto xl:mx-0 xl:ml-auto">
+                            <div className="bg-gradient-to-br from-[#0a0a0a] to-black border border-neutral-800 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden shadow-2xl">
+                                <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+                                <div className="mb-8">
+                                    <div className="mb-6 inline-flex w-14 h-14 bg-neutral-900 border border-neutral-800 items-center justify-center rounded-2xl shadow-inner text-emerald-500">
+                                        <AIIcon />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-3 tracking-tight text-white">Interactive Question Storming</h3>
+                                    <p className="text-neutral-400 text-sm font-light leading-relaxed">
+                                        Input a common charity struggle below, and the CharityOps Engine will generate three provocative questions.
+                                    </p>
+                                </div>
+
+                                <form onSubmit={handleStorm} className="relative z-10 group mb-8">
+                                    <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl blur opacity-20 group-focus-within:opacity-40 transition duration-500"></div>
+                                    <div className="relative flex flex-col sm:flex-row items-center bg-black border border-neutral-700 rounded-lg p-1.5 gap-2 shadow-2xl">
+                                        <input
+                                            type="text"
+                                            placeholder="e.g. 'Our donors are aging out'"
+                                            value={input}
+                                            onChange={e => setInput(e.target.value)}
+                                            className="flex-1 w-full bg-transparent text-white px-4 py-3 outline-none placeholder:text-neutral-600 text-sm"
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={isGenerating || !input.trim()}
+                                            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-md transition-colors flex items-center justify-center w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.2)] whitespace-nowrap text-xs"
+                                        >
+                                            {isGenerating ? (
+                                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            ) : "Ask"}
+                                        </button>
+                                    </div>
+                                </form>
+
+                                {/* Outputs */}
+                                <div className="space-y-3 min-h-[150px]">
+                                    {prompts.map((prompt, i) => (
+                                        <div key={i} className="animate-in fade-in slide-in-from-bottom-2 bg-[#050505] border border-neutral-800/80 p-5 rounded-xl flex gap-4 items-start shadow-sm" style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'both' }}>
+                                            <div className="text-emerald-500/40 font-mono font-black text-lg leading-none select-none mt-0.5">0{i + 1}</div>
+                                            <div className="text-neutral-300 text-sm leading-relaxed flex-1 font-light">{prompt}</div>
+                                        </div>
+                                    ))}
+                                    {!isGenerating && prompts.length === 0 && (
+                                        <div className="flex items-center justify-center h-[150px] border border-dashed border-neutral-800 rounded-xl text-neutral-600 font-mono text-xs tracking-widest bg-black/40">
+                                            AWAITING INPUT...
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="mt-8 pt-6 border-t border-neutral-800/50 flex justify-center sm:justify-end">
+                                    <a href="https://uantchern.github.io/question-storming/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 font-bold text-xs tracking-widest uppercase flex items-center gap-2 group/link transition-colors">
+                                        Launch Full Process Engine <span className="group-hover/link:translate-x-1 transition-transform"><ChevronRightIcon /></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            );
+        };
+
+        const Footer = () => (
+            <footer className="py-12 px-6 border-t border-neutral-900 bg-black text-center text-neutral-500 text-sm font-mono tracking-widest uppercase">
+                CharityOps &copy; {new Date().getFullYear()} // System Version 1.0.0
+            </footer>
+        );
+
+        const App = () => {
+            // Re-initialize Lucide Icons when components render
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, []);
+
+            return (
+                <React.Fragment>
+                    <Navbar />
+                    <Hero />
+                    <StrategyLab />
+                    <MeetEngine />
+                    <Footer />
+                </React.Fragment>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
