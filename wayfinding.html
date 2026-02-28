@@ -475,7 +475,7 @@
             const [selectedNode, setSelectedNode] = useState(null);
             const [searchQuery, setSearchQuery] = useState("");
             const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
-            const [expandedIds, setExpandedIds] = useState(new Set(["root_ecosystem"]));
+            const [expandedIds, setExpandedIds] = useState(new Set(["root_ecosystem", ...window.ecosystemData.nodes.map(n => n.id)]));
             const [blinkState, setBlinkState] = useState(false);
 
             useEffect(() => {
