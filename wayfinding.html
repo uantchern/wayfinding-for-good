@@ -562,16 +562,32 @@
                 if (fgRef.current) {
                     const chargeForce = fgRef.current.d3Force('charge');
                     if (chargeForce) {
-                        chargeForce.strength(-8000); // Extremely high repulsion
-                        chargeForce.distanceMax(5000); // Repel across large distance
+                        chargeForce.strength(-20000); // Massive initial explosive repulsion
+                        chargeForce.distanceMax(8000);
                     }
                     const linkForce = fgRef.current.d3Force('link');
                     if (linkForce) {
-                        linkForce.distance(250); // Give links plenty of slack
+                        linkForce.distance(400); // Give links much more slack
                     }
-                    // Re-kick the simulation strongly
+                    // Explicit collision force prevents any overlap directly based on node size
+                    fgRef.current.d3Force('collide', window.d3.forceCollide().radius(node => (node.val || 5) * 8).iterations(3));
+
+                    // Manually force zoom out so player sees the full explosion
+                    fgRef.current.zoom(0.2, 0);
+
+                    // Allow simulation to breathe out naturally and explosively
                     fgRef.current.d3Alpha(1);
                     fgRef.current.d3ReheatSimulation();
+
+                    // Ease down the strength slightly after the massive initial split to settle beautifully
+                    setTimeout(() => {
+                        if (fgRef.current && fgRef.current.d3Force('charge')) {
+                            fgRef.current.d3Force('charge').strength(-4000);
+                            fgRef.current.d3Alpha(0.3);
+                            fgRef.current.d3ReheatSimulation();
+                            fgRef.current.zoomToFit(2000, 100);
+                        }
+                    }, 500);
                 }
             }, [graphData]);
 
@@ -755,9 +771,8 @@
                                 linkCanvasObject={linkCanvasObject}
                                 onNodeClick={handleNodeClick}
                                 onBackgroundClick={handleBackgroundClick}
-                                d3VelocityDecay={0.2}
-                                d3AlphaDecay={0.01}
-                                cooldownTicks={400}
+                                d3VelocityDecay={0.1}
+                                cooldownTicks={800}
                             />
                         </div>
                     )}
