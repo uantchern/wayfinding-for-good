@@ -559,24 +559,20 @@
             }, [expandedIds]);
 
             useEffect(() => {
-                // Apply a much stronger force layout to prevent any overlapping
-                const timer = setTimeout(() => {
-                    if (fgRef.current) {
-                        const chargeForce = fgRef.current.d3Force('charge');
-                        if (chargeForce) {
-                            chargeForce.strength(-2500); // Maximum repulsion
-                            chargeForce.distanceMax(3000); // Act over larger distance
-                        }
-                        const linkForce = fgRef.current.d3Force('link');
-                        if (linkForce) {
-                            linkForce.distance(180); // Spread connections out
-                        }
-                        // Re-kick the simulation to apply new forces
-                        fgRef.current.d3ReheatSimulation();
+                if (fgRef.current) {
+                    const chargeForce = fgRef.current.d3Force('charge');
+                    if (chargeForce) {
+                        chargeForce.strength(-8000); // Extremely high repulsion
+                        chargeForce.distanceMax(5000); // Repel across large distance
                     }
-                }, 300);
-
-                return () => clearTimeout(timer);
+                    const linkForce = fgRef.current.d3Force('link');
+                    if (linkForce) {
+                        linkForce.distance(250); // Give links plenty of slack
+                    }
+                    // Re-kick the simulation strongly
+                    fgRef.current.d3Alpha(1);
+                    fgRef.current.d3ReheatSimulation();
+                }
             }, [graphData]);
 
             useEffect(() => {
