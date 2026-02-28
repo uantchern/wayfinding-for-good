@@ -559,14 +559,24 @@
             }, [expandedIds]);
 
             useEffect(() => {
-                if (fgRef.current) {
-                    fgRef.current.d3Force('charge').strength(-800);
-                    fgRef.current.d3Force('collide', window.d3 ? window.d3.forceCollide(node => (node.val || 5) * 1.6 + 5) : null);
-                    // if react-force-graph link force is available
-                    if (fgRef.current.d3Force('link')) {
-                        fgRef.current.d3Force('link').distance(70);
+                // Apply a much stronger force layout to prevent any overlapping
+                const timer = setTimeout(() => {
+                    if (fgRef.current) {
+                        const chargeForce = fgRef.current.d3Force('charge');
+                        if (chargeForce) {
+                            chargeForce.strength(-2500); // Maximum repulsion
+                            chargeForce.distanceMax(3000); // Act over larger distance
+                        }
+                        const linkForce = fgRef.current.d3Force('link');
+                        if (linkForce) {
+                            linkForce.distance(180); // Spread connections out
+                        }
+                        // Re-kick the simulation to apply new forces
+                        fgRef.current.d3ReheatSimulation();
                     }
-                }
+                }, 300);
+
+                return () => clearTimeout(timer);
             }, [graphData]);
 
             useEffect(() => {
@@ -749,9 +759,9 @@
                                 linkCanvasObject={linkCanvasObject}
                                 onNodeClick={handleNodeClick}
                                 onBackgroundClick={handleBackgroundClick}
-                                d3VelocityDecay={0.4}
+                                d3VelocityDecay={0.2}
                                 d3AlphaDecay={0.01}
-                                cooldownTicks={100}
+                                cooldownTicks={400}
                             />
                         </div>
                     )}
