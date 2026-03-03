@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PURPOSELY - Board Effectiveness Report Card</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface-color: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.4);
+            --danger: #fb7185;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--surface-color);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            color: var(--text-main);
+        }
+
+        .header p {
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .section.danger {
+            border-left-color: var(--danger);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-right: 12px;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .section.danger h2::before {
+            background: var(--danger);
+            box-shadow: 0 0 10px rgba(251, 113, 133, 0.4);
+        }
+
+        p {
+            color: var(--text-muted);
+        }
+
+        li {
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: var(--text-main);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .stat-bar {
+            background: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            height: 24px;
+            margin: 20px 0;
+        }
+
+        .stat-segment.oversight {
+            background: var(--accent);
+            width: 73%;
+        }
+
+        .stat-segment.advocacy {
+            background: #a78bfa;
+            width: 21%;
+        }
+
+        .stat-segment.strategic {
+            background: var(--danger);
+            width: 6%;
+        }
+
+        .stat-legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+
+            .container {
+                background: transparent;
+                border: none;
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            p,
+            li {
+                color: #333;
+            }
+
+            strong {
+                color: #000;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Week 8 Report Card</h1>
+            <p>PURPOSELY Question Storming Module &bull; NVPC Board Evaluation</p>
+        </div>
+
+        <div class="section danger">
+            <h2>1. Collective Blind Spots</h2>
+            <p>During the 6-week "Question Storming" pulse, the board collectively exhibited significant blind spots
+                primarily in <strong>Principle 2 (Board & Management Succession)</strong> and <strong>Principle 4
+                    (Management & Planning Frameworks)</strong>.</p>
+            <ul>
+                <li><strong>Succession Myopia:</strong> In Scenario 2, 75% of the board's inquiries plateaued at
+                    operational compliance—asking solely about immediate candidate requirements rather than
+                    interrogating the CEO on long-term systemic leadership continuity and transition resilience.</li>
+                <li><strong>Scaling vs. Controls:</strong> In Scenario 4, the board struggled to elevate their questions
+                    above day-to-day cash burn. 62% of questions failed to challenge management on the structural
+                    necessity of instituting formalized financial checks and balances to support rapid program scaling.
+                </li>
+            </ul>
+            <p>Overall, while the board rarely misses immediate operational fires, their collective blind spot lies in
+                anticipating structural risks before they manifest.</p>
+        </div>
+
+        <div class="section">
+            <h2>2. The Inquiry Index</h2>
+            <p>The board's Questioning Culture is highly capable but heavily reactive. Based on NVPC domain
+                categorization across 48 total iterative queries:</p>
+
+            <div class="stat-bar">
+                <div class="stat-segment oversight" title="Oversight (73%)"></div>
+                <div class="stat-segment advocacy" title="Advocacy (21%)"></div>
+                <div class="stat-segment strategic" title="Strategic (6%)"></div>
+            </div>
+            <div class="stat-legend">
+                <span><strong>Oversight:</strong> 35</span>
+                <span><strong>Advocacy:</strong> 10</span>
+                <span><strong>Strategic:</strong> 3</span>
+            </div>
+
+            <p>The board acts as an exceptional safety net in the <strong>Oversight</strong> domain. Directors are
+                fluent in compliance, fiduciary duty, and immediate risk mitigation. However, there is a pronounced
+                deficit in <strong>Strategic Direction</strong>. The board currently operates more as 'managers of the
+                present' rather than 'architects of the future.' The low emphasis on generative, long-term inquiries
+                prevents the charity from pivoting from basic survivability toward dynamic sector impact.</p>
+        </div>
+
+        <div class="section">
+            <h2>3. Recommended Action Plan</h2>
+            <p>To shift the board's questioning culture from reactive oversight to proactive stewardship, we strongly
+                recommend leveraging the GovernWell training ecosystem for the following mapped weaknesses:</p>
+            <ul>
+                <li><strong>For Principle 4 Weaknesses:</strong> We recommend that the full Finance Committee enrolls in
+                    the <a href="#" style="color:var(--accent)">Financial Stewardship for Charities</a> masterclass
+                    hosted by ISCA.</li>
+                <li><strong>For Principle 2 Weaknesses:</strong> The Board Chair and Nominating Committee should
+                    prioritize attending a dedicated <a href="#" style="color:var(--accent)">Board Dynamics & Succession
+                        Planning</a> workshop to build a more formalized framework for leadership transition.</li>
+                <li><strong>For Strategic Generativity:</strong> Dedicate 30 minutes of your next Quarterly Meeting to a
+                    facilitated 'Question Storming' session focusing exclusively on 5-year sector resilience,
+                    deliberately banning any questions related to the current fiscal year.</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Generated autonomously via the PURPOSELY platform. Data anonymized in compliance with Singapore PDPA
+            protocols.
+        </div>
+    </div>
+</body>
+
+</html>
