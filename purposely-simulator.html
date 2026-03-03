@@ -343,6 +343,10 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                     const data = await response.json();
                     removeTypingIndicator(typingId);
 
+                    if (data.error) {
+                        throw new Error(data.error.message || "OpenAI API Error (Check API Key)");
+                    }
+
                     let aiReply = data.choices[0].message.content;
 
                     if (currentState === 3) {
@@ -356,7 +360,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
 
                 } catch (err) {
                     removeTypingIndicator(typingId);
-                    addMessage("⚠️ Error hitting OpenAI endpoint. Check your API key or console.", "ai");
+                    addMessage("⚠️ " + (err.message || "Error hitting OpenAI endpoint."), "ai");
                 }
             } else if (currentState === 4) {
                 const typingId = addTypingIndicator();
