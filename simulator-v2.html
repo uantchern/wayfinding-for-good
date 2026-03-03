@@ -332,11 +332,8 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            systemInstruction: {
-                                parts: [{ text: SYSTEM_PROMPT }]
-                            },
                             contents: [{
-                                parts: [{ text: `SCENARIO: ${scenario.dilemma}\nCHALLENGE RULE: ${logic}\nDIRECTOR'S QUERY: "${userText}"` }]
+                                parts: [{ text: `SYSTEM INSTRUCTIONS:\n${SYSTEM_PROMPT}\n\nSCENARIO: ${scenario.dilemma}\nCHALLENGE RULE: ${logic}\nDIRECTOR'S QUERY: "${userText}"` }]
                             }]
                         })
                     });
