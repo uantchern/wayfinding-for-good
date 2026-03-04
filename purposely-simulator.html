@@ -601,7 +601,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                 const typingId = addTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator(typingId);
-                    let closureMsg = "Thank you for mapping your views! Your diagnostic transcript will securely download to your device now. You can drop it into the Review Assessment Dashboard to see your live NVPC scores! 🚀";
+                    let closureMsg = "Thank you for your assessment. Please complete the other 5 principles.";
                     addMessage(closureMsg, 'ai');
                     chatHistory.push({ scenario: currentScenarioId, step: 11, sender: 'PURPOSELY AI', text: closureMsg });
 
