@@ -144,6 +144,31 @@
             background-color: #008f6f;
         }
 
+        .mic-btn {
+            background-color: #202c33;
+            color: #8696a0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .mic-btn:hover:not(:disabled) {
+            background-color: #2a3942;
+        }
+
+        .mic-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         /* Debug/Setup Drawer */
         .debug-drawer {
             background: #1e293b;
@@ -261,6 +286,9 @@
             <div class="input-area">
                 <input type="text" id="userInput" class="input-box" placeholder="Type your question..."
                     onkeypress="handleEnter(event)" disabled>
+                <button class="mic-btn" onclick="toggleVoice()" id="micBtn" disabled>
+                    <i class="fas fa-microphone"></i>
+                </button>
                 <button class="send-btn" onclick="sendMessage()" id="sendBtn" disabled>
                     <i class="fas fa-paper-plane"></i>
                 </button>
@@ -427,6 +455,65 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             if (el) el.remove();
         }
 
+        // Voice Recording Logic
+        let isRecording = false;
+        let recognition = null;
+
+        function toggleVoice() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Your browser does not support voice input. Please use Chrome or Edge.");
+                return;
+            }
+
+            if (!recognition) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.lang = 'en-SG'; // Opt for Singapore English accuracy
+                recognition.continuous = false;
+                recognition.interimResults = true;
+
+                recognition.onstart = () => {
+                    isRecording = true;
+                    document.getElementById('micBtn').style.color = '#00a884'; // Active state
+                    document.getElementById('micBtn').classList.add('animate-pulse');
+                    document.getElementById('userInput').placeholder = 'Listening...';
+                };
+
+                recognition.onresult = (event) => {
+                    let text = '';
+                    for (let i = 0; i < event.results.length; i++) {
+                        text += event.results[i][0].transcript;
+                    }
+                    document.getElementById('userInput').value = text;
+                };
+
+                recognition.onerror = (event) => {
+                    console.error("Speech error", event);
+                    stopRecording();
+                };
+
+                recognition.onend = () => {
+                    stopRecording();
+                };
+            }
+
+            if (isRecording) {
+                stopRecording();
+            } else {
+                recognition.start();
+            }
+        }
+
+        function stopRecording() {
+            if (recognition && isRecording) {
+                recognition.stop();
+            }
+            isRecording = false;
+            document.getElementById('micBtn').style.color = '#8696a0';
+            document.getElementById('micBtn').classList.remove('animate-pulse');
+            document.getElementById('userInput').placeholder = 'Type your question...';
+        }
+
         function startSimulation(scenarioId) {
             const apiKey = document.getElementById('apiKey').value;
             if (!apiKey) { alert("Please input a Google Gemini API Key to power the simulation."); return; }
@@ -435,6 +522,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             document.getElementById('chatWindow').innerHTML = `<div class="w-full flex justify-center mt-2 mb-4"><span class="bg-[#182229] px-4 py-1.5 rounded-lg text-xs text-gray-400 shadow-sm">Simulation Started</span></div>`;
             document.getElementById('userInput').disabled = false;
             document.getElementById('sendBtn').disabled = false;
+            document.getElementById('micBtn').disabled = false;
             document.getElementById('userInput').focus();
 
             currentScenarioId = scenarioId;
@@ -570,6 +658,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
 
                     document.getElementById('userInput').disabled = true;
                     document.getElementById('sendBtn').disabled = true;
+                    document.getElementById('micBtn').disabled = true;
 
                     if (!completedScenarios.includes(currentScenarioId)) {
                         completedScenarios.push(currentScenarioId);
