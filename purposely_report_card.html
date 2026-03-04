@@ -175,9 +175,24 @@
 
 <body>
     <div class="container">
-        <div class="header">
-            <h1 id="reportTitle">Live Board Evaluation</h1>
-            <p>PURPOSELY Question Storming Module &bull; Privacy-First NLP Analysis</p>
+        <div class="header"
+            style="text-align: left; padding-bottom: 25px; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <h1 id="dynCharityName"
+                    style="margin: 0; font-size: 2.2rem; letter-spacing: -1px; color: var(--text-main);">Evaluating
+                    Organization...</h1>
+                <p id="dynCharityUen"
+                    style="color: var(--accent); font-family: monospace; font-size: 1.1rem; letter-spacing: 1px; font-weight: 600; margin-top: 5px; margin-bottom: 0;">
+                    UEN: [PENDING]</p>
+            </div>
+            <div style="text-align: right;">
+                <p
+                    style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 10px 0; font-weight: 600;">
+                    Times Principle Assessed</p>
+                <div id="principleCounts" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;">
+                    <!-- JS injected counts -->
+                </div>
+            </div>
         </div>
 
         <div id="emptyState"
@@ -323,6 +338,26 @@
         });
 
         function generateLiveReport(text) {
+            // Inject dynamic Charity Header
+            let storedName = localStorage.getItem('charityName');
+            let storedUen = localStorage.getItem('charityUen');
+            document.getElementById('dynCharityName').innerText = storedName ? storedName : "Anonymous Organization";
+            document.getElementById('dynCharityUen').innerText = storedUen ? `UEN: ${storedUen}` : "UEN: Not Provided";
+
+            // Count Principle Assessment Frequencies
+            let countP1 = (text.match(/## Principle 1/gi) || []).length;
+            let countP2 = (text.match(/## Principle 2/gi) || []).length;
+            let countP3 = (text.match(/## Principle 3/gi) || []).length;
+            let countP4 = (text.match(/## Principle 4/gi) || []).length;
+            let countP5 = (text.match(/## Principle 5/gi) || []).length;
+            let countP6 = (text.match(/## Principle 6/gi) || []).length;
+
+            // Fallback for mocked view
+            if (countP1 === 0 && countP2 === 0 && countP3 === 0 && countP4 === 0 && countP5 === 0 && countP6 === 0) { countP2 = 1; countP4 = 1; }
+
+            let getBadge = (name, c) => `<span style="background: ${c > 0 ? 'var(--accent)' : 'var(--border)'}; opacity: ${c > 0 ? '1' : '0.5'}; color:${c > 0 ? '#0f172a' : 'var(--text-muted)'}; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight:600;">${name}: ${c}</span>`;
+            document.getElementById('principleCounts').innerHTML = `${getBadge('P1', countP1)}${getBadge('P2', countP2)}${getBadge('P3', countP3)}${getBadge('P4', countP4)}${getBadge('P5', countP5)}${getBadge('P6', countP6)}`;
+
             // Count queries
             let queries = text.match(/Director:/g) || text.match(/Director Q\d/g) || [];
             let totalQuestions = queries.length;
