@@ -211,17 +211,9 @@
                     placeholder="AIza...">
             </div>
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-400 mb-2">Select Scenario</label>
-                <select id="scenarioSelect"
-                    class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white focus:outline-none focus:border-sky-500">
-                    <option value="1">1: Mission & Objectives (Mission Drift)</option>
-                    <option value="5">5: Accountability (Data Breach)</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-400 mb-3">Select a Principle to begin</label>
+                <div id="principlesContainer"></div>
             </div>
-            <button onclick="startSimulation()"
-                class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
-                Start Weekly Pulse
-            </button>
         </div>
 
         <!-- The Phone -->
@@ -266,25 +258,83 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
 
         const scenarios = {
             "1": {
-                dilemma: "Hi Director! Here is your dilemma for Week 1: Mission & Objectives.\n\nThe charity (an IPC focused on elderly care) is offered a highly lucrative $500,000 restricted grant from a major corporate donor. However, the strict grant stipulations require the charity to allocate 40% of the funds to launch a brand-new youth mentorship program. The management team is eager to accept. Accepting the grant would require diverting significant staff time away from core elderly care objects. The donor requires an immediate answer.\n\n*What is the first, most critical question you would ask the management team?*",
+                title: "Principle 1: Mission & Objectives",
+                dilemma: "Hi Director! Week 1 Dilemma:\n\nA corporate donor offers a $500k restricted grant, but stipulations require diverting 40% of funds to a brand-new, unrelated youth mentorship program. The management team is eager, but it diverts staff from your core elderly care mission.\n\n*What is your first, most critical question?*",
                 challenges: [
-                    "Challenge 1 (Relevance): Challenge them to ensure the issue strictly aligns with the core objects and constitution registered with the Commissioner of Charities.",
-                    "Challenge 2 (Fiduciary Duty): Challenge them on how this protects assets (like staff time) and fulfills fiduciary duty prioritizing current elderly beneficiaries.",
-                    "Challenge 3 (Strategy): Challenge them to look 5-10 years ahead. How does this impact IPC renewal and long-term sector credibility?"
+                    "Challenge 1: Ensure strict alignment with registered core objects.",
+                    "Challenge 2: Question how this protects current beneficiary interests.",
+                    "Challenge 3: Ask about long-term vision vs short-term cash."
+                ]
+            },
+            "2": {
+                title: "Principle 2: Board & Management",
+                dilemma: "Hi Director! Week 2 Dilemma:\n\nThe Board Chair has served for 12 years and firmly resists stepping down, citing a lack of 'ready successors'. Key independent directors are frustrated and threatening to resign over the stagnant leadership.\n\n*What is your first, most critical question?*",
+                challenges: [
+                    "Challenge 1: Push on succession planning and risk.",
+                    "Challenge 2: Cite governance term limits and independence rules.",
+                    "Challenge 3: Ask how to resolve the immediate boardroom conflict objectively."
+                ]
+            },
+            "3": {
+                title: "Principle 3: Acts Responsibly",
+                dilemma: "Hi Director! Week 3 Dilemma:\n\nThe Executive Director awarded a lucrative IT contract to a vendor firm owned by his brother-in-law. Although the price was competitive, it was single-sourced without a formal tender process or conflict of interest declaration.\n\n*What is your first, most critical question?*",
+                challenges: [
+                    "Challenge 1: Press on why standard procurement failed.",
+                    "Challenge 2: Challenge the specific breach of Conflict of Interest.",
+                    "Challenge 3: Ask how to handle public/donor audits on this matter."
+                ]
+            },
+            "4": {
+                title: "Principle 4: Plans for the Future",
+                dilemma: "Hi Director! Week 4 Dilemma:\n\nThe charity runs entirely on yearly government grants with zero reserves. A sudden policy change delays the next grant disbursement by 6 months, leaving the charity unable to make payroll next week.\n\n*What is your first, most critical question?*",
+                challenges: [
+                    "Challenge 1: Demand immediate contingency strategies.",
+                    "Challenge 2: Ask why there is no established reserves policy.",
+                    "Challenge 3: Challenge the long-term financial sustainability plan."
                 ]
             },
             "5": {
-                dilemma: "Hi Director! Here is your dilemma for Week 5: Accountability.\n\nAn IT vendor informs the ED that a server containing sensitive personal data of 2,000 donors was inadvertently exposed online for three weeks. There is no active evidence of exfiltration, but logs are inconclusive. The ED suggests quietly patching the vulnerability and 'handling it internally' without notifying the Board or the PDPC, arguing that public disclosure would jeopardize upcoming fundraising campaigns.\n\n*What is your immediate, pressing question to the Executive Director?*",
+                title: "Principle 5: Accountable & Transparent",
+                dilemma: "Hi Director! Week 5 Dilemma:\n\nA server containing sensitive personal data of 2,000 donors was inadvertently exposed. The ED suggests quietly patching it without notifying the Board or Authorities to avoid jeopardizing an upcoming fundraising campaign.\n\n*What is your first, most critical question?*",
                 challenges: [
-                    "Challenge 1 (Relevance): Challenge them on whether 'handling it internally' truly serves overarching accountability versus short-term comfort.",
-                    "Challenge 2 (Fiduciary Duty): Challenge them specifically on the severe legal and statutory risks under Singapore law (PDPA).",
-                    "Challenge 3 (Strategy): Challenge them to move from incident response to systemic change. How does this fundamentally reform cybersecurity governance?"
+                    "Challenge 1: Challenge the ethical choice of 'hiding' it.",
+                    "Challenge 2: Emphasize strict legal risks under the PDPA.",
+                    "Challenge 3: Ask for a systemic cybersecurity governance overhaul."
+                ]
+            },
+            "6": {
+                title: "Principle 6: Communicates Actively",
+                dilemma: "Hi Director! Week 6 Dilemma:\n\nA viral social media post accuses your charity of wasting funds on 'lavish staff retreats', utilizing out-of-context photos. Donors are furious and threatening to pull funding. The comms team has yet to respond.\n\n*What is your first, most critical question?*",
+                challenges: [
+                    "Challenge 1: Push for immediate crisis communication facts.",
+                    "Challenge 2: Ask how to transparently rebuild public trust instantly.",
+                    "Challenge 3: Challenge the internal policies on staff welfare spending."
                 ]
             }
         };
 
         let currentState = 0; // 0: Init, 1: Q1, 2: Q2, 3: Q3, 4: Final
-        let currentScenarioId = "1";
+        let currentScenarioId = null;
+        let completedScenarios = [];
+
+        function renderPrinciples() {
+            const container = document.getElementById('principlesContainer');
+            if (!container) return;
+            let html = '<div class="grid grid-cols-1 gap-3">';
+            for (let key in scenarios) {
+                const isCompleted = completedScenarios.includes(key);
+                html += `
+                <button onclick="startSimulation('${key}')" 
+                    class="text-left w-full border ${isCompleted ? 'border-slate-800 bg-slate-800' : 'border-slate-500 bg-slate-700 hover:bg-slate-600'} rounded-lg p-3 transition duration-200"
+                    ${isCompleted ? 'disabled' : ''}>
+                    <div class="${isCompleted ? 'text-gray-500 line-through' : 'text-white font-medium'}">
+                        ${scenarios[key].title}
+                    </div>
+                </button>`;
+            }
+            html += '</div>';
+            container.innerHTML = html;
+        }
 
         function getTime() {
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -320,7 +370,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             if (el) el.remove();
         }
 
-        function startSimulation() {
+        function startSimulation(scenarioId) {
             const apiKey = document.getElementById('apiKey').value;
             if (!apiKey) { alert("Please input a Google Gemini API Key to power the simulation."); return; }
 
@@ -329,7 +379,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             document.getElementById('userInput').disabled = false;
             document.getElementById('sendBtn').disabled = false;
 
-            currentScenarioId = document.getElementById('scenarioSelect').value;
+            currentScenarioId = scenarioId;
             currentState = 1;
 
             // Send Initial Dilemma
@@ -350,6 +400,17 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             const input = document.getElementById('userInput');
             const userText = input.value.trim();
             if (!userText || currentState === 0) return;
+
+            // Validate that user input is an actual question
+            const hasQuestionMark = userText.includes('?');
+            const hasQuestionWord = /\b(how|what|where|when|why|who)\b/i.test(userText.toLowerCase());
+
+            if (!hasQuestionMark || !hasQuestionWord) {
+                addMessage(userText, 'user');
+                input.value = '';
+                addMessage("⚠️ As a Director using the Question Storming method, you must guide with questions. Please rephrase to include a questioning word (who, what, where, when, why, how) and end with a question mark (?).", 'ai');
+                return;
+            }
 
             addMessage(userText, 'user');
             input.value = '';
@@ -399,7 +460,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                     let aiReply = data.candidates[0].content.parts[0].text;
 
                     if (currentState === 3) {
-                        aiReply += "\n\n*(This concludes the iteration. Please reply with your Final Thoughts on how you will approach this topic moving forward.)*";
+                        aiReply += "\n\n*(This concludes the iteration. Please reply with a final concluding question to challenge their long-term resolve.)*";
                         currentState = 4;
                     } else {
                         currentState++;
@@ -415,15 +476,27 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                 const typingId = addTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator(typingId);
-                    addMessage("Thank you for completing this week's governance pulse! Your responses have been anonymized and logged for the Week 8 Evaluation. Have a great week ahead! 🚀", 'ai');
+                    addMessage("Thank you for completing this governance pulse! You've challenged the team effectively. Please open the menu to select another principle. 🚀", 'ai');
                     document.getElementById('userInput').disabled = true;
                     document.getElementById('sendBtn').disabled = true;
                     currentState = 0;
+
+                    // Mark as completed and refresh UI
+                    if (!completedScenarios.includes(currentScenarioId)) {
+                        completedScenarios.push(currentScenarioId);
+                    }
+                    renderPrinciples();
+
+                    // Auto-open drawer to choose next
+                    setTimeout(() => {
+                        document.getElementById('debugDrawer').classList.add('open');
+                    }, 2000);
                 }, 1000);
             }
         }
 
-        // Open drawer on load
+        // Initial render and open drawer
+        renderPrinciples();
         document.getElementById('debugDrawer').classList.add('open');
     </script>
 </body>
