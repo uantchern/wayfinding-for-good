@@ -214,6 +214,13 @@
                 <label class="block text-sm font-medium text-gray-400 mb-3">Select a Principle to begin</label>
                 <div id="principlesContainer"></div>
             </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-700">
+                <button onclick="exportToNotebookLM()"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fas fa-file-export"></i> Push to NotebookLM
+                </button>
+            </div>
         </div>
 
         <!-- The Phone -->
@@ -232,6 +239,17 @@
                     <h2 class="text-white font-semibold text-lg leading-tight">PURPOSELY</h2>
                     <p class="text-gray-400 text-sm leading-tight">Governance Partner • Online</p>
                 </div>
+            </div>
+
+            <!-- 11-Step Breadcrumb Tracker -->
+            <div id="breadcrumbTracker" class="hidden w-full bg-[#1b252b] px-4 py-3 border-b border-[#2f3b43]">
+                <div
+                    class="flex justify-between items-center text-[10px] text-gray-400 font-bold tracking-wider uppercase mb-2">
+                    <span>1. Scenario</span>
+                    <span>Q-Storming Loop</span>
+                    <span>11. Final</span>
+                </div>
+                <div class="flex gap-1.5 w-full" id="breadcrumbBars"></div>
             </div>
 
             <div class="chat-bg" id="chatWindow">
@@ -313,9 +331,54 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             }
         };
 
-        let currentState = 0; // 0: Init, 1: Q1, 2: Q2, 3: Q3, 4: Final
+        let currentStep = 0; // 0: Init, 1-11: Live Simulation Steps
         let currentScenarioId = null;
         let completedScenarios = [];
+        let chatHistory = []; // Tracks data for NotebookLM export
+
+        function exportToNotebookLM() {
+            if (chatHistory.length === 0) {
+                alert("No simulation data to export yet."); return;
+            }
+            let md = "# PURPOSELY: Governance Pulse Export\n\n*Generated anonymously for internal NotebookLM Contexting.*\n\n---\n";
+            let currentScenario = null;
+            chatHistory.forEach(log => {
+                if (log.scenario !== currentScenario) {
+                    md += `\n## ${scenarios[log.scenario]?.title || "Governance Scenario"}\n\n`;
+                    currentScenario = log.scenario;
+                }
+                md += `**[Step ${log.step}] ${log.sender}:** ${log.text.replace(/\\*/g, "")}\n\n`;
+            });
+
+            const blob = new Blob([md], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'purposely_board_data.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function updateBreadcrumb() {
+            const tracker = document.getElementById('breadcrumbTracker');
+            if (currentStep === 0) {
+                tracker.classList.add('hidden');
+                return;
+            }
+            tracker.classList.remove('hidden');
+            const barsContainer = document.getElementById('breadcrumbBars');
+            let barsHtml = '';
+            for (let i = 1; i <= 11; i++) {
+                if (i < currentStep) {
+                    barsHtml += `<div class="h-1.5 flex-1 bg-teal-500 rounded-full"></div>`;
+                } else if (i === currentStep) {
+                    barsHtml += `<div class="h-1.5 flex-1 bg-yellow-400 rounded-full animate-pulse"></div>`;
+                } else {
+                    barsHtml += `<div class="h-1.5 flex-1 bg-slate-700 rounded-full"></div>`;
+                }
+            }
+            barsContainer.innerHTML = barsHtml;
+        }
 
         function renderPrinciples() {
             const container = document.getElementById('principlesContainer');
@@ -343,24 +406,18 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
         function addMessage(text, sender) {
             const chatWindow = document.getElementById('chatWindow');
             const formattedText = text.replace(/\n/g, '<br>');
-
             chatWindow.innerHTML += `
             <div class="bubble ${sender}">
                 ${formattedText}
                 <span class="timestamp">${getTime()}</span>
-            </div>
-        `;
+            </div>`;
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
         function addTypingIndicator() {
             const chatWindow = document.getElementById('chatWindow');
             const id = 'typing-' + Date.now();
-            chatWindow.innerHTML += `
-            <div id="${id}" class="bubble ai" style="color: #00a884; font-style: italic;">
-                typing...
-            </div>
-        `;
+            chatWindow.innerHTML += `<div id="${id}" class="bubble ai" style="color: #00a884; font-style: italic;">typing...</div>`;
             chatWindow.scrollTop = chatWindow.scrollHeight;
             return id;
         }
@@ -378,16 +435,22 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             document.getElementById('chatWindow').innerHTML = `<div class="w-full flex justify-center mt-2 mb-4"><span class="bg-[#182229] px-4 py-1.5 rounded-lg text-xs text-gray-400 shadow-sm">Simulation Started</span></div>`;
             document.getElementById('userInput').disabled = false;
             document.getElementById('sendBtn').disabled = false;
+            document.getElementById('userInput').focus();
 
             currentScenarioId = scenarioId;
-            currentState = 1;
+            currentStep = 1;
+            updateBreadcrumb();
 
-            // Send Initial Dilemma
             setTimeout(() => {
                 const typingId = addTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator(typingId);
-                    addMessage(`*[P${currentScenarioId} Dilemma]*\n\n${scenarios[currentScenarioId].dilemma}`, 'ai');
+                    let initialDilemma = `*[P${currentScenarioId} Dilemma]*\n\n${scenarios[currentScenarioId].dilemma}`;
+                    addMessage(initialDilemma, 'ai');
+                    chatHistory.push({ scenario: currentScenarioId, step: 1, sender: 'PURPOSELY AI', text: initialDilemma });
+
+                    currentStep = 2; // user input for Q1 expected
+                    updateBreadcrumb();
                 }, 1000);
             }, 500);
         }
@@ -399,10 +462,10 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const userText = input.value.trim();
-            if (!userText || currentState === 0) return;
+            if (!userText || currentStep === 0) return;
 
-            // Validate that user input is an actual question, but only during the 3 interrogation phases
-            if (currentState >= 1 && currentState <= 3) {
+            // Validate that user input is an actual question, but only during the 4 interrogation phases (Steps 2, 4, 6, 8)
+            if ([2, 4, 6, 8].includes(currentStep)) {
                 const hasQuestionMark = userText.includes('?');
                 const hasQuestionWord = /\b(how|what|where|when|why|who)\b/i.test(userText.toLowerCase());
 
@@ -414,17 +477,28 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                 }
             }
 
-            let userLabel = currentState <= 3 ? `[P${currentScenarioId}Q${currentState}]` : `[P${currentScenarioId} Final Reflection]`;
-            addMessage(`*${userLabel}*\n${userText}`, 'user');
+            let userLabel = '';
+            if (currentStep === 2) userLabel = `[P${currentScenarioId}Q1]`;
+            else if (currentStep === 4) userLabel = `[P${currentScenarioId}Q2]`;
+            else if (currentStep === 6) userLabel = `[P${currentScenarioId}Q3]`;
+            else if (currentStep === 8) userLabel = `[P${currentScenarioId}Q4]`;
+            else if (currentStep === 10) userLabel = `[P${currentScenarioId} Final Reflection]`;
+
+            let formattedUserText = `*${userLabel}*\n${userText}`;
+            addMessage(formattedUserText, 'user');
+            chatHistory.push({ scenario: currentScenarioId, step: currentStep, sender: 'Director', text: formattedUserText });
             input.value = '';
 
-            if (currentState >= 1 && currentState <= 3) {
+            currentStep++; // advances to AI step (3, 5, 7, 9, 11)
+            updateBreadcrumb();
+
+            if ([3, 5, 7, 9].includes(currentStep)) {
                 const typingId = addTypingIndicator();
 
                 try {
                     const apiKey = document.getElementById('apiKey').value;
 
-                    // Dynamically discover a working model to prevent "not found" region errors
+                    // Dynamically discover a working model
                     let targetModel = "gemini-1.5-flash";
                     try {
                         const modelReq = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
@@ -432,23 +506,31 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                             const modelData = await modelReq.json();
                             const availableModels = modelData.models.filter(m => m.supportedGenerationMethods.includes("generateContent") && m.name.includes("gemini"));
                             if (availableModels.length > 0) {
-                                // Prefer 1.5 flash, then 1.5 pro, then anything else
                                 const flash = availableModels.find(m => m.name.includes("1.5-flash"));
                                 if (flash) targetModel = flash.name.replace("models/", "");
                                 else targetModel = availableModels[0].name.replace("models/", "");
                             }
                         }
-                    } catch (e) { console.warn("ListModels discovery failed, defaulting."); }
+                    } catch (e) { console.warn("ListModels discovery failed."); }
 
                     const scenario = scenarios[currentScenarioId];
-                    const logic = scenario.challenges[currentState - 1];
+                    let logic = '';
+                    if (currentStep === 3) logic = scenario.challenges[0];
+                    if (currentStep === 5) logic = scenario.challenges[1];
+                    if (currentStep === 7) logic = scenario.challenges[2];
+                    if (currentStep === 9) logic = "Provide a very brief 2-sentence synthesis of their questions and challenge them to provide their Final Reflexive Thoughts on what they've learned about governing this principle.";
+
+                    let currentPrompt = SYSTEM_PROMPT;
+                    if (currentStep === 9) {
+                        currentPrompt = currentPrompt.replace("Ask EXACTLY ONE challenging follow-up question in return. Do NOT grade or praise them excessively. Challenge them to think deeper.", "Do NOT ask a follow-up question. Summarize the discourse politely and invite their final reflections.");
+                    }
 
                     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:generateContent?key=${apiKey}`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             contents: [{
-                                parts: [{ text: `SYSTEM INSTRUCTIONS:\n${SYSTEM_PROMPT}\n\nSCENARIO: ${scenario.dilemma}\nCHALLENGE RULE: ${logic}\nDIRECTOR'S QUERY: "${userText}"` }]
+                                parts: [{ text: `SYSTEM INSTRUCTIONS:\n${currentPrompt}\n\nSCENARIO: ${scenario.dilemma}\nCHALLENGE RULE: ${logic}\nDIRECTOR'S RECENT QUERY: "${userText}"` }]
                             }]
                         })
                     });
@@ -456,43 +538,47 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                     const data = await response.json();
                     removeTypingIndicator(typingId);
 
-                    if (data.error) {
-                        throw new Error(data.error.message || "Google Gemini API Error (Check API Key)");
-                    }
+                    if (data.error) throw new Error(data.error.message);
 
-                    let aiLabel = `[P${currentScenarioId}Q${currentState} Smart Prompt]`;
-                    let aiReply = `*${aiLabel}*\n\n` + data.candidates[0].content.parts[0].text;
+                    let aiReply = data.candidates[0].content.parts[0].text;
+                    let aiLabel = '';
+                    if (currentStep === 3) aiLabel = `[P${currentScenarioId} Challenge 1]`;
+                    if (currentStep === 5) aiLabel = `[P${currentScenarioId} Challenge 2]`;
+                    if (currentStep === 7) aiLabel = `[P${currentScenarioId} Challenge 3]`;
+                    if (currentStep === 9) aiLabel = `[P${currentScenarioId} Synthesis & Reflection Target]`;
 
-                    if (currentState === 3) {
-                        aiReply += "\n\n*(This concludes the scenario. Please share your open-ended views on how we fared in resolving this dilemma. You can type your response or send a WhatsApp Voice note.)*";
-                        currentState = 4;
-                    } else {
-                        currentState++;
-                    }
+                    let finalReply = `*${aiLabel}*\n\n${aiReply}`;
+                    addMessage(finalReply, 'ai');
+                    chatHistory.push({ scenario: currentScenarioId, step: currentStep, sender: 'PURPOSELY AI', text: finalReply });
 
-                    addMessage(aiReply, 'ai');
+                    currentStep++; // advance to User Step (4, 6, 8, 10)
+                    updateBreadcrumb();
 
                 } catch (err) {
                     removeTypingIndicator(typingId);
                     addMessage("⚠️ " + (err.message || "Error hitting Google Gemini endpoint."), "ai");
+                    currentStep--; // Rollback step on network error
+                    updateBreadcrumb();
                 }
-            } else if (currentState === 4) {
+            } else if (currentStep === 11) {
                 const typingId = addTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator(typingId);
-                    addMessage("Thank you for sharing your thoughtful views! Your feedback has been successfully recorded. Please open the menu above to select your next principle. 🚀", 'ai');
+                    let closureMsg = "Thank you for sharing your thoughtful views! Your feedback has been safely recorded to your local instance. Please open the menu above to select your next principle. 🚀";
+                    addMessage(closureMsg, 'ai');
+                    chatHistory.push({ scenario: currentScenarioId, step: 11, sender: 'PURPOSELY AI', text: closureMsg });
+
                     document.getElementById('userInput').disabled = true;
                     document.getElementById('sendBtn').disabled = true;
-                    currentState = 0;
 
-                    // Mark as completed and refresh UI
                     if (!completedScenarios.includes(currentScenarioId)) {
                         completedScenarios.push(currentScenarioId);
                     }
                     renderPrinciples();
 
-                    // Auto-open drawer to choose next
                     setTimeout(() => {
+                        currentStep = 0;
+                        updateBreadcrumb();
                         document.getElementById('debugDrawer').classList.add('open');
                     }, 2000);
                 }, 1000);
