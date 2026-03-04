@@ -387,7 +387,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                 const typingId = addTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator(typingId);
-                    addMessage(scenarios[currentScenarioId].dilemma, 'ai');
+                    addMessage(`*[P${currentScenarioId} Dilemma]*\n\n${scenarios[currentScenarioId].dilemma}`, 'ai');
                 }, 1000);
             }, 500);
         }
@@ -414,7 +414,8 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                 }
             }
 
-            addMessage(userText, 'user');
+            let userLabel = currentState <= 3 ? `[P${currentScenarioId}Q${currentState}]` : `[P${currentScenarioId} Final Reflection]`;
+            addMessage(`*${userLabel}*\n${userText}`, 'user');
             input.value = '';
 
             if (currentState >= 1 && currentState <= 3) {
@@ -459,7 +460,8 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                         throw new Error(data.error.message || "Google Gemini API Error (Check API Key)");
                     }
 
-                    let aiReply = data.candidates[0].content.parts[0].text;
+                    let aiLabel = `[P${currentScenarioId}Q${currentState} Smart Prompt]`;
+                    let aiReply = `*${aiLabel}*\n\n` + data.candidates[0].content.parts[0].text;
 
                     if (currentState === 3) {
                         aiReply += "\n\n*(This concludes the scenario. Please share your open-ended views on how we fared in resolving this dilemma. You can type your response or send a WhatsApp Voice note.)*";
