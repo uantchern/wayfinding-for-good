@@ -28,7 +28,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 async function sendWhatsAppMessage(toHashPlaceholder, messageBody) {
     // Note: In production, since you only store the hash, you must either:
     // A) Send the reply seamlessly within the webhook HTTP response (if using Twilio).
-    // B) E2E encrypt the raw phone number inside a temporary cache that expires after the 6-week pulse, 
+    // B) E2E encrypt the raw phone number inside a temporary cache that expires after the assessment pulse, 
     //    so you can map returning hashes to actual delivery numbers. 
     // For this prototype, we assume we have the raw 'to' number mapped safely in-session.
 

@@ -16,10 +16,10 @@ const supabase = createClient(
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-const REPORT_SYSTEM_PROMPT = `You are the Senior Governance Architect tasked with generating perfectly formatted HTML content for the Week 8 PURPOSELY Board Effectiveness Report.
-You will be provided with aggregated JSON statistics representing the board's 6-week "Question Storming" performance across the NVPC Charity Board Framework domains.
+const REPORT_SYSTEM_PROMPT = `You are the Senior Governance Architect tasked with generating perfectly formatted HTML content for the PURPOSELY Board Effectiveness Report.
+You will be provided with aggregated JSON statistics representing the board's "Question Storming" performance across the NVPC Charity Board Framework domains.
 
-Your output MUST be a valid JSON object with exactly these three keys, stringified as raw HTML (use <p>, <ul>, <li>, <strong>, but NO markdown wrapping or outer ```html blocks):
+Your output MUST be a valid JSON object with exactly these three keys, stringified as raw HTML (use <p>, <ul>, <li>, <strong>, but NO markdown wrapping or outer \`\`\`html blocks):
     {
         "blind_spots_html": "HTML summarizing the principles where the board plateaued at operational compliance (high 'blind spot' rates).",
         "inquiry_index_html": "HTML providing a qualitative summary of their questioning culture. Are they generative or passive? Heavily focused on Oversight but weak on Strategy?",
@@ -29,7 +29,7 @@ Your output MUST be a valid JSON object with exactly these three keys, stringifi
 Tone Rules: "Critical Friend", professional, heavily contextualized to Singapore's charity sector. Avoid grading or scores.`;
 
 async function fetchBoardAggregatedData(targetBoardId) {
-    console.log(`Fetching 6-week evaluation data for Board: ${targetBoardId}...`);
+    console.log(`Fetching evaluation data for Board: ${targetBoardId}...`);
     // Note: Due to the anonymized nature, we join evaluation_results -> director_sessions -> directors -> boards
 
     // In Supabase, you'll need the proper relation mappings, testing with a mock structured query
@@ -60,16 +60,16 @@ async function fetchBoardAggregatedData(targetBoardId) {
         blind_spots_by_scenario: {}
     };
 
-    boardEvals.forEach(eval => {
-        if (eval.nvpc_advocacy) stats.domain_tallies.advocacy++;
-        if (eval.nvpc_oversight) stats.domain_tallies.oversight++;
-        if (eval.nvpc_strategic) stats.domain_tallies.strategic++;
+    boardEvals.forEach(e => {
+        if (e.nvpc_advocacy) stats.domain_tallies.advocacy++;
+        if (e.nvpc_oversight) stats.domain_tallies.oversight++;
+        if (e.nvpc_strategic) stats.domain_tallies.strategic++;
 
-        const sId = eval.director_sessions.scenario_id;
+        const sId = e.director_sessions.scenario_id;
         if (!stats.blind_spots_by_scenario[sId]) stats.blind_spots_by_scenario[sId] = { total: 0, blind_spots: 0 };
 
         stats.blind_spots_by_scenario[sId].total++;
-        if (eval.is_blind_spot) stats.blind_spots_by_scenario[sId].blind_spots++;
+        if (e.is_blind_spot) stats.blind_spots_by_scenario[sId].blind_spots++;
     });
 
     return stats;
@@ -204,7 +204,7 @@ function buildHtmlReport(llmData) {
 <body>
     <div class="container">
         <div class="header">
-            <h1>Week 8 Report Card</h1>
+            <h1>Report Card</h1>
             <p>PURPOSELY Question Storming Module &bull; NVPC Board Evaluation</p>
         </div>
         
@@ -245,7 +245,7 @@ async function runReportGenerator(boardId) {
         TO PROVE THE JSON LLM LOGIC:
         */
         const mockStats = {
-            total_sessions: 48, // 8 directors * 6 wks
+            total_sessions: 48, // 8 directors * 6
             domain_tallies: { advocacy: 10, oversight: 35, strategic: 3 },
             blind_spots_by_scenario: {
                 "1_mission": { total: 8, blind_spots: 1 },
