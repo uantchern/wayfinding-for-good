@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CharityOps Wayfinding Statement</title>
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="CharityOps Wayfinding Statement" />
+    <meta property="og:description"
+        content="We discover Really Useful Things for Charities. No maps required. Just intent." />
+    <meta property="og:image" content="https://uantchern.github.io/wayfinding-for-good/social-preview.png" />
+    <meta property="og:url" content="https://www.charityops.org/" />
+    <meta property="og:type" content="website" />
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -267,7 +274,12 @@
         <div class="max-w-4xl mx-auto">
             <div id="contact-form-container"
                 class="bg-[#FDFBF7] p-8 md:p-12 rounded-sm border border-[#EAE5D8] shadow-sm">
-                <form id="wayfinding-form" class="space-y-8" onsubmit="handleFormSubmit(event)">
+                <form action="https://formsubmit.co/uantchern@gmail.com" method="POST" target="_blank" class="space-y-8"
+                    onsubmit="setTimeout(() => { document.getElementById('submit-btn').innerHTML = 'SENT!'; document.getElementById('submit-btn').disabled = true; }, 100);">
+                    <!-- FormSubmit Configuration -->
+                    <input type="hidden" name="_subject" value="New CharityOps Intent">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://uantchern.github.io/wayfinding-for-good/">
                     <div class="text-center space-y-2 mb-10">
                         <i data-lucide="mail" class="w-8 h-8 text-[#D2B48C] mx-auto mb-4 stroke-[1]"></i>
                         <h3 class="text-2xl font-light text-[#1B2B28] italic">Begin a conversation</h3>
@@ -335,45 +347,7 @@
         }
 
         // Form Submit
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            const container = document.getElementById('contact-form-container');
-            const form = document.getElementById('wayfinding-form');
-
-            btn.innerHTML = 'SENDING...';
-            btn.disabled = true;
-
-            const formData = new FormData(form);
-
-            fetch('https://formsubmit.co/ajax/uantchern@gmail.com', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json'
-                },
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    container.innerHTML = `
-                    <div class="flex flex-col items-center text-center space-y-6 py-8 animate-in fade-in zoom-in duration-700">
-                        <i data-lucide="check-circle-2" class="w-12 h-12 text-[#1B2B28] stroke-[1]"></i>
-                        <div class="space-y-2">
-                            <h3 class="text-2xl font-light text-[#1B2B28] italic">Conversation Initiated</h3>
-                            <p class="text-[#5E5A4B] font-light max-sm text-sm">Thank you. Your intent has been shared with Uantchern. We will reach out when the path is ready.</p>
-                            <p class="text-[10px] text-emerald-600 mt-2 tracking-widest uppercase">Note: Make sure to check your email to activate formsubmit if this is your first time.</p>
-                        </div>
-                        <button onclick="location.reload()" class="text-[10px] tracking-[0.4em] uppercase text-[#8B7355] hover:text-[#1B2B28] transition-all font-bold">Back to Form</button>
-                    </div>
-                `;
-                    lucide.createIcons();
-                })
-                .catch(error => {
-                    console.error("Submission failed", error);
-                    btn.innerHTML = 'ERROR - TRY AGAIN';
-                    btn.disabled = false;
-                });
-        }
+        // Handled natively by HTML <form> action to ensure FormSubmit activation email triggers reliably.
     </script>
 </body>
 
