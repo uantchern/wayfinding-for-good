@@ -278,13 +278,13 @@
                         <div class="space-y-1">
                             <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Your
                                 Name</label>
-                            <input required type="text" placeholder="Name"
+                            <input name="name" required type="text" placeholder="Name"
                                 class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
                         </div>
                         <div class="space-y-1">
                             <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Email
                                 Address</label>
-                            <input required type="email" placeholder="Email"
+                            <input name="email" required type="email" placeholder="Email"
                                 class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
                         </div>
                     </div>
@@ -292,7 +292,8 @@
                     <div class="space-y-1">
                         <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">What would
                             you like to do?</label>
-                        <textarea required rows="4" placeholder="Tell us about your interest in wayfinding RUTs..."
+                        <textarea name="message" required rows="4"
+                            placeholder="Tell us about your interest in wayfinding RUTs..."
                             class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic resize-none"></textarea>
                     </div>
 
@@ -333,29 +334,45 @@
             }
         }
 
-        // Form Submit Simulation
+        // Form Submit
         function handleFormSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
             const container = document.getElementById('contact-form-container');
+            const form = document.getElementById('wayfinding-form');
 
             btn.innerHTML = 'SENDING...';
             btn.disabled = true;
 
-            // Simulate intent share to uantchern@gmail.com
-            setTimeout(() => {
-                container.innerHTML = `
+            const formData = new FormData(form);
+
+            fetch('https://formsubmit.co/ajax/uantchern@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    container.innerHTML = `
                     <div class="flex flex-col items-center text-center space-y-6 py-8 animate-in fade-in zoom-in duration-700">
                         <i data-lucide="check-circle-2" class="w-12 h-12 text-[#1B2B28] stroke-[1]"></i>
                         <div class="space-y-2">
                             <h3 class="text-2xl font-light text-[#1B2B28] italic">Conversation Initiated</h3>
                             <p class="text-[#5E5A4B] font-light max-sm text-sm">Thank you. Your intent has been shared with Uantchern. We will reach out when the path is ready.</p>
+                            <p class="text-[10px] text-emerald-600 mt-2 tracking-widest uppercase">Note: Make sure to check your email to activate formsubmit if this is your first time.</p>
                         </div>
                         <button onclick="location.reload()" class="text-[10px] tracking-[0.4em] uppercase text-[#8B7355] hover:text-[#1B2B28] transition-all font-bold">Back to Form</button>
                     </div>
                 `;
-                lucide.createIcons();
-            }, 1500);
+                    lucide.createIcons();
+                })
+                .catch(error => {
+                    console.error("Submission failed", error);
+                    btn.innerHTML = 'ERROR - TRY AGAIN';
+                    btn.disabled = false;
+                });
         }
     </script>
 </body>
