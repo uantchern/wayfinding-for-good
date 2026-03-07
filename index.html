@@ -128,7 +128,7 @@
             const context = prompt("Let's Question Storm! First, set the context:\n\nRegarding your charity, What are the issues/questions/topics?\n(Consider: Who? What? When? Where? Why? How?)");
             if (context) {
                 // Encode the context and redirect to the question stormer page so it can pre-fill
-                window.location.href = `https://uantchern.github.io/question-storming/index.html?context=${encodeURIComponent(context)}`;
+                window.location.href = `https://uantchern.github.io/question-storming/index.html?prompt=${encodeURIComponent(context)}`;
             }
         }
     </script>
