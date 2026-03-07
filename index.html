@@ -125,11 +125,42 @@
     <!-- Modal Logic -->
     <script>
         function startStormer() {
-            const context = prompt("Let's Question Storm! First, set the context:\n\nRegarding your charity, What are the issues/questions/topics?\n(Consider: Who? What? When? Where? Why? How?)");
-            if (context) {
-                // Encode the context and redirect to the question stormer page so it can pre-fill
-                window.location.href = `https://uantchern.github.io/question-storming/index.html?prompt=${encodeURIComponent(context)}`;
+            const promptMsg = "Let's Question Storm! First, set the context:\n\nRegarding your charity, What are the issues/questions/topics?\n(Consider: Who? What? When? Where? Why? How?)";
+            const defaultSeed = "1. How can we reach more donors?\n2. What is the biggest inefficiency in our operations?\n3. Why do volunteers leave?";
+
+            let isValid = false;
+            let context = "";
+
+            while (!isValid) {
+                context = prompt(promptMsg, context || defaultSeed);
+
+                // If user clicks Cancel
+                if (context === null) {
+                    return;
+                }
+
+                const trimmed = context.trim();
+                if (!trimmed) {
+                    alert("Please enter a challenge scenario to proceed.");
+                    continue;
+                }
+
+                // Basic check if it contains a question mark or question words
+                const lower = trimmed.toLowerCase();
+                const questionWords = ['who', 'what', 'where', 'when', 'why', 'how', 'if', 'could', 'would', 'should', 'is', 'are', 'do', 'does', 'can'];
+
+                const hasQuestionMark = trimmed.indexOf('?') !== -1;
+                const startsWithQuestionWord = questionWords.some(word => lower.startsWith(word) || lower.indexOf('\n' + word) !== -1 || lower.match(new RegExp('\\b' + word + '\\b')));
+
+                if (hasQuestionMark || startsWithQuestionWord) {
+                    isValid = true;
+                } else {
+                    alert("The system requires your challenge to be framed as a question (must contain a '?' or question word). Please try again.");
+                }
             }
+
+            // Encode the context and redirect to the question stormer page so it can pre-fill
+            window.location.href = `https://uantchern.github.io/question-storming/index.html?prompt=${encodeURIComponent(context)}`;
         }
     </script>
 
