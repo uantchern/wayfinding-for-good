@@ -112,8 +112,26 @@
                 We <span class="text-[#2D423F] border-b border-[#D2B48C] italic">discover</span> Really Useful Things
                 for Charities.
             </h1>
+            <div class="pt-8">
+                <button onclick="startStormer()"
+                    class="group inline-flex items-center gap-3 bg-[#1B2B28] text-[#F2EFE9] px-8 py-4 rounded-sm tracking-[0.2em] uppercase text-xs font-bold hover:bg-[#2D423F] transition-all shadow-xl shadow-[#EAE5D8]">
+                    Discover a RUT!
+                    <i data-lucide="zap" class="w-4 h-4 group-hover:scale-110 transition-transform text-[#D2B48C]"></i>
+                </button>
+            </div>
         </div>
     </section>
+
+    <!-- Modal Logic -->
+    <script>
+        function startStormer() {
+            const context = prompt("Let's Question Storm! First, set the context:\n\nRegarding your charity, What are the issues/questions/topics?\n(Consider: Who? What? When? Where? Why? How?)");
+            if (context) {
+                // Encode the context and redirect to the question stormer page so it can pre-fill
+                window.location.href = `https://uantchern.github.io/question-storming/index.html?context=${encodeURIComponent(context)}`;
+            }
+        }
+    </script>
 
     <!-- Finding Clarity Section -->
     <section id="path" class="py-32 px-8 bg-[#FDFBF7] border-t border-[#EAE5D8]">
