@@ -261,9 +261,6 @@
                 <h1 id="dynCharityName"
                     style="margin: 0; font-size: 2.2rem; letter-spacing: -1px; color: var(--text-main);">Evaluating
                     Organization...</h1>
-                <p id="dynCharityUen"
-                    style="color: var(--accent); font-family: monospace; font-size: 1.1rem; letter-spacing: 1px; font-weight: 600; margin-top: 5px; margin-bottom: 0;">
-                    UEN: [PENDING]</p>
             </div>
             <div style="text-align: right;">
                 <p
@@ -445,9 +442,7 @@
         function generateLiveReport(text) {
             // Inject dynamic Charity Header
             let storedName = localStorage.getItem('charityName');
-            let storedUen = localStorage.getItem('charityUen');
             document.getElementById('dynCharityName').innerText = storedName ? storedName : "Anonymous Organization";
-            document.getElementById('dynCharityUen').innerText = storedUen ? `UEN: ${storedUen}` : "UEN: Not Provided";
 
             // Count Principle Assessment Frequencies
             let countP1 = (text.match(/## Principle 1/gi) || []).length;
