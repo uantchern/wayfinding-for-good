@@ -112,232 +112,236 @@
                 We <span class="text-[#2D423F] border-b border-[#D2B48C] italic">discover</span> Really Useful Things
                 for Charities.
             </h1>
-            <div class="pt-8">
-                <button onclick="startStormer()"
-                    class="group inline-flex items-center gap-3 bg-[#1B2B28] text-[#F2EFE9] px-8 py-4 rounded-sm tracking-[0.2em] uppercase text-xs font-bold hover:bg-[#2D423F] transition-all shadow-xl shadow-[#EAE5D8]">
-                    Discover a RUT!
-                    <i data-lucide="zap" class="w-4 h-4 group-hover:scale-110 transition-transform text-[#D2B48C]"></i>
-                </button>
-            </div>
-        </div>
-    </section>
 
-    <!-- Modal Logic -->
-    <script>
-        function startStormer() {
-            // Redirect directly to the Question Stormer app without a prompt
-            window.location.href = `https://uantchern.github.io/question-storming/index.html`;
-        }
-    </script>
 
-    <!-- Finding Clarity Section -->
-    <section id="path" class="py-32 px-8 bg-[#FDFBF7] border-t border-[#EAE5D8]">
-        <div class="max-w-4xl mx-auto">
-            <div class="mb-20 space-y-4">
-                <span class="text-[10px] tracking-[0.5em] uppercase text-[#8B7355] block font-light">Clearings along the
-                    journey</span>
-                <h2 class="text-3xl md:text-4xl font-light text-[#1B2B28] italic">Finding Clarity</h2>
-            </div>
-
-            <div class="space-y-4" id="faq-container">
-
-                <!-- Who are We? -->
-                <div class="faq-item border-b border-[#E0D7C6] py-8">
-                    <button class="w-full flex justify-between items-center text-left group outline-none"
-                        onclick="toggleFaq(this)">
-                        <div class="flex items-center gap-6">
-                            <div
-                                class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
-                                <i data-lucide="heart" class="w-4 h-4"></i>
-                            </div>
-                            <h3
-                                class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
-                                Who are We?</h3>
-                        </div>
-                        <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
-                    </button>
-                    <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-4">
-                        <p>CharityOps is an AI social enterprise. Our mission is to discover Really Useful Things (RUTs)
-                            for the Singapore charity sector.</p>
+            <!-- Finding Clarity Section -->
+            <section id="path" class="py-32 px-8 bg-[#FDFBF7] border-t border-[#EAE5D8]">
+                <div class="max-w-4xl mx-auto">
+                    <div class="mb-20 space-y-4">
+                        <span class="text-[10px] tracking-[0.5em] uppercase text-[#8B7355] block font-light">Clearings
+                            along the
+                            journey</span>
+                        <h2 class="text-3xl md:text-4xl font-light text-[#1B2B28] italic">Finding Clarity</h2>
                     </div>
-                </div>
 
-                <!-- RUTs Definition -->
-                <div class="faq-item border-b border-[#E0D7C6] py-8">
-                    <button class="w-full flex justify-between items-center text-left group outline-none"
-                        onclick="toggleFaq(this)">
-                        <div class="flex items-center gap-6">
-                            <div
-                                class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
-                                <i data-lucide="sparkles" class="w-4 h-4"></i>
-                            </div>
-                            <h3
-                                class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
-                                What are Really Useful Things (RUTs)?</h3>
-                        </div>
-                        <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
-                    </button>
-                    <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-6">
-                        <p>A Really Useful Thing (RUT) is a "digital temp worker" in the form of a mini-AI program. RUTs
-                            are used for a specific purpose over a limited period of time, for example, creating an
-                            impact report immediately after an event. They appeal to charities because they are cheap
-                            and disposable.</p>
-                        <div class="bg-[#F2EFE9] p-6 border-l-2 border-[#D2B48C] space-y-4 not-italic">
-                            <span class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] block">Discovery
-                                Examples</span>
-                            <div class="grid gap-6">
-                                <div class="flex gap-4 items-start">
-                                    <i data-lucide="clipboard-check" class="text-[#8B7355] w-5 h-5 mt-1"></i>
-                                    <div>
-                                        <p class="font-bold text-[#1B2B28] text-sm">Board Self Assessment</p>
-                                        <p class="text-sm text-[#5E5A4B]">A RUT helping board members assess true
-                                            effectiveness in making an impact.</p>
+                    <div class="space-y-4" id="faq-container">
+
+                        <!-- Who are We? -->
+                        <div class="faq-item border-b border-[#E0D7C6] py-8">
+                            <button class="w-full flex justify-between items-center text-left group outline-none"
+                                onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-6">
+                                    <div
+                                        class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
+                                        <i data-lucide="heart" class="w-4 h-4"></i>
                                     </div>
+                                    <h3
+                                        class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
+                                        Who are We?</h3>
                                 </div>
-                                <div class="flex gap-4 items-start">
-                                    <i data-lucide="message-square" class="text-[#8B7355] w-5 h-5 mt-1"></i>
-                                    <div>
-                                        <p class="font-bold text-[#1B2B28] text-sm">Question Stormer</p>
-                                        <p class="text-sm text-[#5E5A4B]">An AI-enabled thing used to challenge
-                                            entrenched mindsets.</p>
+                                <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
+                            </button>
+                            <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-4">
+                                <p>CharityOps is an AI social enterprise. Our mission is to discover Really Useful
+                                    Things (RUTs)
+                                    for the Singapore charity sector.</p>
+                            </div>
+                        </div>
+
+                        <!-- RUTs Definition -->
+                        <div class="faq-item border-b border-[#E0D7C6] py-8">
+                            <button class="w-full flex justify-between items-center text-left group outline-none"
+                                onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-6">
+                                    <div
+                                        class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
+                                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                    </div>
+                                    <h3
+                                        class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
+                                        What are Really Useful Things (RUTs)?</h3>
+                                </div>
+                                <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
+                            </button>
+                            <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-6">
+                                <p>A Really Useful Thing (RUT) is a "digital temp worker" in the form of a mini-AI
+                                    program. RUTs
+                                    are used for a specific purpose over a limited period of time, for example, creating
+                                    an
+                                    impact report immediately after an event. They appeal to charities because they are
+                                    cheap
+                                    and disposable.</p>
+                                <div class="bg-[#F2EFE9] p-6 border-l-2 border-[#D2B48C] space-y-4 not-italic">
+                                    <span class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] block">Discovery
+                                        Examples</span>
+                                    <div class="grid gap-6">
+                                        <div class="flex gap-4 items-start">
+                                            <i data-lucide="clipboard-check" class="text-[#8B7355] w-5 h-5 mt-1"></i>
+                                            <div>
+                                                <p class="font-bold text-[#1B2B28] text-sm">Board Self Assessment</p>
+                                                <p class="text-sm text-[#5E5A4B]">A RUT helping board members assess
+                                                    true
+                                                    effectiveness in making an impact.</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex gap-4 items-start">
+                                            <i data-lucide="message-square" class="text-[#8B7355] w-5 h-5 mt-1"></i>
+                                            <div>
+                                                <p class="font-bold text-[#1B2B28] text-sm">
+                                                    <a href="https://uantchern.github.io/question-storming/index.html"
+                                                        target="_blank"
+                                                        class="hover:underline decoration-[#D2B48C] transition-all">Question
+                                                        Stormer</a>
+                                                </p>
+                                                <p class="text-sm text-[#5E5A4B]">An AI-enabled thing used to challenge
+                                                    entrenched mindsets.</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Ecosystem Thriving -->
-                <div class="faq-item border-b border-[#E0D7C6] py-8">
-                    <button class="w-full flex justify-between items-center text-left group outline-none"
-                        onclick="toggleFaq(this)">
-                        <div class="flex items-center gap-6">
-                            <div
-                                class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
-                                <i data-lucide="coins" class="w-4 h-4"></i>
+                        <!-- Ecosystem Thriving -->
+                        <div class="faq-item border-b border-[#E0D7C6] py-8">
+                            <button class="w-full flex justify-between items-center text-left group outline-none"
+                                onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-6">
+                                    <div
+                                        class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
+                                        <i data-lucide="coins" class="w-4 h-4"></i>
+                                    </div>
+                                    <h3
+                                        class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
+                                        How does our ecosystem thrive?</h3>
+                                </div>
+                                <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
+                            </button>
+                            <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-4">
+                                <p>We rely on grants, backers, and funders to fuel discovery. RUTs are monetized via
+                                    sustainable
+                                    business models - subscription fees and one-time fees. Profits are intentionally
+                                    reinvested:
+                                    our primary impact is creating jobs for individuals displaced by AI. Our RUTs
+                                    discovery team
+                                    comprise of interns, volunteers, retirees and fractionals.</p>
                             </div>
-                            <h3
-                                class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
-                                How does our ecosystem thrive?</h3>
                         </div>
-                        <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
-                    </button>
-                    <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-4">
-                        <p>We rely on grants, backers, and funders to fuel discovery. RUTs are monetized via sustainable
-                            business models - subscription fees and one-time fees. Profits are intentionally reinvested:
-                            our primary impact is creating jobs for individuals displaced by AI. Our RUTs discovery team
-                            comprise of interns, volunteers, retirees and fractionals.</p>
-                    </div>
-                </div>
 
 
-                <!-- Get Involved -->
-                <div class="faq-item border-b border-[#E0D7C6] py-8">
-                    <button class="w-full flex justify-between items-center text-left group outline-none"
-                        onclick="toggleFaq(this)">
-                        <div class="flex items-center gap-6">
-                            <div
-                                class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
-                                <i data-lucide="footprints" class="w-4 h-4"></i>
+                        <!-- Get Involved -->
+                        <div class="faq-item border-b border-[#E0D7C6] py-8">
+                            <button class="w-full flex justify-between items-center text-left group outline-none"
+                                onclick="toggleFaq(this)">
+                                <div class="flex items-center gap-6">
+                                    <div
+                                        class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
+                                        <i data-lucide="footprints" class="w-4 h-4"></i>
+                                    </div>
+                                    <h3
+                                        class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
+                                        How do I get involved?</h3>
+                                </div>
+                                <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
+                            </button>
+                            <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-4">
+                                <p>Drop us a note if you are keen on discovering Really Useful Things that can make a
+                                    difference
+                                    for charities. We have roles for volunteers, interns, retirees, storytellers,
+                                    technologists
+                                    or people looking to refresh their life.</p>
                             </div>
-                            <h3
-                                class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
-                                How do I get involved?</h3>
                         </div>
-                        <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
-                    </button>
-                    <div class="faq-content pl-12 md:pl-16 text-[#5E5A4B] font-light italic space-y-4">
-                        <p>Drop us a note if you are keen on discovering Really Useful Things that can make a difference
-                            for charities. We have roles for volunteers, interns, retirees, storytellers, technologists
-                            or people looking to refresh their life.</p>
+
                     </div>
                 </div>
+            </section>
 
-            </div>
-        </div>
-    </section>
+            <!-- Form Section -->
+            <section class="py-32 px-8 bg-[#F2EFE9] border-t border-[#EAE5D8]">
+                <div class="max-w-4xl mx-auto">
+                    <div id="contact-form-container"
+                        class="bg-[#FDFBF7] p-8 md:p-12 rounded-sm border border-[#EAE5D8] shadow-sm">
+                        <form action="https://formsubmit.co/29393160c1ac01b653865c5d9fc0b6c9" method="POST"
+                            target="_blank" class="space-y-8"
+                            onsubmit="setTimeout(() => { document.getElementById('submit-btn').innerHTML = 'SENT!'; document.getElementById('submit-btn').disabled = true; }, 100);">
+                            <!-- FormSubmit Configuration -->
+                            <input type="hidden" name="_subject" value="New CharityOps Intent">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_next" value="https://uantchern.github.io/wayfinding-for-good/">
+                            <div class="text-center space-y-2 mb-10">
+                                <i data-lucide="mail" class="w-8 h-8 text-[#D2B48C] mx-auto mb-4 stroke-[1]"></i>
+                                <h3 class="text-2xl font-light text-[#1B2B28] italic">Begin a conversation</h3>
+                                <p class="text-[#5E5A4B] font-light text-sm italic">No maps required. Just intent.</p>
+                            </div>
 
-    <!-- Form Section -->
-    <section class="py-32 px-8 bg-[#F2EFE9] border-t border-[#EAE5D8]">
-        <div class="max-w-4xl mx-auto">
-            <div id="contact-form-container"
-                class="bg-[#FDFBF7] p-8 md:p-12 rounded-sm border border-[#EAE5D8] shadow-sm">
-                <form action="https://formsubmit.co/29393160c1ac01b653865c5d9fc0b6c9" method="POST" target="_blank"
-                    class="space-y-8"
-                    onsubmit="setTimeout(() => { document.getElementById('submit-btn').innerHTML = 'SENT!'; document.getElementById('submit-btn').disabled = true; }, 100);">
-                    <!-- FormSubmit Configuration -->
-                    <input type="hidden" name="_subject" value="New CharityOps Intent">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_next" value="https://uantchern.github.io/wayfinding-for-good/">
-                    <div class="text-center space-y-2 mb-10">
-                        <i data-lucide="mail" class="w-8 h-8 text-[#D2B48C] mx-auto mb-4 stroke-[1]"></i>
-                        <h3 class="text-2xl font-light text-[#1B2B28] italic">Begin a conversation</h3>
-                        <p class="text-[#5E5A4B] font-light text-sm italic">No maps required. Just intent.</p>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="space-y-1">
+                                    <label
+                                        class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Your
+                                        Name</label>
+                                    <input name="name" required type="text" placeholder="Name"
+                                        class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
+                                </div>
+                                <div class="space-y-1">
+                                    <label
+                                        class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Email
+                                        Address</label>
+                                    <input name="email" required type="email" placeholder="Email"
+                                        class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">What
+                                    would
+                                    you like to do?</label>
+                                <textarea name="message" required rows="4"
+                                    placeholder="Tell us about your interest in wayfinding RUTs..."
+                                    class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic resize-none"></textarea>
+                            </div>
+
+                            <div class="flex justify-center pt-4">
+                                <button type="submit" id="submit-btn"
+                                    class="group flex items-center gap-3 bg-[#2D423F] text-[#F2EFE9] px-12 py-4 rounded-sm tracking-[0.3em] uppercase text-[10px] font-bold hover:bg-[#1B2B28] transition-all shadow-xl shadow-[#EAE5D8]">
+                                    SEND
+                                    <i data-lucide="send"
+                                        class="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
+                </div>
+            </section>
 
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div class="space-y-1">
-                            <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Your
-                                Name</label>
-                            <input name="name" required type="text" placeholder="Name"
-                                class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Email
-                                Address</label>
-                            <input name="email" required type="email" placeholder="Email"
-                                class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
-                        </div>
-                    </div>
+            <!-- Footer -->
+            <footer class="py-24 px-8 bg-[#FDFBF7] border-t border-[#EAE5D8] text-center">
+                <i data-lucide="waves" class="w-6 h-6 text-[#D2B48C] mx-auto mb-6"></i>
+                <div class="text-[10px] tracking-[0.4em] text-[#8B7355] font-light uppercase">© 2026 CharityOps ·
+                    Singapore
+                </div>
+            </footer>
 
-                    <div class="space-y-1">
-                        <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">What would
-                            you like to do?</label>
-                        <textarea name="message" required rows="4"
-                            placeholder="Tell us about your interest in wayfinding RUTs..."
-                            class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-3 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic resize-none"></textarea>
-                    </div>
+            <script>
+                // Initialize Icons
+                lucide.createIcons();
 
-                    <div class="flex justify-center pt-4">
-                        <button type="submit" id="submit-btn"
-                            class="group flex items-center gap-3 bg-[#2D423F] text-[#F2EFE9] px-12 py-4 rounded-sm tracking-[0.3em] uppercase text-[10px] font-bold hover:bg-[#1B2B28] transition-all shadow-xl shadow-[#EAE5D8]">
-                            SEND
-                            <i data-lucide="send"
-                                class="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
+                // FAQ Toggle Logic
+                function toggleFaq(button) {
+                    const item = button.parentElement;
+                    const isActive = item.classList.contains('active');
 
-    <!-- Footer -->
-    <footer class="py-24 px-8 bg-[#FDFBF7] border-t border-[#EAE5D8] text-center">
-        <i data-lucide="waves" class="w-6 h-6 text-[#D2B48C] mx-auto mb-6"></i>
-        <div class="text-[10px] tracking-[0.4em] text-[#8B7355] font-light uppercase">© 2026 CharityOps · Singapore
-        </div>
-    </footer>
+                    // Close others for cleaner wayfinding
+                    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
 
-    <script>
-        // Initialize Icons
-        lucide.createIcons();
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                }
 
-        // FAQ Toggle Logic
-        function toggleFaq(button) {
-            const item = button.parentElement;
-            const isActive = item.classList.contains('active');
-
-            // Close others for cleaner wayfinding
-            document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
-
-            if (!isActive) {
-                item.classList.add('active');
-            }
-        }
-
-        // Form Submit
-        // Handled natively by HTML <form> action to ensure FormSubmit activation email triggers reliably.
-    </script>
+                // Form Submit
+                // Handled natively by HTML <form> action to ensure FormSubmit activation email triggers reliably.
+            </script>
 </body>
 
 </html>
