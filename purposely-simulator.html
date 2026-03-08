@@ -228,21 +228,37 @@
     <div class="phone-container">
         <!-- Developer Settings Drawer -->
         <div class="debug-drawer" id="debugDrawer">
-            <h2 class="text-2xl font-bold text-white mb-6">Module Setup</h2>
+            <h2 class="text-2xl font-bold text-white mb-6">Instructions</h2>
+
+            <ol class="list-decimal pl-5 space-y-3 text-gray-300 text-sm mb-8 leading-relaxed">
+                <li>Select the type of charity from the drop down.</li>
+                <li>Select a principle from the Charity Governance Code.</li>
+                <li>You will be shown a scenario associated with the selected charity type and principle.</li>
+                <li>Enter your 3 questions about the scenario when prompted (your question must start with Who, What,
+                    How, Where, Why, When and end with a ?).</li>
+                <li>After the 3 questions, you can then send the audit trail to a fellow board member via WhatsApp.</li>
+                <li>After sending or not sending, go back to the 6 principles screen and start afresh.</li>
+            </ol>
 
             <div class="mb-6 space-y-3">
-                <input type="text" id="setupCharity" placeholder="Charity Name"
-                    class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 transition-colors"
-                    oninput="localStorage.setItem('charityName', this.value)" />
+                <select id="setupCharity"
+                    class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                    onchange="localStorage.setItem('charityName', this.value)">
+                    <option value="" disabled selected>Select Charity Type...</option>
+                    <option value="Arts and Heritage">Arts and Heritage</option>
+                    <option value="Community">Community</option>
+                    <option value="Education">Education</option>
+                    <option value="Health">Health</option>
+                    <option value="Social Services">Social Services</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Others">Others</option>
+                </select>
             </div>
 
-            <!-- API Key input removed to ensure full privacy and offline-capability -->
+            <!-- Principle selection -->
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-400 mb-3">Select a Principle to begin</label>
                 <div id="principlesContainer"></div>
             </div>
-
-            <!-- Push to NotebookLM button removed by request; transcript now downloads automatically at module completion -->
         </div>
 
         <!-- The Phone -->
@@ -263,13 +279,13 @@
                 </div>
             </div>
 
-            <!-- 11-Step Breadcrumb Tracker -->
+            <!-- 7-Step Breadcrumb Tracker -->
             <div id="breadcrumbTracker" class="hidden w-full bg-[#1b252b] px-4 py-3 border-b border-[#2f3b43]">
                 <div
                     class="flex justify-between items-center text-[10px] text-gray-400 font-bold tracking-wider uppercase mb-2">
                     <span>1. Scenario</span>
                     <span>Q-Storming Loop</span>
-                    <span>11. Final</span>
+                    <span>7. Final</span>
                 </div>
                 <div class="flex gap-1.5 w-full" id="breadcrumbBars"></div>
             </div>
@@ -388,7 +404,7 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             tracker.classList.remove('hidden');
             const barsContainer = document.getElementById('breadcrumbBars');
             let barsHtml = '';
-            for (let i = 1; i <= 11; i++) {
+            for (let i = 1; i <= 7; i++) {
                 if (i < currentStep) {
                     barsHtml += `<div class="h-1.5 flex-1 bg-teal-500 rounded-full"></div>`;
                 } else if (i === currentStep) {
@@ -536,13 +552,28 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             if (e.key === 'Enter') sendMessage();
         }
 
+        function finishSimulation() {
+            setTimeout(() => {
+                currentStep = 0;
+                updateBreadcrumb();
+                document.getElementById('debugDrawer').classList.add('open');
+            }, 500);
+        }
+
+        function openWhatsApp() {
+            let transcript = localStorage.getItem('purposelyTranscript') || '';
+            let encodedTranscript = encodeURIComponent(transcript);
+            window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
+            finishSimulation();
+        }
+
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const userText = input.value.trim();
             if (!userText || currentStep === 0) return;
 
-            // Validate that user input is an actual question, but only during the 4 interrogation phases (Steps 2, 4, 6, 8)
-            if ([2, 4, 6, 8].includes(currentStep)) {
+            // Validate that user input is an actual question, but only during the 3 interrogation phases (Steps 2, 4, 6)
+            if ([2, 4, 6].includes(currentStep)) {
                 const hasQuestionMark = userText.includes('?');
                 const hasQuestionWord = /\b(how|what|where|when|why|who)\b/i.test(userText.toLowerCase());
 
@@ -558,18 +589,16 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             if (currentStep === 2) userLabel = `[P${currentScenarioId}Q1]`;
             else if (currentStep === 4) userLabel = `[P${currentScenarioId}Q2]`;
             else if (currentStep === 6) userLabel = `[P${currentScenarioId}Q3]`;
-            else if (currentStep === 8) userLabel = `[P${currentScenarioId}Q4]`;
-            else if (currentStep === 10) userLabel = `[P${currentScenarioId} Final Reflection]`;
 
             let formattedUserText = `*${userLabel}*\n${userText}`;
             addMessage(formattedUserText, 'user');
             chatHistory.push({ scenario: currentScenarioId, step: currentStep, sender: 'Director', text: formattedUserText });
             input.value = '';
 
-            currentStep++; // advances to AI step (3, 5, 7, 9, 11)
+            currentStep++; // advances to AI step (3, 5, 7)
             updateBreadcrumb();
 
-            if ([3, 5, 7, 9].includes(currentStep)) {
+            if ([3, 5, 7].includes(currentStep)) {
                 const typingId = addTypingIndicator();
 
                 try {
@@ -583,20 +612,46 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                     let aiReply = '';
                     if (currentStep === 3) aiReply = `That is a perceptive opening question. Consider this challenge: ${scenario.challenges[0]}\n\nHow would you frame your next question to address this specific risk?`;
                     else if (currentStep === 5) aiReply = `A good pivot towards oversight. However, we must deepen the inquiry: ${scenario.challenges[1]}\n\nWhat structural or reporting evidence would you demand as a Board member to verify this?`;
-                    else if (currentStep === 7) aiReply = `You've touched on a critical potential blind spot. The crux of the issue is: ${scenario.challenges[2]}\n\nAs a Director, how would you formally track this risk to ensure it is mitigated before the next quarterly meeting?`;
-                    else if (currentStep === 9) aiReply = `You have comprehensively mapped out the operational, strategic, and oversight dimensions of this dilemma. Based on your inquiries, please synthesize your findings.\n\nWhat are your Final Reflexive Thoughts on how we fared in mitigating this risk?`;
+                    else if (currentStep === 7) aiReply = `You've touched on a critical potential blind spot. The crux of the issue is: ${scenario.challenges[2]}\n\nYou have completed your 3 questions!`;
+
                     let aiLabel = '';
                     if (currentStep === 3) aiLabel = `[P${currentScenarioId} Challenge 1]`;
                     if (currentStep === 5) aiLabel = `[P${currentScenarioId} Challenge 2]`;
                     if (currentStep === 7) aiLabel = `[P${currentScenarioId} Challenge 3]`;
-                    if (currentStep === 9) aiLabel = `[P${currentScenarioId} Synthesis & Reflection Target]`;
 
                     let finalReply = `*${aiLabel}*\n\n${aiReply}`;
                     addMessage(finalReply, 'ai');
                     chatHistory.push({ scenario: currentScenarioId, step: currentStep, sender: 'PURPOSELY AI', text: finalReply });
 
-                    currentStep++; // advance to User Step (4, 6, 8, 10)
-                    updateBreadcrumb();
+                    if (currentStep === 7) {
+                        autoExportTranscript();
+
+                        // Add WhatsApp and Back action buttons
+                        const chatWindow = document.getElementById('chatWindow');
+                        const buttonsHtml = `
+                        <div class="w-full flex flex-col gap-3 mt-4 mb-4">
+                            <button onclick="openWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2">
+                                <i class="fab fa-whatsapp text-xl"></i> Send to WhatsApp
+                            </button>
+                            <button onclick="finishSimulation()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
+                                Back to Principles
+                            </button>
+                        </div>`;
+                        chatWindow.innerHTML += buttonsHtml;
+                        chatWindow.scrollTop = chatWindow.scrollHeight;
+
+                        document.getElementById('userInput').disabled = true;
+                        document.getElementById('sendBtn').disabled = true;
+                        document.getElementById('micBtn').disabled = true;
+
+                        if (!completedScenarios.includes(currentScenarioId)) {
+                            completedScenarios.push(currentScenarioId);
+                        }
+                        renderPrinciples();
+                    } else {
+                        currentStep++; // advance to User Step (4, 6)
+                        updateBreadcrumb();
+                    }
 
                 } catch (err) {
                     removeTypingIndicator(typingId);
@@ -604,31 +659,6 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                     currentStep--; // Rollback step on network error
                     updateBreadcrumb();
                 }
-            } else if (currentStep === 11) {
-                const typingId = addTypingIndicator();
-                setTimeout(() => {
-                    removeTypingIndicator(typingId);
-                    let closureMsg = "Thank you for your assessment. Please complete the other 5 principles.";
-                    addMessage(closureMsg, 'ai');
-                    chatHistory.push({ scenario: currentScenarioId, step: 11, sender: 'PURPOSELY AI', text: closureMsg });
-
-                    document.getElementById('userInput').disabled = true;
-                    document.getElementById('sendBtn').disabled = true;
-                    document.getElementById('micBtn').disabled = true;
-
-                    if (!completedScenarios.includes(currentScenarioId)) {
-                        completedScenarios.push(currentScenarioId);
-                    }
-                    renderPrinciples();
-
-                    autoExportTranscript();
-
-                    setTimeout(() => {
-                        currentStep = 0;
-                        updateBreadcrumb();
-                        document.getElementById('debugDrawer').classList.add('open');
-                    }, 2000);
-                }, 1000);
             }
         }
 
