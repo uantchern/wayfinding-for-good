@@ -87,6 +87,84 @@
         .project-link:hover {
             text-decoration-color: #1B2B28;
         }
+
+        /* Journey Animations */
+        @keyframes float-leaf {
+            0% {
+                transform: translate(0px, 0px) rotate(0deg);
+                opacity: 0.6;
+            }
+
+            33% {
+                transform: translate(-10px, 15px) rotate(-15deg);
+                opacity: 0.4;
+            }
+
+            66% {
+                transform: translate(10px, 30px) rotate(15deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(0px, 45px) rotate(0deg);
+                opacity: 0.6;
+            }
+        }
+
+        .leaf-animate {
+            animation: float-leaf 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes ripple-word {
+            0% {
+                transform: scale(1);
+                text-shadow: 0px 0px 0px rgba(210, 180, 140, 0);
+                color: inherit;
+            }
+
+            50% {
+                transform: scale(1.03);
+                text-shadow: 0px 0px 8px rgba(210, 180, 140, 0.6);
+                color: #8B7355;
+            }
+
+            100% {
+                transform: scale(1);
+                text-shadow: 0px 0px 0px rgba(210, 180, 140, 0);
+                color: inherit;
+            }
+        }
+
+        .ripple-animate {
+            display: inline-block;
+            animation: ripple-word 5s ease-in-out infinite;
+        }
+
+        @keyframes rustle-sentence {
+            0% {
+                transform: rotate(0deg) skewX(0deg);
+            }
+
+            25% {
+                transform: rotate(0.2deg) skewX(0.5deg);
+            }
+
+            50% {
+                transform: rotate(-0.1deg) skewX(-0.5deg);
+            }
+
+            75% {
+                transform: rotate(0.1deg) skewX(0.2deg);
+            }
+
+            100% {
+                transform: rotate(0deg) skewX(0deg);
+            }
+        }
+
+        .rustle-animate:hover {
+            animation: rustle-sentence 2s ease-in-out infinite alternate;
+        }
     </style>
 </head>
 
@@ -117,11 +195,18 @@
             <!-- Finding Clarity Section -->
             <section id="path" class="pt-32 pb-12 px-8 bg-[#FDFBF7] border-t border-[#EAE5D8]">
                 <div class="max-w-4xl mx-auto">
-                    <div class="mb-20 space-y-4">
-                        <span class="text-[10px] tracking-[0.5em] uppercase text-[#8B7355] block font-light">Clearings
-                            along the
-                            journey</span>
-                        <h2 class="text-3xl md:text-4xl font-light text-[#1B2B28] italic">Finding Clarity</h2>
+                    <div class="mb-20 space-y-4 relative">
+                        <div
+                            class="absolute -top-12 -left-8 md:-left-12 z-0 text-[#D2B48C] opacity-50 leaf-animate pointer-events-none">
+                            <i data-lucide="leaf" class="w-8 h-8"></i>
+                        </div>
+                        <h2
+                            class="text-2xl md:text-3xl lg:text-4xl font-light text-[#1B2B28] italic leading-relaxed rustle-animate relative z-10 transition-transform cursor-default inline-block">
+                            "You don’t pick the <span class="ripple-animate font-serif">path</span> because of the
+                            destination;<br class="hidden md:block" /> you discover the <span
+                                class="ripple-animate font-serif" style="animation-delay: 2.5s;">destination</span>
+                            because of the path."
+                        </h2>
                     </div>
 
                     <div class="space-y-4" id="faq-container">
