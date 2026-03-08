@@ -542,18 +542,18 @@
                 <!-- Background Image Layer with Edge Blending -->
                 <div class="absolute inset-0 z-0 bg-cover bg-center"
                     style="background-image: url('pathway_to_nowhere.png');">
-                    <!-- Soft Edges Overlays - 50% Opacity -->
+                    <!-- Soft Edges Overlays - 30% Opacity -->
                     <div
-                        class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F2EFE9] to-transparent opacity-50">
+                        class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F2EFE9] to-transparent opacity-30">
                     </div>
                     <div
-                        class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F2EFE9] to-transparent opacity-50">
+                        class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F2EFE9] to-transparent opacity-30">
                     </div>
                     <div
-                        class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F2EFE9] to-transparent opacity-50">
+                        class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F2EFE9] to-transparent opacity-30">
                     </div>
                     <div
-                        class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#F2EFE9] to-transparent opacity-50">
+                        class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#F2EFE9] to-transparent opacity-30">
                     </div>
                 </div>
 
@@ -628,7 +628,7 @@
                     const layer = document.getElementById('fallen-leaves-layer');
                     if (!layer) return;
 
-                    const numLeaves = 80; // Dense cover
+                    const numLeaves = 120; // Denser cover
                     const leaves = [];
 
                     for (let i = 0; i < numLeaves; i++) {
@@ -668,9 +668,9 @@
                     lucide.createIcons({ root: layer });
 
                     function animateCycle() {
-                        // 1. Gust of wind blows leaves rightwards and slightly up (half speed)
+                        // 1. Gust of wind blows leaves rightwards and slightly up
                         leaves.forEach((leaf, idx) => {
-                            const windDuration = Math.random() * 3.0 + 4.0; // 4s - 7s
+                            const windDuration = Math.random() * 1.5 + 2.0; // 2s - 3.5s
                             leaf.style.transition = `all ${windDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
 
                             // Make them blow off screen to the right
@@ -706,8 +706,8 @@
                     // Initial wait so user sees leaves covering, then start the cycle
                     setTimeout(() => {
                         animateCycle();
-                        // Total cycle: ~7s to blow, 5s reveal, ~17s fall = ~29s. Update rest time.
-                        setInterval(animateCycle, 35000); // 35s interval
+                        // Total cycle: ~3.5s to blow, 5s reveal, ~17s fall = ~25.5s. Update rest time.
+                        setInterval(animateCycle, 30000); // 30s interval
                     }, 5000);
                 }
 
