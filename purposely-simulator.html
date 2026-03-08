@@ -501,14 +501,40 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             if (chatHistory.length === 0) {
                 alert("No simulation data to export yet."); return;
             }
-            let md = "# PURPOSELY: Governance Pulse Export\n\n*Generated anonymously for internal NotebookLM Contexting.*\n\n---\n";
-            let currentScenario = null;
-            chatHistory.forEach(log => {
-                if (log.scenario !== currentScenario) {
-                    md += `\n## ${scenarios[log.scenario]?.title || "Governance Scenario"}\n\n`;
-                    currentScenario = log.scenario;
-                }
-                md += `**[Step ${log.step}] ${log.sender}:** ${log.text.replace(/\\*/g, "")}\n\n`;
+
+            let md = "Hi! I just used the Question Storming RUT from CharityOps to conduct a self-assessment.\n\n";
+
+            // Extract the relevant context from the chat history
+            // chatHistory data structure: { scenario: string, step: number, sender: string, text: string }
+            // Steps: 
+            // 1: AI (Scenario presentation)
+            // 2: User (Q1)
+            // 3: AI (Challenge 1)
+            // 4: User (Q2)
+            // 5: AI (Challenge 2)
+            // 6: User (Q3)
+            // 7: AI (Challenge 3 / Completion)
+
+            const scenarioLog = chatHistory.find(log => log.step === 1);
+            const userQuestions = chatHistory.filter(log => log.sender === 'Director');
+
+            if (scenarioLog) {
+                const scenarioId = scenarioLog.scenario;
+                md += `*Principle Assessed:*\n${scenarios[scenarioId]?.title || "Governance Scenario"}\n\n`;
+
+                // Clean up the scenario text to remove the structural labels like *[P1 Scenario]*
+                let cleanScenario = scenarioLog.text.replace(/^\*\[.*?\]\*\n\n/, '');
+                // Also remove the bottom prompt like "What is your first question?"
+                cleanScenario = cleanScenario.replace(/\n\n\*what is your first question\?\*$/i, '');
+
+                md += `*Scenario:*\n${cleanScenario}\n\n`;
+            }
+
+            md += "*My 3 Questions:*\n";
+            userQuestions.forEach((log, index) => {
+                // Clean up user labels like *[P1Q1]*
+                let cleanQuestion = log.text.replace(/^\*\[.*?\]\*\n/, '');
+                md += `${index + 1}. ${cleanQuestion}\n`;
             });
 
             // Seamlessly sync to LocalStorage to eliminate clumsy file uploads

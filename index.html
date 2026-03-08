@@ -115,10 +115,10 @@
             animation: float-leaf 12s ease-in-out infinite alternate;
         }
 
-        /* Continuous Random Leaves */
-        @keyframes random-fall {
+        /* Gentle Floating Falling Leaves */
+        @keyframes fall-down {
             0% {
-                transform: translate(0, -50px) rotate(0deg);
+                transform: translateY(-50px);
                 opacity: 0;
             }
 
@@ -131,18 +131,34 @@
             }
 
             100% {
-                transform: translate(150px, 110vh) rotate(360deg);
+                transform: translateY(110vh);
                 opacity: 0;
             }
         }
 
-        .falling-leaf {
+        @keyframes sway {
+            0% {
+                transform: translateX(-40px) rotate(-45deg);
+            }
+
+            100% {
+                transform: translateX(40px) rotate(45deg);
+            }
+        }
+
+        .falling-leaf-container {
             position: fixed;
             top: 0;
             color: #D2B48C;
             pointer-events: none;
-            z-index: 5;
-            animation: random-fall linear forwards;
+            z-index: -1;
+            animation: fall-down linear forwards;
+            will-change: transform, opacity;
+        }
+
+        .falling-leaf-sway {
+            animation: sway 4s ease-in-out infinite alternate;
+            will-change: transform;
         }
 
         @keyframes ripple-word {
@@ -529,26 +545,36 @@
 
                 // Falling Leaves Logic
                 function createFallingLeaf() {
-                    const wrap = document.createElement('div');
-                    wrap.className = 'falling-leaf';
-                    // Randomize left pos, duration, scale
-                    wrap.style.left = Math.random() * 100 + 'vw';
-                    wrap.style.animationDuration = Math.random() * 7 + 10 + 's'; // 10s to 17s drop
+                    const container = document.createElement('div');
+                    container.className = 'falling-leaf-container';
+                    container.style.left = Math.random() * 100 + 'vw';
+                    container.style.animationDuration = Math.random() * 7 + 12 + 's'; // 12s to 19s drop (gentler)
+
+                    const sway = document.createElement('div');
+                    sway.className = 'falling-leaf-sway';
+                    sway.style.animationDuration = (Math.random() * 2 + 3) + 's'; // 3s to 5s sway
+                    sway.style.animationDelay = (Math.random() * 2) + 's';
+
+                    const scaler = document.createElement('div');
                     const scale = Math.random() * 0.5 + 0.8;
-                    wrap.style.transform = `scale(${scale})`;
+                    scaler.style.transform = `scale(${scale})`;
 
                     const leafIcon = document.createElement('i');
                     leafIcon.setAttribute('data-lucide', 'leaf');
                     leafIcon.className = 'w-6 h-6 opacity-60';
-                    wrap.appendChild(leafIcon);
 
-                    document.body.appendChild(wrap);
+                    scaler.appendChild(leafIcon);
+                    sway.appendChild(scaler);
+                    container.appendChild(sway);
+
+                    document.body.appendChild(container);
+
                     lucide.createIcons({ name: 'leaf', attrs: { class: 'w-6 h-6 opacity-60' } });
 
-                    // Clean up after 18 seconds maximally
+                    // Clean up after 20 seconds maximally
                     setTimeout(() => {
-                        wrap.remove();
-                    }, 18000);
+                        container.remove();
+                    }, 20000);
                 }
 
                 // Initial 3 leaves
