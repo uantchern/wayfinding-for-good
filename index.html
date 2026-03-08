@@ -151,7 +151,7 @@
             top: 0;
             color: #D2B48C;
             pointer-events: none;
-            z-index: -1;
+            z-index: 50;
             animation: fall-down linear forwards;
             will-change: transform, opacity;
         }
@@ -548,11 +548,11 @@
                     const container = document.createElement('div');
                     container.className = 'falling-leaf-container';
                     container.style.left = Math.random() * 100 + 'vw';
-                    container.style.animationDuration = Math.random() * 7 + 12 + 's'; // 12s to 19s drop (gentler)
+                    container.style.animationDuration = Math.random() * 15 + 25 + 's'; // 25s to 40s drop (floating)
 
                     const sway = document.createElement('div');
                     sway.className = 'falling-leaf-sway';
-                    sway.style.animationDuration = (Math.random() * 2 + 3) + 's'; // 3s to 5s sway
+                    sway.style.animationDuration = (Math.random() * 3 + 4) + 's'; // 4s to 7s sway
                     sway.style.animationDelay = (Math.random() * 2) + 's';
 
                     const scaler = document.createElement('div');
@@ -571,10 +571,10 @@
 
                     lucide.createIcons({ name: 'leaf', attrs: { class: 'w-6 h-6 opacity-60' } });
 
-                    // Clean up after 20 seconds maximally
+                    // Clean up after 50 seconds maximally
                     setTimeout(() => {
                         container.remove();
-                    }, 20000);
+                    }, 50000);
                 }
 
                 // Initial 3 leaves
