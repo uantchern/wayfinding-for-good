@@ -115,6 +115,36 @@
             animation: float-leaf 12s ease-in-out infinite alternate;
         }
 
+        /* Continuous Random Leaves */
+        @keyframes random-fall {
+            0% {
+                transform: translate(0, -50px) rotate(0deg);
+                opacity: 0;
+            }
+
+            5% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translate(150px, 110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .falling-leaf {
+            position: fixed;
+            top: 0;
+            color: #D2B48C;
+            pointer-events: none;
+            z-index: 5;
+            animation: random-fall linear forwards;
+        }
+
         @keyframes ripple-word {
             0% {
                 transform: scale(1);
@@ -496,6 +526,38 @@
             <script>
                 // Initialize Icons
                 lucide.createIcons();
+
+                // Falling Leaves Logic
+                function createFallingLeaf() {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'falling-leaf';
+                    // Randomize left pos, duration, scale
+                    wrap.style.left = Math.random() * 100 + 'vw';
+                    wrap.style.animationDuration = Math.random() * 7 + 10 + 's'; // 10s to 17s drop
+                    const scale = Math.random() * 0.5 + 0.8;
+                    wrap.style.transform = `scale(${scale})`;
+
+                    const leafIcon = document.createElement('i');
+                    leafIcon.setAttribute('data-lucide', 'leaf');
+                    leafIcon.className = 'w-6 h-6 opacity-60';
+                    wrap.appendChild(leafIcon);
+
+                    document.body.appendChild(wrap);
+                    lucide.createIcons({ name: 'leaf', attrs: { class: 'w-6 h-6 opacity-60' } });
+
+                    // Clean up after 18 seconds maximally
+                    setTimeout(() => {
+                        wrap.remove();
+                    }, 18000);
+                }
+
+                // Initial 3 leaves
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(createFallingLeaf, Math.random() * 5000);
+                }
+
+                // Drop a new leaf every 4 seconds to maintain roughly 3 on screen
+                setInterval(createFallingLeaf, 4000);
 
                 // FAQ Toggle Logic
                 function toggleFaq(button) {
