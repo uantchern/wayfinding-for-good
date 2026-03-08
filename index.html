@@ -537,7 +537,18 @@
                 </div>
             </section>
 
+            <!-- Pathway Reveal Section -->
+            <section
+                class="h-64 md:h-80 relative bg-[#2D423F] overflow-hidden flex items-center justify-center border-t border-[#1B2B28]">
+                <!-- The Pathway -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-0 opacity-90">
+                    <i data-lucide="footprints" class="w-16 h-16 text-[#D2B48C] mb-4"></i>
+                    <h3 class="text-3xl md:text-4xl font-light text-[#F2EFE9] italic tracking-wide">The Pathway</h3>
+                </div>
 
+                <!-- Fallen Leaves Layer -->
+                <div id="fallen-leaves-layer" class="absolute -inset-10 z-10 pointer-events-none"></div>
+            </section>
 
             <script>
                 // Initialize Icons
@@ -600,6 +611,95 @@
 
                 // Form Submit
                 // Handled natively by HTML <form> action to ensure FormSubmit activation email triggers reliably.
+
+                // Pathway Leaves Logic
+                function initPathway() {
+                    const layer = document.getElementById('fallen-leaves-layer');
+                    if (!layer) return;
+
+                    const numLeaves = 80; // Dense cover
+                    const leaves = [];
+
+                    for (let i = 0; i < numLeaves; i++) {
+                        const leaf = document.createElement('div');
+                        leaf.className = 'absolute';
+
+                        // Base resting positions
+                        const baseX = Math.random() * 100; // %
+                        const baseY = Math.random() * 100; // % inside the container
+                        const baseRot = Math.random() * 360;
+                        const scale = Math.random() * 0.8 + 0.6;
+
+                        // Store properties for reset
+                        leaf.dataset.baseX = baseX;
+                        leaf.dataset.baseY = baseY;
+                        leaf.dataset.baseRot = baseRot;
+                        leaf.dataset.scale = scale;
+
+                        leaf.style.left = baseX + '%';
+                        leaf.style.top = baseY + '%';
+                        leaf.style.transform = `rotate(${baseRot}deg) scale(${scale})`;
+
+                        // Pick colors that contrast with dark background
+                        const colors = ['#D2B48C', '#B08968', '#8B7355', '#EAE5D8'];
+                        leaf.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+                        const icon = document.createElement('i');
+                        icon.setAttribute('data-lucide', 'leaf');
+                        icon.className = 'w-10 h-10 opacity-100 fill-current'; // Solid leaves
+
+                        leaf.appendChild(icon);
+                        layer.appendChild(leaf);
+                        leaves.push(leaf);
+                    }
+
+                    // Render lucide icons specifically in this layer
+                    lucide.createIcons({ root: layer });
+
+                    function animateCycle() {
+                        // 1. Gust of wind blows leaves rightwards and slightly up
+                        leaves.forEach((leaf, idx) => {
+                            const windDuration = Math.random() * 1.5 + 2.0; // 2s - 3.5s
+                            leaf.style.transition = `all ${windDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
+
+                            // Make them blow off screen to the right
+                            const windDx = 50 + Math.random() * 100; // vw right
+                            const windDy = -20 - Math.random() * 50; // vh up
+
+                            leaf.style.transform = `translate(${windDx}vw, ${windDy}vh) rotate(${parseFloat(leaf.dataset.baseRot) + 360 + Math.random() * 360}deg) scale(${leaf.dataset.scale})`;
+                            leaf.style.opacity = '0';
+                        });
+
+                        // 2. Reveal pathway for ~5 seconds, then prepare falling leaves (reset to top)
+                        setTimeout(() => {
+                            leaves.forEach(leaf => {
+                                leaf.style.transition = 'none';
+                                const startY = -40 - Math.random() * 40; // start above the container
+                                const currentRot = parseFloat(leaf.dataset.baseRot);
+                                leaf.style.transform = `translate(0, ${startY}vh) rotate(${currentRot - 180}deg) scale(${leaf.dataset.scale})`;
+                            });
+
+                            // 3. Fall down and cover the pathway
+                            setTimeout(() => {
+                                leaves.forEach(leaf => {
+                                    const fallDuration = Math.random() * 2 + 2.5; // 2.5s - 4.5s
+                                    leaf.style.transition = `all ${fallDuration}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+                                    leaf.style.transform = `translate(0, 0) rotate(${leaf.dataset.baseRot}deg) scale(${leaf.dataset.scale})`;
+                                    leaf.style.opacity = '1';
+                                });
+                            }, 50); // slight delay to allow CSS reset to apply
+                        }, 5000); // 5 seconds of revealed pathway
+                    }
+
+                    // Initial wait so user sees leaves covering, then start the cycle
+                    setTimeout(() => {
+                        animateCycle();
+                        // Total cycle: ~2.5s to blow, 5s reveal, ~3.5s fall = ~11s. Add some padding for rest time.
+                        setInterval(animateCycle, 15000); // 15s interval
+                    }, 5000);
+                }
+
+                initPathway();
             </script>
 </body>
 
