@@ -245,7 +245,7 @@
     </style>
 </head>
 
-<body class="selection:bg-[#D2B48C] selection:text-[#1B2B28] fade-in">
+<body class="selection:bg-[#D2B48C] selection:text-[#1B2B28] fade-in overflow-x-hidden">
 
     <!-- Hero Section -->
     <section class="py-20 md:py-28 flex flex-col justify-center items-center px-8 relative overflow-hidden">
@@ -539,11 +539,16 @@
 
             <!-- Pathway Reveal Section -->
             <section
-                class="h-64 md:h-80 relative bg-[#2D423F] overflow-hidden flex items-center justify-center border-t border-[#1B2B28]">
+                class="h-64 md:h-80 relative flex items-center justify-center border-t border-[#1B2B28] bg-[#1B2B28]"
+                style="background-image: url('pathway_to_nowhere.png'); background-size: cover; background-position: center;">
+                <!-- Dark gradient overlay for text readability -->
+                <div class="absolute inset-0 bg-gradient-to-t from-[#1B2B28] to-transparent opacity-80 z-0"></div>
+
                 <!-- The Pathway -->
                 <div class="absolute inset-0 flex flex-col items-center justify-center z-0 opacity-90">
-                    <i data-lucide="footprints" class="w-16 h-16 text-[#D2B48C] mb-4"></i>
-                    <h3 class="text-3xl md:text-4xl font-light text-[#F2EFE9] italic tracking-wide">The Pathway</h3>
+                    <h3
+                        class="text-3xl md:text-4xl font-light text-[#F2EFE9] italic tracking-wide mt-auto mb-8 drop-shadow-lg">
+                        The Pathway</h3>
                 </div>
 
                 <!-- Fallen Leaves Layer -->
@@ -674,7 +679,8 @@
                         setTimeout(() => {
                             leaves.forEach(leaf => {
                                 leaf.style.transition = 'none';
-                                const startY = -40 - Math.random() * 40; // start above the container
+                                const windowHeightInVH = (window.innerHeight / window.innerWidth) * 100; // rough approx
+                                const startY = -150 - Math.random() * 100; // start way above the container to fall from top of page
                                 const currentRot = parseFloat(leaf.dataset.baseRot);
                                 leaf.style.transform = `translate(0, ${startY}vh) rotate(${currentRot - 180}deg) scale(${leaf.dataset.scale})`;
                             });
@@ -682,7 +688,7 @@
                             // 3. Fall down and cover the pathway
                             setTimeout(() => {
                                 leaves.forEach(leaf => {
-                                    const fallDuration = Math.random() * 2 + 2.5; // 2.5s - 4.5s
+                                    const fallDuration = Math.random() * 4 + 4.5; // 4.5s - 8.5s for long fall
                                     leaf.style.transition = `all ${fallDuration}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
                                     leaf.style.transform = `translate(0, 0) rotate(${leaf.dataset.baseRot}deg) scale(${leaf.dataset.scale})`;
                                     leaf.style.opacity = '1';
