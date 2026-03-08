@@ -538,17 +538,15 @@
             </section>
 
             <!-- Pathway Reveal Section -->
-            <section
-                class="h-64 md:h-80 relative flex items-center justify-center border-t border-[#1B2B28] bg-[#1B2B28]"
-                style="background-image: url('pathway_to_nowhere.png'); background-size: cover; background-position: center;">
-                <!-- Dark gradient overlay for text readability -->
-                <div class="absolute inset-0 bg-gradient-to-t from-[#1B2B28] to-transparent opacity-80 z-0"></div>
-
-                <!-- The Pathway -->
-                <div class="absolute inset-0 flex flex-col items-center justify-center z-0 opacity-90">
-                    <h3
-                        class="text-3xl md:text-4xl font-light text-[#F2EFE9] italic tracking-wide mt-auto mb-8 drop-shadow-lg">
-                        The Pathway</h3>
+            <section class="h-64 md:h-80 relative flex items-center justify-center bg-[#F2EFE9]">
+                <!-- Background Image Layer with Edge Blending -->
+                <div class="absolute inset-0 z-0 bg-cover bg-center"
+                    style="background-image: url('pathway_to_nowhere.png');">
+                    <!-- Soft Edges Overlays -->
+                    <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F2EFE9] to-transparent"></div>
+                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F2EFE9] to-transparent"></div>
+                    <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F2EFE9] to-transparent"></div>
+                    <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#F2EFE9] to-transparent"></div>
                 </div>
 
                 <!-- Fallen Leaves Layer -->
