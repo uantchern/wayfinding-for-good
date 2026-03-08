@@ -311,7 +311,7 @@
     <script>
         const SYSTEM_PROMPT = `You are the Senior Governance Architect acting as a 'Critical Friend' to a charity board director in Singapore. 
 Your tone must be professional, demanding but polite, and deeply contextualized to Singapore's charity sector (Commissioner of Charities, IPC regulations, PDPA, NCSS Code of Governance).
-You will receive the scenario dilemma, the current Challenge Stage logic, and the Director's query.
+You will receive the scenario, the current Challenge Stage logic, and the Director's query.
 Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone. Ask EXACTLY ONE challenging follow-up question in return. Do NOT grade or praise them excessively. Challenge them to think deeper.`;
 
         const scenarios = {
@@ -665,11 +665,11 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
 
                     const charityTypeRaw = document.getElementById('setupCharity').value;
                     const charityType = charityTypeRaw ? charityTypeRaw : "charity";
-                    const injectedDilemma = activeScenarioData.dilemma.replace(/{charityType}/g, charityType);
+                    const injectedScenario = activeScenarioData.dilemma.replace(/{charityType}/g, charityType);
 
-                    let initialDilemma = `*[P${currentScenarioId} Dilemma]*\n\n${injectedDilemma}`;
-                    addMessage(initialDilemma, 'ai');
-                    chatHistory.push({ scenario: currentScenarioId, step: 1, sender: 'PURPOSELY AI', text: initialDilemma });
+                    let initialScenarioMsg = `*[P${currentScenarioId} Scenario]*\n\n${injectedScenario}`;
+                    addMessage(initialScenarioMsg, 'ai');
+                    chatHistory.push({ scenario: currentScenarioId, step: 1, sender: 'PURPOSELY AI', text: initialScenarioMsg });
 
                     currentStep = 2; // user input for Q1 expected
                     updateBreadcrumb();
