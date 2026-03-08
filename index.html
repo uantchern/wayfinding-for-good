@@ -542,18 +542,18 @@
                 <!-- Background Image Layer with Edge Blending -->
                 <div class="absolute inset-0 z-0 bg-cover bg-center"
                     style="background-image: url('pathway_to_nowhere.png');">
-                    <!-- Soft Edges Overlays - 30% Opacity -->
+                    <!-- Soft Edges Overlays - Must be fully opaque at the very edges to blend seamlessly -->
                     <div
-                        class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F2EFE9] to-transparent opacity-30">
+                        class="absolute inset-y-0 left-0 w-32 md:w-1/3 bg-gradient-to-r from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
                     </div>
                     <div
-                        class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F2EFE9] to-transparent opacity-30">
+                        class="absolute inset-y-0 right-0 w-32 md:w-1/3 bg-gradient-to-l from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
                     </div>
                     <div
-                        class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F2EFE9] to-transparent opacity-30">
+                        class="absolute inset-x-0 top-0 h-24 md:h-32 bg-gradient-to-b from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
                     </div>
                     <div
-                        class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#F2EFE9] to-transparent opacity-30">
+                        class="absolute inset-x-0 bottom-0 h-24 md:h-32 bg-gradient-to-t from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
                     </div>
                 </div>
 
@@ -707,7 +707,7 @@
                     setTimeout(() => {
                         animateCycle();
                         // Total cycle: ~3.5s to blow, 5s reveal, ~17s fall = ~25.5s. Update rest time.
-                        setInterval(animateCycle, 30000); // 30s interval
+                        setInterval(animateCycle, 22500); // 22.5s interval
                     }, 5000);
                 }
 
