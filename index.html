@@ -542,11 +542,19 @@
                 <!-- Background Image Layer with Edge Blending -->
                 <div class="absolute inset-0 z-0 bg-cover bg-center"
                     style="background-image: url('pathway_to_nowhere.png');">
-                    <!-- Soft Edges Overlays -->
-                    <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F2EFE9] to-transparent"></div>
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F2EFE9] to-transparent"></div>
-                    <div class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F2EFE9] to-transparent"></div>
-                    <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#F2EFE9] to-transparent"></div>
+                    <!-- Soft Edges Overlays - 50% Opacity -->
+                    <div
+                        class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#F2EFE9] to-transparent opacity-50">
+                    </div>
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F2EFE9] to-transparent opacity-50">
+                    </div>
+                    <div
+                        class="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#F2EFE9] to-transparent opacity-50">
+                    </div>
+                    <div
+                        class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#F2EFE9] to-transparent opacity-50">
+                    </div>
                 </div>
 
                 <!-- Fallen Leaves Layer -->
@@ -660,9 +668,9 @@
                     lucide.createIcons({ root: layer });
 
                     function animateCycle() {
-                        // 1. Gust of wind blows leaves rightwards and slightly up
+                        // 1. Gust of wind blows leaves rightwards and slightly up (half speed)
                         leaves.forEach((leaf, idx) => {
-                            const windDuration = Math.random() * 1.5 + 2.0; // 2s - 3.5s
+                            const windDuration = Math.random() * 3.0 + 4.0; // 4s - 7s
                             leaf.style.transition = `all ${windDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
 
                             // Make them blow off screen to the right
@@ -683,10 +691,10 @@
                                 leaf.style.transform = `translate(0, ${startY}vh) rotate(${currentRot - 180}deg) scale(${leaf.dataset.scale})`;
                             });
 
-                            // 3. Fall down and cover the pathway
+                            // 3. Fall down and cover the pathway (half speed)
                             setTimeout(() => {
                                 leaves.forEach(leaf => {
-                                    const fallDuration = Math.random() * 4 + 4.5; // 4.5s - 8.5s for long fall
+                                    const fallDuration = Math.random() * 8.0 + 9.0; // 9s - 17s for long fall
                                     leaf.style.transition = `all ${fallDuration}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
                                     leaf.style.transform = `translate(0, 0) rotate(${leaf.dataset.baseRot}deg) scale(${leaf.dataset.scale})`;
                                     leaf.style.opacity = '1';
@@ -698,8 +706,8 @@
                     // Initial wait so user sees leaves covering, then start the cycle
                     setTimeout(() => {
                         animateCycle();
-                        // Total cycle: ~2.5s to blow, 5s reveal, ~3.5s fall = ~11s. Add some padding for rest time.
-                        setInterval(animateCycle, 15000); // 15s interval
+                        // Total cycle: ~7s to blow, 5s reveal, ~17s fall = ~29s. Update rest time.
+                        setInterval(animateCycle, 35000); // 35s interval
                     }, 5000);
                 }
 
