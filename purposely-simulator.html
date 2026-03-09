@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PURPOSELY - WhatsApp Simulator</title>
+    <title>PURPOSELY - Board Self-Assessment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -100,75 +100,6 @@
             margin-top: 4px;
         }
 
-        .input-area {
-            background-color: #202c33;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 0px;
-            flex-shrink: 0;
-        }
-
-        .input-box {
-            flex: 1;
-            background-color: #2a3942;
-            border-radius: 24px;
-            padding: 12px 20px;
-            border: none;
-            color: white;
-            font-size: 15px;
-            resize: none;
-            overflow: hidden;
-            height: 44px;
-            outline: none;
-        }
-
-        .send-btn {
-            background-color: #00a884;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            color: white;
-            transition: background 0.2s;
-            flex-shrink: 0;
-        }
-
-        .send-btn:hover {
-            background-color: #008f6f;
-        }
-
-        .mic-btn {
-            background-color: #202c33;
-            color: #8696a0;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            font-size: 1.25rem;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .mic-btn:hover:not(:disabled) {
-            background-color: #2a3942;
-        }
-
-        .mic-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
         /* Debug/Setup Drawer */
         .debug-drawer {
             background: #1e293b;
@@ -185,6 +116,8 @@
 
         .debug-drawer.open {
             display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Mobile Responsiveness */
@@ -220,6 +153,33 @@
                 z-index: 50;
             }
         }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            align-self: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .action-btn {
+            background-color: #00a884;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:hover {
+            background-color: #008f6f;
+        }
     </style>
 </head>
 
@@ -228,36 +188,42 @@
     <div class="phone-container">
         <!-- Developer Settings Drawer -->
         <div class="debug-drawer" id="debugDrawer">
-            <h2 class="text-2xl font-bold text-white mb-6">Instructions</h2>
+            <h2 class="text-2xl font-bold text-white mb-2">Charity Board Self-Assessment</h2>
+            <p class="text-sm text-gray-400 mb-6 italic">This RUT helps directors assess their knowledge and compliance
+                with the Code of Governance for Charities and IPCs</p>
 
             <ol class="list-decimal pl-5 space-y-3 text-gray-300 text-sm mb-8 leading-relaxed">
-                <li>Select the type of charity from the drop down.</li>
-                <li>Select a principle from the Charity Governance Code.</li>
-                <li>You will be shown a scenario associated with the selected charity type and principle.</li>
-                <li>Enter your 3 questions about the scenario when prompted (your question must start with Who, What,
-                    How, Where, Why, When and end with a ?).</li>
-                <li>After the 3 questions, you can then send the audit trail to a fellow board member via WhatsApp.</li>
-                <li>After sending or not sending, go back to the 6 principles screen and start afresh.</li>
+                <li>The RUT will generate a scenario, using publicly available resources in the Singapore charity
+                    sector.</li>
+                <li>Based on the generated scenario, the relevant paragraphs from the Governance Evaluation Checklist
+                    (GEC) will be shown.</li>
+                <li>The director will be prompted if the charity has put this principle into action: Yes or No or
+                    Partial to deal with the scenario.</li>
+                <li>The director will be asked if another scenario is needed and if yes generate again.</li>
+                <li>If no, the RUT will end the session.</li>
+                <li>The session details can be shared via WhatsApp.</li>
             </ol>
 
             <div class="mb-6 space-y-3">
                 <select id="setupCharity"
                     class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500 transition-colors"
                     onchange="localStorage.setItem('charityName', this.value)">
-                    <option value="" disabled selected>Select Charity Type...</option>
+                    <option value="" disabled selected>Select Charity Type (Optional)...</option>
                     <option value="Arts and Heritage">Arts and Heritage</option>
                     <option value="Community">Community</option>
                     <option value="Education">Education</option>
                     <option value="Health">Health</option>
                     <option value="Social Services">Social Services</option>
                     <option value="Sports">Sports</option>
-                    <option value="Others">Others</option>
+                    <option value="Other">Others</option>
                 </select>
             </div>
 
-            <!-- Principle selection -->
-            <div class="mb-6">
-                <div id="principlesContainer"></div>
+            <div class="mt-auto">
+                <button onclick="generateRandomScenario()"
+                    class="w-full bg-[#00a884] hover:bg-[#008f6f] text-white font-bold py-4 px-4 rounded-xl shadow-lg transition-transform transform hover:scale-105 active:scale-95 flex justify-center items-center gap-2 text-lg">
+                    <i class="fas fa-play"></i> Start Assessment
+                </button>
             </div>
         </div>
 
@@ -278,311 +244,136 @@
                 </div>
             </div>
 
-            <!-- 7-Step Breadcrumb Tracker -->
-            <div id="breadcrumbTracker" class="hidden w-full bg-[#1b252b] px-4 py-3 border-b border-[#2f3b43]">
-                <div
-                    class="flex justify-between items-center text-[10px] text-gray-400 font-bold tracking-wider uppercase mb-2">
-                    <span>1. Scenario</span>
-                    <span>Q-Storming Loop</span>
-                    <span>7. Final</span>
-                </div>
-                <div class="flex gap-1.5 w-full" id="breadcrumbBars"></div>
-            </div>
-
             <div class="chat-bg" id="chatWindow">
                 <div class="w-full flex justify-center mt-2 mb-4">
                     <span class="bg-[#182229] px-4 py-1.5 rounded-lg text-xs text-gray-400 shadow-sm">Today</span>
                 </div>
-            </div>
 
-            <div class="input-area">
-                <input type="text" id="userInput" class="input-box" placeholder="Type your question..."
-                    onkeypress="handleEnter(event)" disabled>
-                <button class="mic-btn" onclick="toggleVoice()" id="micBtn" disabled>
-                    <i class="fas fa-microphone"></i>
-                </button>
-                <button class="send-btn" onclick="sendMessage()" id="sendBtn" disabled>
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+                <div class="w-full flex flex-col items-center justify-center h-full opacity-50 text-center px-6 pb-20 pointer-events-none"
+                    id="emptyStatePlaceholder">
+                    <i class="fas fa-shield-alt text-5xl mb-4 text-[#00a884]"></i>
+                    <p class="text-gray-300">Open the side menu (☰) to start the assessment.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const SYSTEM_PROMPT = `You are the Senior Governance Architect acting as a 'Critical Friend' to a charity board director in Singapore. 
-Your tone must be professional, demanding but polite, and deeply contextualized to Singapore's charity sector (Commissioner of Charities, IPC regulations, PDPA, NCSS Code of Governance).
-You will receive the scenario, the current Challenge Stage logic, and the Director's query.
-Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone. Ask EXACTLY ONE challenging follow-up question in return. Do NOT grade or praise them excessively. Challenge them to think deeper.`;
-
         const scenarios = {
             "1": {
-                title: "Principle 1: The charity serves its mission and achieves its objectives.",
+                title: "Principle 1: Board Governance",
                 pool: [
                     {
-                        dilemma: "A corporate donor offers your {charityType} a $500k restricted grant, but stipulations require diverting 40% of funds to launch an unrelated youth mentorship program. The management team is eager to accept, but it fundamentally distracts from your core mission.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their very first question. Smart Prompt: Challenge them to strictly align their thinking with the core objects registered with the Commissioner of Charities.",
-                            "Evaluate their second question. Smart Prompt: Push them to question how this decision protects current beneficiary interests versus chasing cash.",
-                            "Evaluate their third question. Smart Prompt: Challenge them to critically assess the long-term impact on the charity's mission focus over the next 5-10 years."
-                        ]
+                        dilemma: "A corporate donor offers your {charityType} a $500k restricted grant, but stipulations require diverting 40% of funds to launch an unrelated youth mentorship program. The management team is eager to accept, but it fundamentally distracts from your core mission.",
+                        gec: "GEC 1.1.2: The Board should review and approve the vision and mission of the charity. They should document this and communicate it to its members and the public."
                     },
                     {
-                        dilemma: "A prominent board member proposes changing your {charityType} main focus to jump on a new trending social cause that attracts easy funding, effectively abandoning your legacy beneficiaries.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Challenge them on whether such a pivot breaches the charity's governing instrument.",
-                            "Evaluate their second question. Smart Prompt: Push them to consider the ethical obligation to existing beneficiaries who depend on current services.",
-                            "Evaluate their third question. Smart Prompt: Ask how they would formally justify an objects change to the Commissioner of Charities, if pursued."
-                        ]
+                        dilemma: "A prominent board member proposes changing your {charityType} main focus to jump on a new trending social cause that attracts easy funding, effectively abandoning your legacy beneficiaries.",
+                        gec: "GEC 1.2.1: The Board should approve a strategic plan for the charity to ensure that the activities are in line with its objectives."
                     },
                     {
-                        dilemma: "The Executive Director of your {charityType} has quietly started expanding operations overseas without board approval, arguing that the local mission is 'already fulfilled'.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Demand they question the legal boundaries of operating outside Singapore without specific prior approval.",
-                            "Evaluate their second question. Smart Prompt: Challenge them on the immediate operational and financial risks of unapproved mission creep.",
-                            "Evaluate their third question. Smart Prompt: Ask how they intend to rectify this massive overstep in executive authority while protecting the charity's local mandate."
-                        ]
+                        dilemma: "The Executive Director of your {charityType} has quietly started expanding operations overseas without board approval, arguing that the local mission is 'already fulfilled'.",
+                        gec: "GEC 1.1.2: The Board should ensure that the activities are in line with its aligned objectives and mission."
                     }
                 ]
             },
             "2": {
-                title: "Principle 2: The charity has an effective Board and Management.",
+                title: "Principle 2: Board Effectiveness",
                 pool: [
                     {
-                        dilemma: "The Board Chair of your {charityType} has served for 12 years and firmly resists stepping down, citing a 'lack of ready successors'. Key independent directors are frustrated and threatening to resign over the stagnant leadership.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Push them to challenge the lack of formal succession planning.",
-                            "Evaluate their second question. Smart Prompt: Guide them to rigidly enforce governance term limits and board independence rules.",
-                            "Evaluate their third question. Smart Prompt: Ask them how they intend to resolve the immediate boardroom conflict objectively."
-                        ]
+                        dilemma: "The Board Chair of your {charityType} has served for 12 years and firmly resists stepping down, citing a 'lack of ready successors'. Key independent directors are frustrated and threatening to resign over the stagnant leadership.",
+                        gec: "GEC 2.1.2: The Board should have a maximum term limit of 10 consecutive years for the Board members. If retained, the Board should document the reasons."
                     },
                     {
-                        dilemma: "It is discovered that three of the eight board members of your {charityType} have missed over 50% of meetings in the last two years, yet the Chair refuses to ask them to step down because they are 'well connected'.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Challenge them to address the strict requirement for active board participation and quorum risks.",
-                            "Evaluate their second question. Smart Prompt: Push them to demand a formal, objective review of board member performance and contribution.",
-                            "Evaluate their third question. Smart Prompt: Ask how they plan to enforce attendance policies moving forward without alienating donors."
-                        ]
+                        dilemma: "It is discovered that three of the eight board members of your {charityType} have missed over 50% of meetings in the last two years, yet the Chair refuses to ask them to step down because they are 'well connected'.",
+                        gec: "GEC 2.2.1: The Board should conduct regular meetings with a quorum to effectively oversee the management of the charity."
                     },
                     {
-                        dilemma: "The board of your {charityType} consists entirely of close friends of the founder, lacking crucial skills in finance, legal, and digital strategy. They govern primarily by rubber-stamping the founder's decisions.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Demand they challenge the severe lack of board diversity and independence.",
-                            "Evaluate their second question. Smart Prompt: Push them to initiate a formal board competency matrix and recruitment drive.",
-                            "Evaluate their third question. Smart Prompt: Ask how they will specifically dismantle the 'echo chamber' culture to ensure robust oversight."
-                        ]
+                        dilemma: "The board of your {charityType} consists entirely of close friends of the founder, lacking crucial skills in finance, legal, and digital strategy. They govern primarily by rubber-stamping the founder's decisions.",
+                        gec: "GEC 2.1.1: The Board should ensure that there is an appropriate mix of core competencies and diversity on the Board to fulfill its roles and responsibilities."
                     }
                 ]
             },
             "3": {
-                title: "Principle 3: The charity acts responsibly, fairly and with integrity.",
+                title: "Principle 3: Conflict of Interest",
                 pool: [
                     {
-                        dilemma: "The Executive Director of your {charityType} awarded a lucrative contract to a vendor firm owned by his brother-in-law without a tender. Although the price was competitive, no conflict of interest was officially declared.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Press them on why standard procurement processes completely failed.",
-                            "Evaluate their second question. Smart Prompt: Challenge them on the specific severity of the undeclared Conflict of Interest.",
-                            "Evaluate their third question. Smart Prompt: Ask how they plan to handle public or donor audits regarding this matter."
-                        ]
+                        dilemma: "The Executive Director of your {charityType} awarded a lucrative contract to a vendor firm owned by his brother-in-law without a tender. Although the price was competitive, no conflict of interest was officially declared.",
+                        gec: "GEC 3.2.2: There are documented procedures for Board members and staff to declare actual or potential conflicts of interest to the Board at the earliest opportunity."
                     },
                     {
-                        dilemma: "A board member of your {charityType} silently votes to approve a massive office relocation, failing to disclose they own the new building being leased.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Demand they uncover why the continuous conflict of interest declaration process failed entirely.",
-                            "Evaluate their second question. Smart Prompt: Press them on how to reverse or legally manage the tainted transaction now that it is discovered.",
-                            "Evaluate their third question. Smart Prompt: Ask them how they will report this massive breach of fiduciary duty to the Commissioner of Charities."
-                        ]
+                        dilemma: "A board member of your {charityType} silently votes to approve a massive office relocation, failing to disclose they own the new building being leased.",
+                        gec: "GEC 3.1.1: Board members should not vote or participate in decision-making on matters where they have a conflict of interest."
                     },
                     {
-                        dilemma: "Your {charityType} accepts a huge anonymous donation from a shell company discovered to be linked to a controversial industry that fundamentally conflicts with the charity's values.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Challenge them on the charity's donor screening and Anti-Money Laundering (AML) policies.",
-                            "Evaluate their second question. Smart Prompt: Push them to strictly reconcile the desperate need for funds with the severe reputational risk to the charity's integrity.",
-                            "Evaluate their third question. Smart Prompt: Ask what decisive, documented action they will take to reject or return the tainted funds formally."
-                        ]
+                        dilemma: "Your {charityType} accepts a huge anonymous donation from a shell company discovered to be linked to a controversial industry that fundamentally conflicts with the charity's values.",
+                        gec: "GEC 3.1.2: The Board ensures no person in a position to influence the charity's decisions derives any unfair or improper advantage."
                     }
                 ]
             },
             "4": {
-                title: "Principle 4: The charity is well-managed and plans for the future.",
+                title: "Principle 4: Financial Management",
                 pool: [
                     {
-                        dilemma: "Your {charityType} runs entirely on yearly government grants and currently maintains zero financial reserves. A sudden policy change delays the next grant disbursement by 6 months, leaving the charity unable to make payroll next week.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Demand they formulate an immediate, drastic contingency strategy.",
-                            "Evaluate their second question. Smart Prompt: Press them on why there is absolutely no established reserves policy.",
-                            "Evaluate their third question. Smart Prompt: Challenge them on securing a long-term, diversified financial sustainability plan."
-                        ]
+                        dilemma: "Your {charityType} runs entirely on yearly government grants and currently maintains zero financial reserves. A sudden policy change delays the next grant disbursement by 6 months, leaving the charity unable to make payroll next week.",
+                        gec: "GEC 4.1.3: The Board should establish and disclose a reserves policy. The reserves level should be regularly reviewed."
                     },
                     {
-                        dilemma: "The finance manager of your {charityType} has been single-handedly approving all expenses without dual signatories for two years, and an internal audit reveals $50,000 in 'unexplained' miscellaneous spending.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Demand immediate suspension of the rogue financial process and the implementation of strict dual-signatory controls.",
-                            "Evaluate their second question. Smart Prompt: Challenge them on the board's catastrophic failure to review basic financial controls and audit logs.",
-                            "Evaluate their third question. Smart Prompt: Ask how they will investigate the missing funds and report potential fraud to the authorities immediately."
-                        ]
+                        dilemma: "The finance manager of your {charityType} has been single-handedly approving all expenses without dual signatories for two years, and an internal audit reveals $50,000 in 'unexplained' miscellaneous spending.",
+                        gec: "GEC 4.2.1: The Board ensures that internal controls are in place with documented procedures for financial matters in key areas."
                     },
                     {
-                        dilemma: "Your {charityType} decides to invest 80% of its cash reserves into a high-risk crypto-currency fund, promising double-digit returns to quickly solve a funding deficit.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Push them to strictly review the charity's formal investment policy and approved risk appetite.",
-                            "Evaluate their second question. Smart Prompt: Challenge them on the heavy fiduciary duty of care regarding the preservation of charitable public assets.",
-                            "Evaluate their third question. Smart Prompt: Ask them how they will rapidly unwind this high-risk unauthorized investment before reserves are wiped out."
-                        ]
+                        dilemma: "Your {charityType} decides to invest 80% of its cash reserves into a high-risk crypto-currency fund, promising double-digit returns to quickly solve a funding deficit.",
+                        gec: "GEC 4.2.2: The Board should approve an investment policy, setting out the objectives, risk tolerance, and the types of investments allowed."
                     }
                 ]
             },
             "5": {
-                title: "Principle 5: The charity is accountable and transparent.",
+                title: "Principle 5: Accountability and Transparency",
                 pool: [
                     {
-                        dilemma: "A server containing sensitive personal data of 2,000 donors to your {charityType} was inadvertently exposed online. The Executive Director suggests quietly patching it without notifying the Board or Authorities to avoid jeopardizing a major fundraising campaign.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Challenge the highly unethical choice of 'hiding' a data leak.",
-                            "Evaluate their second question. Smart Prompt: Emphasize the strict, severe legal reporting risks built into the Personal Data Protection Act (PDPA).",
-                            "Evaluate their third question. Smart Prompt: Push them to mandate a systemic, organization-wide cybersecurity governance overhaul."
-                        ]
+                        dilemma: "A server containing sensitive personal data of 2,000 donors to your {charityType} was inadvertently exposed online. The Executive Director suggests quietly patching it without notifying the Board or Authorities to avoid jeopardizing a major fundraising campaign.",
+                        gec: "GEC 5.3.1: The charity should put in place policies and procedures to ensure that it complies with the Personal Data Protection Act (PDPA)."
                     },
                     {
-                        dilemma: "Your {charityType} quietly decides to not publish its annual report or financial statements online, claiming 'administrative burden', leading to public speculation about mismanagement of public donations.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Challenge them on the strict statutory requirement to submit and publish timely annual reports.",
-                            "Evaluate their second question. Smart Prompt: Push them to aggressively address the massive loss of public trust resulting from perceived financial secrecy.",
-                            "Evaluate their third question. Smart Prompt: Ask how they will mandate immediate transparency and clear public communication of financial health."
-                        ]
+                        dilemma: "Your {charityType} quietly decides to not publish its annual report or financial statements online, claiming 'administrative burden', leading to public speculation about mismanagement of public donations.",
+                        gec: "GEC 5.1.1: The charity makes available to its stakeholders an annual report on its programmes, activities, and finances."
                     },
                     {
-                        dilemma: "Whistleblowers within your {charityType} formally report severe workplace harassment to the board, but the HR committee buries the report entirely to protect a 'star' fundraising executive.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Demand they scrutinize the complete failure of the charity's formal whistleblowing policy to protect staff.",
-                            "Evaluate their second question. Smart Prompt: Challenge them on the ethical catastrophe of prioritizing fundraising targets over human safety and accountability.",
-                            "Evaluate their third question. Smart Prompt: Ask how they will launch a fully independent investigation without executive interference or retaliation."
-                        ]
+                        dilemma: "Whistleblowers within your {charityType} formally report severe workplace harassment to the board, but the HR committee buries the report entirely to protect a 'star' fundraising executive.",
+                        gec: "GEC 5.2.1: The charity should establish a whistle-blowing policy to provide a confidential channel for staff to report improprieties."
                     }
                 ]
             },
             "6": {
-                title: "Principle 6: The charity communicates actively to instil public confidence.",
+                title: "Principle 6: Public Image",
                 pool: [
                     {
-                        dilemma: "A viral social media post falsely accuses your {charityType} of wasting funds on 'lavish staff retreats', utilizing out-of-context photos. Angry donors are flooding your inbox threatening to pull funding, yet the internal comms team remains silent.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Push them to demand immediate crisis communication facts and timelines from the team.",
-                            "Evaluate their second question. Smart Prompt: Ask how they intend to transparently and effectively rebuild public trust instantly without being defensive.",
-                            "Evaluate their third question. Smart Prompt: Challenge the internal transparency and policies regarding staff welfare spending to ensure it is auditable."
-                        ]
+                        dilemma: "A viral social media post falsely accuses your {charityType} of wasting funds on 'lavish staff retreats', utilizing out-of-context photos. Angry donors are flooding your inbox threatening to pull funding, yet the internal comms team remains silent.",
+                        gec: "GEC 6.1.1: The charity actively communicates with its stakeholders to instil public confidence and maintains its public image."
                     },
                     {
-                        dilemma: "A major celebrity ambassador for your {charityType} is embroiled in a massive criminal scandal, and the media is demanding to know directly if the charity condones their actions.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Demand rapid activation of the charity's crisis communications protocol.",
-                            "Evaluate their second question. Smart Prompt: Challenge them on how to firmly and immediately distance the charity's brand from the individual without alienating their specific fan-donor base.",
-                            "Evaluate their third question. Smart Prompt: Ask what new rigorous policies they will enforce regarding vetting and contracting public ambassadors."
-                        ]
+                        dilemma: "A major celebrity ambassador for your {charityType} is embroiled in a massive criminal scandal, and the media is demanding to know directly if the charity condones their actions.",
+                        gec: "GEC 6.1.2: The Board should establish guidelines on how the charity engages with the media and the public to protect its reputation."
                     },
                     {
-                        dilemma: "Your {charityType} launches an awareness campaign that is widely criticized as culturally insensitive and highly offensive to a minority group in Singapore, sparking trending outrage across local forums.\n\n*What is your first question?*",
-                        challenges: [
-                            "Evaluate their first question. Smart Prompt: Push them to emphatically demand accountability for the total lack of cultural vetting in the communications sign-off process.",
-                            "Evaluate their second question. Smart Prompt: Challenge them to formulate a sincere, immediate public apology that goes far beyond standard PR 'spin'.",
-                            "Evaluate their third question. Smart Prompt: Ask how they will structurally rebuild trust with the affected communities while navigating the public backlash safely."
-                        ]
+                        dilemma: "Your {charityType} launches an awareness campaign that is widely criticized as culturally insensitive and highly offensive to a minority group in Singapore, sparking trending outrage across local forums.",
+                        gec: "GEC 6.1.1: The charity should carefully review public communications to ensure they accurately represent its mission and maintain public trust."
                     }
                 ]
             }
         };
 
-        let currentStep = 0; // 0: Init, 1-11: Live Simulation Steps
-        let currentScenarioId = null;
-        let activeScenarioData = null;
-        let completedScenarios = [];
-        let chatHistory = []; // Tracks data for NotebookLM export
-
-        function autoExportTranscript() {
-            if (chatHistory.length === 0) {
-                alert("No simulation data to export yet."); return;
-            }
-
-            let md = "Hi! I just used a Really Useful Thing from CharityOps.org to conduct a self-assessment.\n\n";
-
-            // Extract the relevant context from the chat history
-            // chatHistory data structure: { scenario: string, step: number, sender: string, text: string }
-            // Steps: 
-            // 1: AI (Scenario presentation)
-            // 2: User (Q1)
-            // 3: AI (Challenge 1)
-            // 4: User (Q2)
-            // 5: AI (Challenge 2)
-            // 6: User (Q3)
-            // 7: AI (Challenge 3 / Completion)
-
-            const scenarioLog = chatHistory.find(log => log.step === 1);
-            const userQuestions = chatHistory.filter(log => log.sender === 'Director');
-
-            if (scenarioLog) {
-                const scenarioId = scenarioLog.scenario;
-                md += `*Principle Assessed:*\n${scenarios[scenarioId]?.title || "Governance Scenario"}\n\n`;
-
-                // Clean up the scenario text to remove the structural labels like *[P1 Scenario]*
-                let cleanScenario = scenarioLog.text.replace(/^\*\[.*?\]\*\n\n/, '');
-                // Also remove the bottom prompt like "What is your first question?"
-                cleanScenario = cleanScenario.replace(/\n\n\*what is your first question\?\*$/i, '');
-
-                md += `*Scenario:*\n${cleanScenario}\n\n`;
-            }
-
-            md += "*My 3 Questions:*\n";
-            userQuestions.forEach((log, index) => {
-                // Clean up user labels like *[P1Q1]*
-                let cleanQuestion = log.text.replace(/^\*\[.*?\]\*\n/, '');
-                md += `${index + 1}. ${cleanQuestion}\n`;
-            });
-
-            // Seamlessly sync to LocalStorage to eliminate clumsy file uploads
-            localStorage.setItem('purposelyTranscript', md);
-        }
-
-        function updateBreadcrumb() {
-            const tracker = document.getElementById('breadcrumbTracker');
-            if (currentStep === 0) {
-                tracker.classList.add('hidden');
-                return;
-            }
-            tracker.classList.remove('hidden');
-            const barsContainer = document.getElementById('breadcrumbBars');
-            let barsHtml = '';
-            for (let i = 1; i <= 7; i++) {
-                if (i < currentStep) {
-                    barsHtml += `<div class="h-1.5 flex-1 bg-teal-500 rounded-full"></div>`;
-                } else if (i === currentStep) {
-                    barsHtml += `<div class="h-1.5 flex-1 bg-yellow-400 rounded-full animate-pulse"></div>`;
-                } else {
-                    barsHtml += `<div class="h-1.5 flex-1 bg-slate-700 rounded-full"></div>`;
-                }
-            }
-            barsContainer.innerHTML = barsHtml;
-        }
-
-        function renderPrinciples() {
-            const container = document.getElementById('principlesContainer');
-            if (!container) return;
-            let html = '<div class="grid grid-cols-1 gap-3">';
-            for (let key in scenarios) {
-                const isCompleted = completedScenarios.includes(key);
-                html += `
-                <button onclick="startSimulation('${key}')" 
-                    class="text-left w-full border ${isCompleted ? 'border-slate-800 bg-slate-800' : 'border-slate-500 bg-slate-700 hover:bg-slate-600'} rounded-lg p-3 transition duration-200"
-                    ${isCompleted ? 'disabled' : ''}>
-                    <div class="${isCompleted ? 'text-gray-500 line-through' : 'text-white font-medium'}">
-                        ${scenarios[key].title}
-                    </div>
-                </button>`;
-            }
-            html += '</div>';
-            container.innerHTML = html;
-        }
+        let chatHistory = [];
+        let currentAssessmentData = null;
 
         function getTime() {
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function scrollToBottom() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
         function addMessage(text, sender) {
@@ -593,14 +384,14 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
                 ${formattedText}
                 <span class="timestamp">${getTime()}</span>
             </div>`;
-            chatWindow.scrollTop = chatWindow.scrollHeight;
+            scrollToBottom();
         }
 
         function addTypingIndicator() {
             const chatWindow = document.getElementById('chatWindow');
             const id = 'typing-' + Date.now();
             chatWindow.innerHTML += `<div id="${id}" class="bubble ai" style="color: #00a884; font-style: italic;">typing...</div>`;
-            chatWindow.scrollTop = chatWindow.scrollHeight;
+            scrollToBottom();
             return id;
         }
 
@@ -609,216 +400,161 @@ Keep your response under 80 words. Adopt a conversational WhatsApp-friendly tone
             if (el) el.remove();
         }
 
-        // Voice Recording Logic
-        let isRecording = false;
-        let recognition = null;
-
-        function toggleVoice() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Your browser does not support voice input. Please use Chrome or Edge.");
-                return;
-            }
-
-            if (!recognition) {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                recognition = new SpeechRecognition();
-                recognition.lang = 'en-SG'; // Opt for Singapore English accuracy
-                recognition.continuous = false;
-                recognition.interimResults = true;
-
-                recognition.onstart = () => {
-                    isRecording = true;
-                    document.getElementById('micBtn').style.color = '#00a884'; // Active state
-                    document.getElementById('micBtn').classList.add('animate-pulse');
-                    document.getElementById('userInput').placeholder = 'Listening...';
-                };
-
-                recognition.onresult = (event) => {
-                    let text = '';
-                    for (let i = 0; i < event.results.length; i++) {
-                        text += event.results[i][0].transcript;
-                    }
-                    document.getElementById('userInput').value = text;
-                };
-
-                recognition.onerror = (event) => {
-                    console.error("Speech error", event);
-                    stopRecording();
-                };
-
-                recognition.onend = () => {
-                    stopRecording();
-                };
-            }
-
-            if (isRecording) {
-                stopRecording();
-            } else {
-                recognition.start();
-            }
+        function removeActionButtons() {
+            const btns = document.querySelectorAll('.action-buttons');
+            btns.forEach(b => b.remove());
         }
 
-        function stopRecording() {
-            if (recognition && isRecording) {
-                recognition.stop();
-            }
-            isRecording = false;
-            document.getElementById('micBtn').style.color = '#8696a0';
-            document.getElementById('micBtn').classList.remove('animate-pulse');
-            document.getElementById('userInput').placeholder = 'Type your question...';
-        }
-
-        function startSimulation(scenarioId) {
+        function generateRandomScenario() {
             document.getElementById('debugDrawer').classList.remove('open');
-            document.getElementById('chatWindow').innerHTML = `<div class="w-full flex justify-center mt-2 mb-4"><span class="bg-[#182229] px-4 py-1.5 rounded-lg text-xs text-gray-400 shadow-sm">Assessment Started</span></div>`;
-            document.getElementById('userInput').disabled = false;
-            document.getElementById('sendBtn').disabled = false;
-            document.getElementById('micBtn').disabled = false;
-            document.getElementById('userInput').focus();
 
-            currentScenarioId = scenarioId;
-            currentStep = 1;
+            const p = document.getElementById('emptyStatePlaceholder');
+            if (p) p.remove();
 
-            const pool = scenarios[currentScenarioId].pool;
-            activeScenarioData = pool[Math.floor(Math.random() * pool.length)];
+            removeActionButtons();
 
-            updateBreadcrumb();
+            // Pick random principle
+            const keys = Object.keys(scenarios);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const principleData = scenarios[randomKey];
+
+            // Pick random scenario inside principle
+            const randomScenario = principleData.pool[Math.floor(Math.random() * principleData.pool.length)];
+
+            const charityTypeRaw = document.getElementById('setupCharity').value;
+            const charityType = charityTypeRaw ? charityTypeRaw : "charity";
+            const injectedDilemma = randomScenario.dilemma.replace(/{charityType}/g, charityType);
+
+            currentAssessmentData = {
+                principleTitle: principleData.title,
+                scenarioText: injectedDilemma,
+                gecText: randomScenario.gec
+            };
+
+            const typingId = addTypingIndicator();
 
             setTimeout(() => {
-                const typingId = addTypingIndicator();
+                removeTypingIndicator(typingId);
+
+                const scenarioMsg = `*[${principleData.title}]*\n\n*Scenario:*\n${injectedDilemma}\n\n*Relevant Checklist (GEC):*\n${randomScenario.gec}`;
+                addMessage(scenarioMsg, 'ai');
+                chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
+
+                const typing2 = addTypingIndicator();
                 setTimeout(() => {
-                    removeTypingIndicator(typingId);
+                    removeTypingIndicator(typing2);
+                    addMessage("Has your charity put this principle into action to deal with the scenario?", 'ai');
 
-                    const charityTypeRaw = document.getElementById('setupCharity').value;
-                    const charityType = charityTypeRaw ? charityTypeRaw : "charity";
-                    const injectedScenario = activeScenarioData.dilemma.replace(/{charityType}/g, charityType);
+                    // Inject buttons
+                    const chatWindow = document.getElementById('chatWindow');
+                    chatWindow.innerHTML += `
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="handleAssessmentResponse('Yes')">Yes</button>
+                        <button class="action-btn" style="background-color: #d32f2f;" onclick="handleAssessmentResponse('No')">No</button>
+                        <button class="action-btn" style="background-color: #f57c00;" onclick="handleAssessmentResponse('Partial')">Partial</button>
+                    </div>`;
+                    scrollToBottom();
+                }, 800);
 
-                    let initialScenarioMsg = `*[P${currentScenarioId} Scenario]*\n\n${injectedScenario}`;
-                    addMessage(initialScenarioMsg, 'ai');
-                    chatHistory.push({ scenario: currentScenarioId, step: 1, sender: 'PURPOSELY AI', text: initialScenarioMsg });
-
-                    currentStep = 2; // user input for Q1 expected
-                    updateBreadcrumb();
-                }, 1000);
-            }, 500);
+            }, 800);
         }
 
-        function handleEnter(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
+        function handleAssessmentResponse(response) {
+            removeActionButtons();
 
-        function finishSimulation() {
+            addMessage(`*My Assessment:* ${response}`, 'user');
+
+            // Update the last history item with the response
+            if (currentAssessmentData) {
+                currentAssessmentData.userResponse = response;
+            }
+
+            const typingId = addTypingIndicator();
+
             setTimeout(() => {
-                currentStep = 0;
-                updateBreadcrumb();
-                document.getElementById('debugDrawer').classList.add('open');
-            }, 500);
+                removeTypingIndicator(typingId);
+                addMessage("Noted. Do you need another scenario?", 'ai');
+
+                const chatWindow = document.getElementById('chatWindow');
+                chatWindow.innerHTML += `
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="handleContinueResponse('Yes')">Yes, Generate Next</button>
+                    <button class="action-btn" style="background-color: #d32f2f;" onclick="handleContinueResponse('No')">No, End Session</button>
+                </div>`;
+                scrollToBottom();
+            }, 800);
+        }
+
+        function handleContinueResponse(response) {
+            removeActionButtons();
+            addMessage(response, 'user');
+
+            if (response === 'Yes') {
+                generateRandomScenario();
+            } else {
+                endSession();
+            }
+        }
+
+        function autoExportTranscript() {
+            if (chatHistory.length === 0) return;
+
+            let md = "Hi! I just used a Really Useful Thing from CharityOps.org to conduct a Board Self-Assessment.\n\n";
+
+            // Count totals
+            let yesCount = 0;
+            let noCount = 0;
+            let partialCount = 0;
+
+            const assessmentLogs = chatHistory.filter(log => log.step === 'Scenario');
+
+            assessmentLogs.forEach((log, index) => {
+                const data = log.data;
+                md += `*Assessment ${index + 1}: ${data.principleTitle}*\n`;
+                md += `*Scenario:* ${data.scenarioText}\n`;
+                md += `*GEC Reference:* ${data.gecText}\n`;
+                md += `*My Assessment:* ${data.userResponse || "No answer recorded"}\n\n`;
+
+                if (data.userResponse === 'Yes') yesCount++;
+                if (data.userResponse === 'No') noCount++;
+                if (data.userResponse === 'Partial') partialCount++;
+            });
+
+            md += `*Summary:*\nYes: ${yesCount} | No: ${noCount} | Partial: ${partialCount}\n`;
+
+            localStorage.setItem('purposelyTranscript', md);
+        }
+
+        function endSession() {
+            const typingId = addTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                addMessage("Your session has concluded. You can share your assessment details via WhatsApp.", 'ai');
+
+                autoExportTranscript();
+
+                const chatWindow = document.getElementById('chatWindow');
+                chatWindow.innerHTML += `
+                <div class="w-full flex flex-col gap-3 mt-4 mb-4">
+                    <button onclick="openWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
+                        <i class="fab fa-whatsapp text-xl"></i> Share Details via WhatsApp
+                    </button>
+                    <button onclick="document.getElementById('debugDrawer').classList.add('open')" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
+                        Back to Menu
+                    </button>
+                </div>`;
+                scrollToBottom();
+            }, 800);
         }
 
         function openWhatsApp() {
             let transcript = localStorage.getItem('purposelyTranscript') || '';
             let encodedTranscript = encodeURIComponent(transcript);
             window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
-            finishSimulation();
         }
 
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const userText = input.value.trim();
-            if (!userText || currentStep === 0) return;
-
-            // Validate that user input is an actual question, but only during the 3 interrogation phases (Steps 2, 4, 6)
-            if ([2, 4, 6].includes(currentStep)) {
-                const hasQuestionMark = userText.includes('?');
-                const hasQuestionWord = /\b(how|what|where|when|why|who)\b/i.test(userText.toLowerCase());
-
-                if (!hasQuestionMark || !hasQuestionWord) {
-                    addMessage(userText, 'user');
-                    input.value = '';
-                    addMessage("⚠️ As a Director using the Question Storming method, you must guide with questions. Please rephrase to include a questioning word (who, what, where, when, why, how) and end with a question mark (?).", 'ai');
-                    return;
-                }
-            }
-
-            let userLabel = '';
-            if (currentStep === 2) userLabel = `[P${currentScenarioId}Q1]`;
-            else if (currentStep === 4) userLabel = `[P${currentScenarioId}Q2]`;
-            else if (currentStep === 6) userLabel = `[P${currentScenarioId}Q3]`;
-
-            let formattedUserText = `*${userLabel}*\n${userText}`;
-            addMessage(formattedUserText, 'user');
-            chatHistory.push({ scenario: currentScenarioId, step: currentStep, sender: 'Director', text: formattedUserText });
-            input.value = '';
-
-            currentStep++; // advances to AI step (3, 5, 7)
-            updateBreadcrumb();
-
-            if ([3, 5, 7].includes(currentStep)) {
-                const typingId = addTypingIndicator();
-
-                try {
-                    const scenario = activeScenarioData;
-
-                    // Simulate AI cognitive processing delay
-                    await new Promise(r => setTimeout(r, 1800));
-
-                    removeTypingIndicator(typingId);
-
-                    let aiReply = '';
-                    if (currentStep === 3) aiReply = `That is a perceptive opening question. Consider this challenge: ${scenario.challenges[0]}\n\nHow would you frame your next question to address this specific risk?`;
-                    else if (currentStep === 5) aiReply = `A good pivot towards oversight. However, we must deepen the inquiry: ${scenario.challenges[1]}\n\nWhat structural or reporting evidence would you demand as a Board member to verify this?`;
-                    else if (currentStep === 7) aiReply = `You've touched on a critical potential blind spot. The crux of the issue is: ${scenario.challenges[2]}\n\nYou have completed your 3 questions!`;
-
-                    let aiLabel = '';
-                    if (currentStep === 3) aiLabel = `[P${currentScenarioId} Challenge 1]`;
-                    if (currentStep === 5) aiLabel = `[P${currentScenarioId} Challenge 2]`;
-                    if (currentStep === 7) aiLabel = `[P${currentScenarioId} Challenge 3]`;
-
-                    let finalReply = `*${aiLabel}*\n\n${aiReply}`;
-                    addMessage(finalReply, 'ai');
-                    chatHistory.push({ scenario: currentScenarioId, step: currentStep, sender: 'PURPOSELY AI', text: finalReply });
-
-                    if (currentStep === 7) {
-                        autoExportTranscript();
-
-                        // Add WhatsApp and Back action buttons
-                        const chatWindow = document.getElementById('chatWindow');
-                        const buttonsHtml = `
-                        <div class="w-full flex flex-col gap-3 mt-4 mb-4">
-                            <button onclick="openWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2">
-                                <i class="fab fa-whatsapp text-xl"></i> Send to WhatsApp
-                            </button>
-                            <button onclick="finishSimulation()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
-                                Back to Principles
-                            </button>
-                        </div>`;
-                        chatWindow.innerHTML += buttonsHtml;
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-
-                        document.getElementById('userInput').disabled = true;
-                        document.getElementById('sendBtn').disabled = true;
-                        document.getElementById('micBtn').disabled = true;
-
-                        if (!completedScenarios.includes(currentScenarioId)) {
-                            completedScenarios.push(currentScenarioId);
-                        }
-                        renderPrinciples();
-                    } else {
-                        currentStep++; // advance to User Step (4, 6)
-                        updateBreadcrumb();
-                    }
-
-                } catch (err) {
-                    removeTypingIndicator(typingId);
-                    addMessage("⚠️ " + (err.message || "Error generating simulation response."), "ai");
-                    currentStep--; // Rollback step on network error
-                    updateBreadcrumb();
-                }
-            }
-        }
-
-        // Initial render and open drawer
-        renderPrinciples();
+        // Open drawer by default
         document.getElementById('debugDrawer').classList.add('open');
     </script>
 </body>
