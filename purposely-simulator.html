@@ -467,6 +467,8 @@
 
         let chatHistory = [];
         let currentAssessmentData = null;
+        let usedScenarios = new Set();
+        let totalScenariosCount = Object.values(scenarios).reduce((acc, curr) => acc + curr.pool.length, 0);
 
         function getTime() {
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -509,6 +511,7 @@
         function startAssessment() {
             document.getElementById('debugDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
+            usedScenarios.clear(); // Reset on start
             generateRandomScenario();
         }
 
@@ -518,13 +521,29 @@
 
             removeActionButtons();
 
-            // Pick random principle
-            const keys = Object.keys(scenarios);
-            const randomKey = keys[Math.floor(Math.random() * keys.length)];
-            const principleData = scenarios[randomKey];
+            if (usedScenarios.size >= totalScenariosCount) {
+                const typingId = addTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator(typingId);
+                    addMessage("You have completed all available scenarios! Assessment concluded.", 'ai');
+                    endSession();
+                }, 800);
+                return;
+            }
 
-            // Pick random scenario inside principle
-            const randomScenario = principleData.pool[Math.floor(Math.random() * principleData.pool.length)];
+            const keys = Object.keys(scenarios);
+            let randomKey, principleData, randomScenarioIndex, randomScenario, scenarioId;
+
+            // Pick a random un-used scenario
+            do {
+                randomKey = keys[Math.floor(Math.random() * keys.length)];
+                principleData = scenarios[randomKey];
+                randomScenarioIndex = Math.floor(Math.random() * principleData.pool.length);
+                scenarioId = `${randomKey}-${randomScenarioIndex}`;
+            } while (usedScenarios.has(scenarioId));
+
+            usedScenarios.add(scenarioId);
+            randomScenario = principleData.pool[randomScenarioIndex];
 
             const injectedDilemma = randomScenario.dilemma.replace(/{charityType}/g, "charity");
 
