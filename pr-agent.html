@@ -233,7 +233,7 @@
                             Stop staring at a blank page. Enter your core topic, event, or milestone, and our AI will automatically draft a compelling LinkedIn narrative and fetch a beautiful visual asset in seconds.
                         </p>
 
-                        <form onSubmit={handleGenerate} className="flex flex-col gap-6 mt-auto mb-auto">
+                        <form onSubmit={handleGenerate} className="flex flex-col gap-6 mt-4 mb-8">
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
                                     Topic / Milestone
@@ -285,10 +285,10 @@
                     </div>
 
                     {/* Right Pane: Live Output */}
-                    <div className="flex-1 bg-white/50 p-6 md:p-10 flex flex-col items-center justify-center overflow-y-auto relative">
+                    <div className="flex-1 bg-white/50 p-6 md:p-10 flex flex-col items-center overflow-y-auto relative">
 
                         {!isGenerating && !generatedPost && (
-                            <div className="animate-fade-in flex flex-col items-center justify-center text-center opacity-70">
+                            <div className="animate-fade-in flex flex-col items-center justify-center text-center opacity-70 my-auto">
                                 <div className="w-20 h-20 rounded-full bg-brand-light flex items-center justify-center mb-6 text-brand">
                                     <Icon name="image" size={32} />
                                 </div>
@@ -298,7 +298,7 @@
                         )}
 
                         {isGenerating && (
-                            <div className="flex flex-col items-center justify-center">
+                            <div className="flex flex-col items-center justify-center my-auto">
                                 <div className="w-24 h-24 rounded-full bg-brand/10 flex items-center justify-center loader-ring mb-6 text-brand">
                                     <Icon name="sparkles" size={32} className="animate-pulse" />
                                 </div>
@@ -308,7 +308,7 @@
                         )}
 
                         {!isGenerating && generatedPost && (
-                            <div className="w-full max-w-lg linkedin-post animate-fade-in flex flex-col">
+                            <div className="w-full max-w-lg linkedin-post animate-fade-in flex flex-col mt-4 mb-4">
                                 {/* LinkedIn Header Mock */}
                                 <div className="p-4 flex items-center justify-between border-b border-gray-100">
                                     <div className="flex items-center gap-3">
