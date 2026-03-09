@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Story & Image Generator | CharityOps RUT</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            light: '#F2EFE9',
+                            DEFAULT: '#8B7355',
+                            dark: '#1B2B28',
+                            muted: '#5E5A4B',
+                            accent: '#D2B48C'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 30px rgba(27, 43, 40, 0.08);
+            border: 1px solid rgba(210, 180, 140, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(139, 115, 85, 0.6);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 15px rgba(139, 115, 85, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(139, 115, 85, 0);
+            }
+        }
+
+        .loader-ring {
+            animation: pulse-ring 2s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(139, 115, 85, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 115, 85, 0.4);
+        }
+
+        .linkedin-post {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8">
+
+    <div id="root"
+        class="w-full max-w-5xl h-[90vh] min-h-[600px] flex flex-col md:flex-row glass-panel rounded-3xl overflow-hidden shadow-2xl">
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Custom hook to use Lucide icons easily in React (since we imported the script tag)
+        const Icon = ({ name, size = 24, className = "" }) => {
+            const iconRef = useRef(null);
+
+            useEffect(() => {
+                if (iconRef.current && window.lucide) {
+                    window.lucide.createIcons({
+                        icons: { [name]: window.lucide.icons[name] },
+                        nameAttr: 'data-lucide',
+                        root: iconRef.current.parentElement
+                    });
+                }
+            }, [name]);
+
+            return <i ref={iconRef} data-lucide={name} width={size} height={size} className={className}></i>;
+        };
+
+        const PROMPT_TEMPLATES = [
+            `🌟 Reflecting on an incredible milestone at our recent {topic}! The energy and commitment from our community have been nothing short of inspiring.\n\nEvery day, we strive to create meaningful impact, and this moment reminds us exactly why we do what we do. It takes a village, and we are so grateful for ours. 🤝\n\nTo everyone who participated, volunteered, and supported us—thank you. Let's keep building a brighter, more inclusive future together! 🚀\n\n#SocialImpact #Nonprofit #CommunityStrong #CharityOps #{topic.replace(/\s+/g, '')} #MakeADifference`,
+
+            `📢 Big news from the frontlines of our mission! We just wrapped up {topic} and the results exceeded our wildest expectations. 🎉\n\nWhen we first planned this, we knew the challenges were steep. But seeing our team and supporters rally together to drive real, tangible change is a powerful reminder of what's possible when purpose meets action. 💡\n\nThis isn't just a win for us; it's a win for the entire community we serve. Onward and upward! 💪\n\n#PurposeDriven #Leadership #Philanthropy #InnovationForGood #{topic.replace(/\s+/g, '')}`,
+
+            `We often talk about impact, but today we want to show it. During our {topic}, we witnessed firsthand the transformative power of compassion combined with strategy. 🌱\n\nA huge shoutout to our dedicated volunteers and generous partners who worked tirelessly behind the scenes. You are the backbone of our organization. Here's to more milestones, deeper connections, and sustainable change! ✨\n\n#Volunteering #SocialGood #TeamWork #CharityOps #CommunityFirst`
+        ];
+
+        const App = () => {
+            const [topic, setTopic] = useState('');
+            const [tone, setTone] = useState('Inspiring');
+            const [isGenerating, setIsGenerating] = useState(false);
+            const [generatedPost, setGeneratedPost] = useState(null);
+            const [copyStatus, setCopyStatus] = useState(false);
+
+            const handleGenerate = (e) => {
+                e.preventDefault();
+                if (!topic.trim()) return;
+
+                setIsGenerating(true);
+                setGeneratedPost(null);
+
+                // Simulate AI network delay (2-3 seconds)
+                setTimeout(() => {
+                    const template = PROMPT_TEMPLATES[Math.floor(Math.random() * PROMPT_TEMPLATES.length)];
+                    const personalizedText = template.replace(/\{topic\}/g, topic.trim());
+
+                    // Generate a visually appropriate placeholder image from Unsplash
+                    const keywords = topic.split(' ').slice(0, 2).join(',') + ',people,event,volunteer';
+                    const imageUrl = `https://source.unsplash.com/800x450/?${keywords}&sig=${Date.now()}`;
+
+                    setGeneratedPost({
+                        text: personalizedText,
+                        imageUrl: imageUrl,
+                        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                    });
+
+                    setIsGenerating(false);
+                }, 2500);
+            };
+
+            const handleCopy = () => {
+                navigator.clipboard.writeText(generatedPost.text);
+                setCopyStatus(true);
+                setTimeout(() => setCopyStatus(false), 2000);
+            };
+
+            const handleShare = () => {
+                const linkedinUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(generatedPost.text)}`;
+                window.open(linkedinUrl, '_blank', 'noopener,noreferrer');
+            };
+
+            return (
+                <div className="flex flex-col md:flex-row w-full h-full">
+                    {/* Left Pane: Setup */}
+                    <div className="w-full md:w-[400px] p-8 md:p-10 flex flex-col border-b md:border-b-0 md:border-r border-brand-accent/30 overflow-y-auto">
+                        <div className="flex items-center gap-2 mb-8 select-none">
+                            <span className="font-serif italic text-brand-dark text-xl">Charity</span>
+                            <span className="text-brand text-xl font-medium -ml-1">Ops</span>
+                        </div>
+
+                        <div className="mb-2">
+                            <span className="text-xs font-bold tracking-widest text-brand uppercase flex items-center gap-2 mb-1">
+                                <Icon name="sparkles" size={14} /> A Really Useful Thing
+                            </span>
+                            <h1 className="text-3xl font-serif font-black text-brand-dark leading-tight">
+                                PR Agent
+                            </h1>
+                        </div>
+
+                        <p className="text-brand-muted text-sm mb-10 leading-relaxed">
+                            Stop staring at a blank page. Enter your core topic, event, or milestone, and our AI will automatically draft a compelling LinkedIn narrative and fetch a beautiful visual asset in seconds.
+                        </p>
+
+                        <form onSubmit={handleGenerate} className="flex flex-col gap-6 mt-auto mb-auto">
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
+                                    Topic / Milestone
+                                </label>
+                                <textarea
+                                    className="w-full p-4 rounded-xl border-2 border-brand-accent/40 bg-white/60 text-brand-dark text-sm focus:outline-none focus:border-brand transition-colors resize-none placeholder-brand-muted/60"
+                                    rows="3"
+                                    placeholder="e.g., Annual Gala Dinner 2026, Successful Beach Cleanup..."
+                                    value={topic}
+                                    onChange={(e) => setTopic(e.target.value)}
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
+                                    Desired Tone
+                                </label>
+                                <select
+                                    className="w-full p-3 rounded-xl border border-brand-accent/40 bg-white/60 text-brand-dark text-sm focus:outline-none focus:border-brand cursor-pointer appearance-none"
+                                    value={tone}
+                                    onChange={(e) => setTone(e.target.value)}
+                                >
+                                    <option value="Inspiring">✨ Inspiring & Uplifting (Default)</option>
+                                    <option value="Professional">💼 Professional & Impact-Driven</option>
+                                    <option value="Gratitude">🤝 Deeply Grateful (Volunteers/Donors)</option>
+                                    <option value="Urgent">🚨 Urgent Call to Action</option>
+                                </select>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={isGenerating || !topic.trim()}
+                                className={`mt-4 w-full py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2 transition-all ${isGenerating || !topic.trim() ? 'bg-brand/50 cursor-not-allowed' : 'bg-brand-dark hover:bg-black hover:shadow-lg'}`}
+                            >
+                                {isGenerating ? (
+                                    <>
+                                        <Icon name="loader-2" size={18} className="animate-spin" />
+                                        Generating Draft...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Icon name="wand-2" size={18} />
+                                        Generate LinkedIn Post
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </div>
+
+                    {/* Right Pane: Live Output */}
+                    <div className="flex-1 bg-white/50 p-6 md:p-10 flex flex-col items-center justify-center overflow-y-auto relative">
+
+                        {!isGenerating && !generatedPost && (
+                            <div className="animate-fade-in flex flex-col items-center justify-center text-center opacity-70">
+                                <div className="w-20 h-20 rounded-full bg-brand-light flex items-center justify-center mb-6 text-brand">
+                                    <Icon name="image" size={32} />
+                                </div>
+                                <h3 className="text-xl font-serif text-brand-dark mb-2">Ready to amplify your voice</h3>
+                                <p className="text-brand-muted text-sm max-w-xs">Fill out the details on the left and click generate to see your automated post here.</p>
+                            </div>
+                        )}
+
+                        {isGenerating && (
+                            <div className="flex flex-col items-center justify-center">
+                                <div className="w-24 h-24 rounded-full bg-brand/10 flex items-center justify-center loader-ring mb-6 text-brand">
+                                    <Icon name="sparkles" size={32} className="animate-pulse" />
+                                </div>
+                                <p className="text-brand-dark font-medium animate-pulse">Crafting your narrative...</p>
+                                <p className="text-brand-muted text-sm mt-2">Searching for the perfect visual asset</p>
+                            </div>
+                        )}
+
+                        {!isGenerating && generatedPost && (
+                            <div className="w-full max-w-lg linkedin-post animate-fade-in flex flex-col">
+                                {/* LinkedIn Header Mock */}
+                                <div className="p-4 flex items-center justify-between border-b border-gray-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-full bg-brand-dark flex items-center justify-center text-white font-serif text-lg">
+                                            C
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-gray-900 leading-tight">CharityOps</h4>
+                                            <p className="text-xs text-gray-500">Non-profit Organization · {generatedPost.date}</p>
+                                        </div>
+                                    </div>
+                                    <Icon name="more-horizontal" size={20} className="text-gray-400" />
+                                </div>
+
+                                {/* Post Body */}
+                                <div className="p-4 text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+                                    {generatedPost.text}
+                                </div>
+
+                                {/* Generated Image */}
+                                <div className="w-full bg-gray-100 min-h-[250px] relative group border-t border-b border-gray-100">
+                                    <img
+                                        src={generatedPost.imageUrl}
+                                        alt="Generated asset for post"
+                                        className="w-full h-auto object-cover max-h-[400px]"
+                                        onError={(e) => { e.target.src = 'https://source.unsplash.com/800x450/?charity,event'; }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                        <a href={generatedPost.imageUrl} target="_blank" download className="bg-white text-gray-900 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-gray-100">
+                                            <Icon name="download" size={16} /> Download Image
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Post Actions & Save tools */}
+                                <div className="p-4 bg-gray-50 flex items-center justify-between gap-4">
+                                    <button
+                                        onClick={handleCopy}
+                                        className="flex-1 py-2.5 rounded-lg border border-gray-200 bg-white text-gray-700 text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors"
+                                    >
+                                        {copyStatus ? <><Icon name="check" size={16} className="text-green-500" /> Copied!</> : <><Icon name="copy" size={16} /> Copy Text</>}
+                                    </button>
+                                    <button
+                                        onClick={handleShare}
+                                        className="flex-1 py-2.5 rounded-lg bg-[#0a66c2] text-white text-sm font-medium flex items-center justify-center gap-2 hover:bg-[#004182] transition-colors"
+                                    >
+                                        <Icon name="linkedin" size={16} /> Share to LinkedIn
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
+                </div >
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
