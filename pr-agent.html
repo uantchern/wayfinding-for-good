@@ -159,9 +159,9 @@
         };
 
         const PROMPT_TEMPLATES = [
-            `🌟 Reflecting on an incredible milestone at our recent {topic}! The energy and commitment from our community have been nothing short of inspiring.\n\nEvery day, we strive to create meaningful impact, and this moment reminds us exactly why we do what we do. It takes a village, and we are so grateful for ours. 🤝\n\nTo everyone who participated, volunteered, and supported us—thank you. Let's keep building a brighter, more inclusive future together! 🚀\n\n#SocialImpact #Nonprofit #CommunityStrong #CharityOps #{topic.replace(/\s+/g, '')} #MakeADifference`,
+            `🌟 Reflecting on an incredible milestone at our recent {topic}! The energy and commitment from our community have been nothing short of inspiring.\n\nEvery day, we strive to create meaningful impact, and this moment reminds us exactly why we do what we do. It takes a village, and we are so grateful for ours. 🤝\n\nTo everyone who participated, volunteered, and supported us—thank you. Let's keep building a brighter, more inclusive future together! 🚀\n\n#SocialImpact #Nonprofit #CommunityStrong #CharityOps {hashtag} #MakeADifference`,
 
-            `📢 Big news from the frontlines of our mission! We just wrapped up {topic} and the results exceeded our wildest expectations. 🎉\n\nWhen we first planned this, we knew the challenges were steep. But seeing our team and supporters rally together to drive real, tangible change is a powerful reminder of what's possible when purpose meets action. 💡\n\nThis isn't just a win for us; it's a win for the entire community we serve. Onward and upward! 💪\n\n#PurposeDriven #Leadership #Philanthropy #InnovationForGood #{topic.replace(/\s+/g, '')}`,
+            `📢 Big news from the frontlines of our mission! We just wrapped up {topic} and the results exceeded our wildest expectations. 🎉\n\nWhen we first planned this, we knew the challenges were steep. But seeing our team and supporters rally together to drive real, tangible change is a powerful reminder of what's possible when purpose meets action. 💡\n\nThis isn't just a win for us; it's a win for the entire community we serve. Onward and upward! 💪\n\n#PurposeDriven #Leadership #Philanthropy #InnovationForGood {hashtag}`,
 
             `We often talk about impact, but today we want to show it. During our {topic}, we witnessed firsthand the transformative power of compassion combined with strategy. 🌱\n\nA huge shoutout to our dedicated volunteers and generous partners who worked tirelessly behind the scenes. You are the backbone of our organization. Here's to more milestones, deeper connections, and sustainable change! ✨\n\n#Volunteering #SocialGood #TeamWork #CharityOps #CommunityFirst`
         ];
@@ -183,11 +183,12 @@
                 // Simulate AI network delay (2-3 seconds)
                 setTimeout(() => {
                     const template = PROMPT_TEMPLATES[Math.floor(Math.random() * PROMPT_TEMPLATES.length)];
-                    const personalizedText = template.replace(/\{topic\}/g, topic.trim());
+                    let personalizedText = template.replace(/\{topic\}/g, topic.trim());
+                    personalizedText = personalizedText.replace(/\{hashtag\}/g, '#' + topic.trim().replace(/\s+/g, ''));
 
-                    // Generate a visually appropriate placeholder image from Unsplash
-                    const keywords = topic.split(' ').slice(0, 2).join(',') + ',people,event,volunteer';
-                    const imageUrl = `https://source.unsplash.com/800x450/?${keywords}&sig=${Date.now()}`;
+                    // Generate a visually appropriate placeholder image
+                    const seedStr = encodeURIComponent(topic.trim().replace(/\s+/g, '') + Date.now());
+                    const imageUrl = `https://picsum.photos/seed/${seedStr}/800/450`;
 
                     setGeneratedPost({
                         text: personalizedText,
@@ -333,7 +334,7 @@
                                         src={generatedPost.imageUrl}
                                         alt="Generated asset for post"
                                         className="w-full h-auto object-cover max-h-[400px]"
-                                        onError={(e) => { e.target.src = 'https://source.unsplash.com/800x450/?charity,event'; }}
+                                        onError={(e) => { e.target.onerror = null; e.target.src = 'https://picsum.photos/seed/charityops/800/450'; }}
                                     />
                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                                         <a href={generatedPost.imageUrl} target="_blank" download className="bg-white text-gray-900 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-gray-100">
