@@ -143,19 +143,24 @@
 
         // Custom hook to use Lucide icons easily in React (since we imported the script tag)
         const Icon = ({ name, size = 24, className = "" }) => {
-            const iconRef = useRef(null);
+            const wrapperRef = useRef(null);
 
             useEffect(() => {
-                if (iconRef.current && window.lucide) {
+                if (wrapperRef.current && window.lucide) {
+                    // Inject a raw <i> tag inside the span so React doesn't track it
+                    wrapperRef.current.innerHTML = `<i data-lucide="${name}" class="${className}"></i>`;
                     window.lucide.createIcons({
-                        icons: { [name]: window.lucide.icons[name] },
-                        nameAttr: 'data-lucide',
-                        root: iconRef.current.parentElement
+                        root: wrapperRef.current,
+                        attrs: {
+                            width: size,
+                            height: size,
+                            "stroke-width": 2
+                        }
                     });
                 }
-            }, [name]);
+            }, [name, size, className]);
 
-            return <i ref={iconRef} data-lucide={name} width={size} height={size} className={className}></i>;
+            return <span ref={wrapperRef} className="inline-flex items-center justify-center"></span>;
         };
 
         const PROMPT_TEMPLATES = [
