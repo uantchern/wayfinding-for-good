@@ -9,24 +9,21 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #202c33;
-            color: white;
+            background-color: #F2EFE9;
+            color: #1B2B28;
             min-height: 100vh;
-            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 20px;
             box-sizing: border-box;
         }
 
-        .phone-container {
+        .app-container {
             display: flex;
-            flex-direction: row;
-            gap: 30px;
-            align-items: center;
-            justify-content: center;
+            gap: 24px;
             width: 100%;
             max-width: 1000px;
             height: 90vh;
@@ -34,210 +31,319 @@
             min-height: 600px;
         }
 
-        .phone-frame {
+        /* Setup / Instructions Pane */
+        .setup-pane {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px;
             width: 380px;
-            height: 100%;
-            background-color: #0b141a;
-            border-radius: 40px;
-            border: 12px solid #111b21;
+            box-shadow: 0 10px 40px rgba(27, 43, 40, 0.08);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #D2B48C;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .setup-pane h1 {
+            font-size: 28px;
+            color: #1B2B28;
+            font-weight: 800;
+            margin-bottom: 8px;
+            font-family: Georgia, serif;
+        }
+
+        .setup-pane p.tagline {
+            color: #8B7355;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+
+        .instructions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .instructions-list li {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 15px;
+            color: #5E5A4B;
+            line-height: 1.5;
+        }
+
+        .instructions-list li i {
+            color: #D2B48C;
+            font-size: 22px;
+            margin-top: 2px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .primary-btn {
+            background-color: #1B2B28;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(27, 43, 40, 0.2);
+        }
+
+        .primary-btn:hover {
+            background-color: #8B7355;
+            transform: translateY(-2px);
+        }
+
+        /* Chat / Assessment Interface */
+        .chat-pane {
+            background-color: #ffffff;
+            border-radius: 24px;
+            flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
+            box-shadow: 0 10px 40px rgba(27, 43, 40, 0.08);
+            border: 1px solid #EAE5D8;
         }
 
-        .whatsapp-header {
-            background-color: #202c33;
-            padding: 15px 20px;
+        .chat-header {
+            background-color: #1B2B28;
+            padding: 20px 24px;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #2f3b43;
+            color: white;
+            gap: 12px;
         }
 
-        .chat-bg {
-            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            background-color: #0b141a;
+        .chat-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            flex-grow: 1;
+            font-family: Georgia, serif;
+        }
+
+        .chat-window {
+            background-color: #F9F8F6;
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
 
         .bubble {
             max-width: 85%;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 15px;
-            line-height: 1.4;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 16px;
+            line-height: 1.5;
             position: relative;
             word-wrap: break-word;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .bubble.ai {
-            background-color: #202c33;
-            color: #e9edef;
+            background-color: #ffffff;
+            color: #1B2B28;
             align-self: flex-start;
-            border-top-left-radius: 0;
-            box-shadow: 0 1px 0.5px rgba(11, 20, 26, .13);
+            border-top-left-radius: 4px;
+            border: 1px solid #EAE5D8;
         }
 
         .bubble.user {
-            background-color: #005c4b;
-            color: #e9edef;
+            background-color: #8B7355;
+            color: #ffffff;
             align-self: flex-end;
-            border-top-right-radius: 0;
-            box-shadow: 0 1px 0.5px rgba(11, 20, 26, .13);
+            border-top-right-radius: 4px;
         }
 
         .timestamp {
             display: block;
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.6);
+            opacity: 0.6;
             text-align: right;
-            margin-top: 4px;
+            margin-top: 8px;
         }
 
-        /* Debug/Setup Drawer */
-        .debug-drawer {
-            background: #1e293b;
-            border-radius: 16px;
-            padding: 30px;
-            width: 350px;
-            height: 100%;
-            box-sizing: border-box;
-            overflow-y: auto;
-            display: none;
-            flex-shrink: 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .debug-drawer.open {
-            display: block;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            body {
-                padding: 0;
-                overflow: hidden;
-            }
-
-            .phone-container {
-                height: 100dvh;
-                max-height: 100dvh;
-                min-height: auto;
-                gap: 0;
-            }
-
-            .phone-frame {
-                width: 100%;
-                height: 100dvh;
-                max-height: none;
-                border-radius: 0;
-                border: none;
-                box-shadow: none;
-            }
-
-            .debug-drawer {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100dvh;
-                border-radius: 0;
-                z-index: 50;
-            }
-        }
-
+        /* Action Buttons generated by JS */
         .action-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
             align-self: center;
             justify-content: center;
             width: 100%;
         }
 
         .action-btn {
-            background-color: #00a884;
+            background-color: #1B2B28;
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 8px 16px;
-            font-weight: 500;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
-            transition: background 0.2s;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(27, 43, 40, 0.15);
         }
 
         .action-btn:hover {
-            background-color: #008f6f;
+            background-color: #8B7355;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            opacity: 0.6;
+            text-align: center;
+            color: #5E5A4B;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 850px) {
+            .app-container {
+                flex-direction: column;
+                height: 100vh;
+                max-height: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                padding: 0;
+                background: #ffffff;
+            }
+
+            .setup-pane {
+                width: 100%;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+                padding: 24px;
+            }
+
+            .chat-pane {
+                display: none;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+                border-top: 1px solid #EAE5D8;
+            }
+
+            .chat-pane.started {
+                display: flex;
+                height: 100%;
+            }
+
+            .setup-pane.started {
+                display: none;
+            }
+        }
+
+        /* Overrides for specific inline styles injected by JS */
+        button[style*="#f57c00"] {
+            background-color: #D2B48C !important;
+            color: #1B2B28 !important;
+        }
+
+        button[style*="#d32f2f"] {
+            background-color: #5E5A4B !important;
+            color: #ffffff !important;
+        }
+
+        .bg-\[\#25D366\] {
+            background-color: #25D366 !important;
+        }
+
+        .bg-slate-700 {
+            background-color: #F2EFE9 !important;
+            color: #1B2B28 !important;
+            border: 1px solid #D2B48C;
+        }
+
+        .hover\:bg-slate-600:hover {
+            background-color: #EAE5D8 !important;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="phone-container">
-        <!-- Developer Settings Drawer -->
-        <div class="debug-drawer" id="debugDrawer">
-            <h2 class="text-2xl font-bold text-white mb-2">Charity Board Self-Assessment</h2>
-            <p class="text-sm text-gray-400 mb-6 italic">This RUT helps directors assess their knowledge and compliance
-                with the Code of Governance for Charities and IPCs</p>
+    <div class="app-container">
+        <!-- Setup Pane -->
+        <div class="setup-pane" id="debugDrawer">
+            <h1>Board Self-Assessment</h1>
+            <p class="tagline"><i class="fas fa-gem mr-2"></i> A Really Useful Thing</p>
 
-            <ol class="list-decimal pl-5 space-y-3 text-gray-300 text-sm mb-8 leading-relaxed">
-                <li>The RUT generates a unique, randomized scenario (it's never the same!) based on the Singapore
-                    charity sector.</li>
-                <li>It presents the relevant Governance Evaluation Checklist (GEC) paragraph.</li>
-                <li>You assess if your charity handles the scenario properly: Yes, No, or Partial.</li>
-                <li>Generate another unique scenario or end the session.</li>
-                <li>Export and share your assessment summary via WhatsApp.</li>
-            </ol>
+            <ul class="instructions-list">
+                <li><i class="fas fa-random"></i>
+                    <div><strong>Generate a unique, randomized scenario</strong> based on realistic Singapore charity
+                        challenges.</div>
+                </li>
+                <li><i class="fas fa-book-open"></i>
+                    <div><strong>Review the relevant Code</strong> of Governance Evaluation Checklist (GEC) principle.
+                    </div>
+                </li>
+                <li><i class="fas fa-check-circle"></i>
+                    <div><strong>Assess</strong> how your charity handles it (Yes, No, or Partial).</div>
+                </li>
+                <li><i class="fab fa-whatsapp"></i>
+                    <div><strong>Share</strong> your assessment summary via WhatsApp.</div>
+                </li>
+            </ul>
 
-
-
-            <div class="mt-auto">
-                <button onclick="generateRandomScenario()"
-                    class="w-full bg-[#00a884] hover:bg-[#008f6f] text-white font-bold py-4 px-4 rounded-xl shadow-lg transition-transform transform hover:scale-105 active:scale-95 flex justify-center items-center gap-2 text-lg">
-                    <i class="fas fa-play"></i> Start Assessment
-                </button>
-            </div>
+            <button onclick="startAssessment()" class="primary-btn">
+                <i class="fas fa-play"></i> Start Assessment
+            </button>
         </div>
 
-        <!-- The Phone -->
-        <div class="phone-frame">
-            <div class="whatsapp-header">
-                <button onclick="document.getElementById('debugDrawer').classList.toggle('open')"
-                    class="text-white hover:text-gray-300 mr-4">
-                    <i class="fas fa-bars text-xl"></i>
+        <!-- Chat / Assessment Pane -->
+        <div class="chat-pane" id="chatContainer">
+            <div class="chat-header">
+                <button
+                    onclick="document.getElementById('debugDrawer').classList.remove('started'); document.getElementById('chatContainer').classList.remove('started');"
+                    class="md:hidden text-white hover:text-[#D2B48C] mr-2"
+                    style="background:transparent; border:none; cursor:pointer;">
+                    <i class="fas fa-arrow-left text-xl"></i>
                 </button>
                 <div
-                    class="w-10 h-10 rounded-full bg-teal-700 flex items-center justify-content-center text-xl font-bold border border-teal-500 overflow-hidden mr-3">
-                    <img src="https://ui-avatars.com/api/?name=Board+Assessment&background=0284c7&color=fff"
-                        class="w-full h-full object-cover">
+                    class="w-8 h-8 rounded-full bg-[#8B7355] flex items-center justify-center text-sm font-bold border border-[#D2B48C] overflow-hidden">
+                    <span class="text-white">BA</span>
                 </div>
-                <div class="flex-1">
-                    <h2 class="text-white font-semibold text-lg leading-tight">Board Self-Assessment Session Details
-                    </h2>
-                </div>
+                <h2>Session Viewer</h2>
             </div>
 
-            <div class="chat-bg" id="chatWindow">
-                <div class="w-full flex justify-center mt-2 mb-4">
-                    <span class="bg-[#182229] px-4 py-1.5 rounded-lg text-xs text-gray-400 shadow-sm">Today</span>
-                </div>
-
-                <div class="w-full flex flex-col items-center justify-center h-full opacity-50 text-center px-6 pb-20 pointer-events-none"
-                    id="emptyStatePlaceholder">
-                    <i class="fas fa-shield-alt text-5xl mb-4 text-[#00a884]"></i>
-                    <p class="text-gray-300">Open the side menu (☰) to start the assessment.</p>
+            <div class="chat-window" id="chatWindow">
+                <div class="empty-state" id="emptyStatePlaceholder">
+                    <i class="fas fa-clipboard-list text-6xl mb-4 text-[#D2B48C]"></i>
+                    <p class="text-lg font-semibold">Ready to assess.</p>
+                    <p class="text-sm mt-2">Click "Start Assessment" to begin.</p>
                 </div>
             </div>
         </div>
@@ -375,7 +481,7 @@
         function addTypingIndicator() {
             const chatWindow = document.getElementById('chatWindow');
             const id = 'typing-' + Date.now();
-            chatWindow.innerHTML += `<div id="${id}" class="bubble ai" style="color: #00a884; font-style: italic;">typing...</div>`;
+            chatWindow.innerHTML += `<div id="${id}" class="bubble ai" style="color: #8B7355; font-style: italic;">typing...</div>`;
             scrollToBottom();
             return id;
         }
@@ -390,9 +496,13 @@
             btns.forEach(b => b.remove());
         }
 
-        function generateRandomScenario() {
-            document.getElementById('debugDrawer').classList.remove('open');
+        function startAssessment() {
+            document.getElementById('debugDrawer').classList.add('started');
+            document.getElementById('chatContainer').classList.add('started');
+            generateRandomScenario();
+        }
 
+        function generateRandomScenario() {
             const p = document.getElementById('emptyStatePlaceholder');
             if (p) p.remove();
 
@@ -523,7 +633,7 @@
                     <button onclick="openWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
                         <i class="fab fa-whatsapp text-xl"></i> Share Details via WhatsApp
                     </button>
-                    <button onclick="document.getElementById('debugDrawer').classList.add('open')" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
+                    <button onclick="document.getElementById('debugDrawer').classList.remove('started'); document.getElementById('chatContainer').classList.remove('started'); chatHistory=[]; document.getElementById('chatWindow').innerHTML='<div class=\\'empty-state\\' id=\\'emptyStatePlaceholder\\'><i class=\\'fas fa-clipboard-list text-6xl mb-4 text-[#D2B48C]\\'></i><p class=\\'text-lg font-semibold\\'>Ready to assess.</p><p class=\\'text-sm mt-2\\'>Click \\'Start Assessment\\' to begin.</p></div>';" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
                         Back to Menu
                     </button>
                 </div>`;
@@ -537,8 +647,7 @@
             window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
         }
 
-        // Open drawer by default
-        document.getElementById('debugDrawer').classList.add('open');
+        // Drawer starts naturally visible in new layout
     </script>
 </body>
 
