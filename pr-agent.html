@@ -159,13 +159,28 @@
             return <span ref={wrapperRef} className="inline-flex items-center justify-center"></span>;
         };
 
-        const PROMPT_TEMPLATES = [
-            `🌟 Reflecting on an incredible milestone at our recent {topic}! The energy and commitment from our community have been nothing short of inspiring.\n\nEvery day, we strive to create meaningful impact, and this moment reminds us exactly why we do what we do. It takes a village, and we are so grateful for ours. 🤝\n\nTo everyone who participated, volunteered, and supported us—thank you. Let's keep building a brighter, more inclusive future together! 🚀\n\n#SocialImpact #Nonprofit #CommunityStrong #CharityOps {hashtag} #MakeADifference`,
-
-            `📢 Big news from the frontlines of our mission! We just wrapped up {topic} and the results exceeded our wildest expectations. 🎉\n\nWhen we first planned this, we knew the challenges were steep. But seeing our team and supporters rally together to drive real, tangible change is a powerful reminder of what's possible when purpose meets action. 💡\n\nThis isn't just a win for us; it's a win for the entire community we serve. Onward and upward! 💪\n\n#PurposeDriven #Leadership #Philanthropy #InnovationForGood {hashtag}`,
-
-            `We often talk about impact, but today we want to show it. During our {topic}, we witnessed firsthand the transformative power of compassion combined with strategy. 🌱\n\nA huge shoutout to our dedicated volunteers and generous partners who worked tirelessly behind the scenes. You are the backbone of our organization. Here's to more milestones, deeper connections, and sustainable change! ✨\n\n#Volunteering #SocialGood #TeamWork #CharityOps #CommunityFirst`
-        ];
+        const PROMPT_TEMPLATES = {
+            "Inspiring": [
+                `🌟 Reflecting on an incredible milestone at our recent {topic}! The energy and commitment from our community have been nothing short of inspiring.\n\nEvery day, we strive to create meaningful impact, and this moment reminds us exactly why we do what we do. It takes a village, and we are so grateful for ours. 🤝\n\nTo everyone who participated, volunteered, and supported us—thank you. Let's keep building a brighter, more inclusive future together! 🚀\n\n#SocialImpact #Nonprofit #CommunityStrong #CharityOps {hashtag} #MakeADifference`,
+                `📢 Big news from the frontlines of our mission! We just wrapped up {topic} and the results exceeded our wildest expectations. 🎉\n\nWhen we first planned this, we knew the challenges were steep. But seeing our team and supporters rally together to drive real, tangible change is a powerful reminder of what's possible when purpose meets action. 💡\n\nThis isn't just a win for us; it's a win for the entire community we serve. Onward and upward! 💪\n\n#PurposeDriven #Leadership #Philanthropy #InnovationForGood {hashtag}`,
+                `We often talk about impact, but today we want to show it. During our {topic}, we witnessed firsthand the transformative power of compassion combined with strategy. 🌱\n\nA huge shoutout to our dedicated volunteers and generous partners who worked tirelessly behind the scenes. You are the backbone of our organization. Here's to more milestones, deeper connections, and sustainable change! ✨\n\n#Volunteering #SocialGood #TeamWork #CharityOps #CommunityFirst {hashtag}`,
+                `Believe in the power of collective action! 🌍 Our recent {topic} proved that when we align our passions toward a common goal, magic happens.\n\nFrom the meticulous planning to the joyous execution, every step was a testament to the resilience and heart of our community. We are overflowing with hope for the future! 💖 Let's carry this momentum forward and continue making waves.\n\n#HopeInAction #CommunityImpact #CharityOps #Milestone {hashtag}`
+            ],
+            "Professional": [
+                `📊 At CharityOps, we believe that rigorous strategy drives sustainable social impact. Our latest engagement, {topic}, perfectly exemplifies this ethos.\n\nBy leveraging data-driven approaches and strategic partnerships, we successfully delivered key outcomes that advance our core mission. We remain committed to maximizing operational efficiency while scaling our grassroots impact. 📈\n\nThank you to our stakeholders for your continued trust and collaboration. 🤝\n\n#SocialImpact #Governance #NonprofitLeadership #CharityOps {hashtag}`,
+                `We are pleased to announce the successful conclusion of {topic}. 🏢\n\nEffective social sector work requires more than just goodwill; it demands operational excellence and transparent accountability. This initiative demonstrated our team's capacity to execute complex projects that deliver measurable value to our beneficiaries.\n\nWe look forward to sharing our comprehensive impact report soon. 📑\n\n#ImpactMeasurement #OperationalExcellence #Philanthropy #CharityOps {hashtag}`,
+                `Strategic alignment was at the heart of our recent {topic}. 🎯\n\nBy uniting cross-sector leaders and aligning our resources with our long-term vision, we are building frameworks that outlast short-term interventions. This is what sustainable capacity building looks like in practice.\n\nWe extend our sincere gratitude to all the professionals who contributed their expertise. 💼\n\n#CapacityBuilding #StrategicPhilanthropy #NonprofitSector #CharityOps {hashtag}`
+            ],
+            "Gratitude": [
+                `🙏 We are simply overwhelmed with gratitude today. Looking back at {topic}, we are reminded that our charity is nothing without the incredible people who power it.\n\nTo our tireless volunteers who gave up their weekends, and to the donors who believed in this vision before it was a reality: YOU are the heroes of this story. ❤️ Every single hour and every single dollar contributed made a profound difference today.\n\nFrom the bottom of our hearts, thank you. 🌻\n\n#Gratitude #VolunteerHeroes #DonorAppreciation #CharityOps {hashtag}`,
+                `There are no words to fully capture the depth of our appreciation following {topic}. 🥺\n\nWe witnessed pure kindness in action. We saw strangers working side-by-side, united by a shared desire to uplift those in need. To everyone who played a part—whether large or small—please know that your contribution has rippled out and changed lives. 🌊\n\nThank you for being the heartbeat of our organization. ❤️\n\n#ThankYou #CommunityLove #SocialWork #CharityOps {hashtag}`,
+                `Today, we want to pause and say a massive THANK YOU regarding our recent {topic}. 🙌\n\nIt is easy to get caught up in the logistics, but moments like these remind us to stop and appreciate the human element. The smiles, the sweat, and the sheer dedication of our supporters have left us completely humbled. You inspire us to do better and be better every single day. 🌟\n\n#HeartWarming #AppreciationPost #CharityOps #GivingBack {hashtag}`
+            ],
+            "Urgent": [
+                `⚠️ We need your attention right now. The situation regarding {topic} is reaching a critical turning point.\n\nOur teams are on the ground working relentlessly, but the scale of the challenge has grown. We cannot do this alone. If you have ever considered supporting our mission, the moment to step up is today. ⏱️\n\nEvery hour counts. Please share this post, donate if you can, and help us spread the word before it's too late. 🆘\n\n#UrgentCall #ActionNeeded #EmergencyResponse #CharityOps {hashtag}`,
+                `🚨 Time is of the essence. Our current efforts surrounding {topic} require immediate community intervention.\n\nWe are facing unprecedented demand, and our resources are being stretched to their absolute limits. We are calling on our corporate partners, our dedicated volunteers, and the wider public to rally behind us immediately. 🛑\n\nDo not look away. We need hands on deck and voices amplified. Click the link in our bio to find out how you can deploy help now. ⚡\n\n#CrisisResponse #CommunityAlert #TakeAction #CharityOps {hashtag}`
+            ]
+        };
 
         const App = () => {
             const [topic, setTopic] = useState('');
@@ -173,6 +188,9 @@
             const [isGenerating, setIsGenerating] = useState(false);
             const [generatedPost, setGeneratedPost] = useState(null);
             const [copyStatus, setCopyStatus] = useState(false);
+
+            // Keep track of the last generated template to ensure variety
+            const lastTemplateRef = useRef(null);
 
             const handleGenerate = (e) => {
                 e.preventDefault();
@@ -183,9 +201,19 @@
 
                 // Simulate AI network delay (2-3 seconds)
                 setTimeout(() => {
-                    const template = PROMPT_TEMPLATES[Math.floor(Math.random() * PROMPT_TEMPLATES.length)];
+                    const availableTemplates = PROMPT_TEMPLATES[tone] || PROMPT_TEMPLATES["Inspiring"];
+
+                    // Prevent picking the exact same template twice in a row if possible
+                    let possibleTemplates = availableTemplates;
+                    if (availableTemplates.length > 1 && lastTemplateRef.current) {
+                        possibleTemplates = availableTemplates.filter(t => t !== lastTemplateRef.current);
+                    }
+
+                    const template = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
+                    lastTemplateRef.current = template; // save for next generation
+
                     let personalizedText = template.replace(/\{topic\}/g, topic.trim());
-                    personalizedText = personalizedText.replace(/\{hashtag\}/g, '#' + topic.trim().replace(/\s+/g, ''));
+                    personalizedText = personalizedText.replace(/\{hashtag\}/g, '#' + topic.trim().replace(/[^a-zA-Z0-9]/g, ''));
 
                     // Generate a visually appropriate placeholder image
                     const seedStr = encodeURIComponent(topic.trim().replace(/\s+/g, '') + Date.now());
