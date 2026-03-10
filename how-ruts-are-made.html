@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How RUTs Are Made | CharityOps</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+
+<body class="selection:bg-[#D2B48C] selection:text-[#1B2B28]">
+
+    <!-- Navigation / Header -->
+    <header
+        class="py-8 px-6 md:px-12 flex items-center justify-between border-b border-[#EAE5D8] bg-white/30 backdrop-blur-sm sticky top-0 z-50">
+        <a href="index.html" class="flex flex-col group cursor-pointer decoration-transparent">
+            <div class="font-serif text-2xl md:text-3xl leading-none cursor-pointer select-none">
+                <span class="relative inline-block">
+                    <span class="text-[#103020] italic relative z-10 font-[500] pr-1">Charity</span>
+                    <span
+                        class="absolute left-[-0.2em] right-0 bottom-[12%] h-[2px] bg-[#B08968] z-0 origin-left transition-transform duration-700 ease-out group-hover:scale-x-105"></span>
+                </span><span class="text-[#B08968] relative z-10 font-[400] tracking-tight ml-[-0.05em]">Ops</span>
+            </div>
+            <span
+                class="text-[10px] tracking-[0.2em] uppercase text-[#8B7355] font-bold mt-1 group-hover:text-[#2D423F] transition-colors"><i
+                    data-lucide="arrow-left" class="inline w-3 h-3 mr-1"></i> Back to Main</span>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-6 py-16 md:py-24">
+
+        <div class="mb-12 text-center md:text-left">
+            <span
+                class="text-xs font-bold tracking-[0.2em] text-[#8B7355] uppercase flex items-center justify-center md:justify-start gap-2 mb-4">
+                <i data-lucide="hammer" class="w-4 h-4"></i> Process
+            </span>
+            <h1 class="text-5xl md:text-6xl font-serif font-light text-[#1B2B28] leading-[1.1] mb-8">How RUTs Are Made
+            </h1>
+
+            <p class="text-xl md:text-2xl text-[#5E5A4B] font-light leading-relaxed mb-6">
+                We believe that software shouldn't take months to build or weeks to learn. This is our blueprint for
+                discovering and developing <strong>Really Useful Things</strong> in record time.
+            </p>
+        </div>
+
+        <div
+            class="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-[#D2B48C] before:to-transparent">
+
+            <!-- Step 1 -->
+            <div
+                class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div
+                    class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#F2EFE9] bg-[#2D423F] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 text-sm font-bold">
+                    1</div>
+                <div
+                    class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-2xl shadow-sm border border-[#EAE5D8]">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i data-lucide="search" class="text-[#8B7355] w-5 h-5"></i>
+                        <h3 class="font-serif text-xl font-bold text-[#1B2B28]">The "Boring" Trigger</h3>
+                    </div>
+                    <p class="text-[#5E5A4B] leading-relaxed">It always starts with a charity worker expressing
+                        frustration over a "boring but important" task. Whether it’s digesting changes to the Code of
+                        Governance, formatting a newsletter, or processing claims—if it's a repetitive drain on human
+                        capital, it's a candidate for a RUT.</p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div
+                class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div
+                    class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#F2EFE9] bg-[#2D423F] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 text-sm font-bold">
+                    2</div>
+                <div
+                    class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-2xl shadow-sm border border-[#EAE5D8]">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i data-lucide="clock" class="text-[#8B7355] w-5 h-5"></i>
+                        <h3 class="font-serif text-xl font-bold text-[#1B2B28]">The 24-Hour Sprint</h3>
+                    </div>
+                    <p class="text-[#5E5A4B] leading-relaxed">Unlike traditional software lifecycles, our objective is
+                        to conceptualize and deploy a working, single-function tool within 24 hours. We strictly adhere
+                        to the <strong class="text-[#1B2B28]">MAYA Principle</strong> (Most Advanced Yet Acceptable),
+                        building clean, focused web-interfaces that act as bridges to powerful Large Language Models.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div
+                class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div
+                    class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#F2EFE9] bg-[#2D423F] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 text-sm font-bold">
+                    3</div>
+                <div
+                    class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-2xl shadow-sm border border-[#EAE5D8]">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i data-lucide="heart-handshake" class="text-[#8B7355] w-5 h-5"></i>
+                        <h3 class="font-serif text-xl font-bold text-[#1B2B28]">The AI❤️ Vibe Check</h3>
+                    </div>
+                    <p class="text-[#5E5A4B] leading-relaxed">Tech needs a soul. Before a RUT is shipped, it goes
+                        through our <em>AI❤️（爱）</em> methodology. Is the tone compassionate? Does the system prompt
+                        encourage positive "Question Storming"? Is it contextualized for Singapore's unique social
+                        sector? If it feels cold and robotic, it gets rebuilt.</p>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div
+                class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div
+                    class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-[#F2EFE9] bg-[#2D423F] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 text-sm font-bold">
+                    4</div>
+                <div
+                    class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-2xl shadow-sm border border-[#EAE5D8]">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i data-lucide="smartphone" class="text-[#8B7355] w-5 h-5"></i>
+                        <h3 class="font-serif text-xl font-bold text-[#1B2B28]">The 90-Day Deployment</h3>
+                    </div>
+                    <p class="text-[#5E5A4B] leading-relaxed">RUTs are not meant to live forever; they are built for 90
+                        days of intensive, high-impact use (perfect for a seasonal campaign or an immediate internal
+                        audit). Every RUT is engineered with a standard <em>Last-Mile</em> feature: one-click export to
+                        WhatsApp, bringing the AI's output directly into the group chats where real human work happens.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-16 text-center">
+            <a href="what-is-a-rut.html"
+                class="inline-flex items-center gap-2 px-8 py-4 bg-[#1B2B28] text-[#F2EFE9] rounded-lg tracking-widest uppercase text-xs font-bold hover:bg-[#2D423F] transition-all shadow-xl hover:-translate-y-1">
+                Read the RUT Manifesto <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#1B2B28] text-[#F2EFE9] py-12 px-6 text-center mt-12 border-t border-[#EAE5D8]">
+        <p class="text-sm opacity-80 mb-2">CharityOps Wayfinding &copy; 2026</p>
+        <p class="text-xs text-[#D2B48C] font-mono opacity-80 uppercase tracking-widest">Fail on Purpose</p>
+    </footer>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
