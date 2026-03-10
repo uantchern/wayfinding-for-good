@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is a RUT? | CharityOps</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            appearance: none;
+            background-color: #F2EFE9;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.5em;
+            height: 1.5em;
+            border: 2px solid #8B7355;
+            border-radius: 0.25em;
+            display: grid;
+            place-content: center;
+        }
+
+        .checklist-item input[type="checkbox"]::before {
+            content: "";
+            width: 0.85em;
+            height: 0.85em;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+            transform: scale(0);
+            background-color: #8B7355;
+        }
+
+        .checklist-item input[type="checkbox"]:checked::before {
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body class="selection:bg-[#D2B48C] selection:text-[#1B2B28]">
+
+    <!-- Navigation / Header -->
+    <header
+        class="py-8 px-6 md:px-12 flex items-center justify-between border-b border-[#EAE5D8] bg-white/30 backdrop-blur-sm sticky top-0 z-50">
+        <a href="index.html" class="flex flex-col group cursor-pointer decoration-transparent">
+            <div class="font-serif text-2xl md:text-3xl leading-none cursor-pointer select-none">
+                <span class="relative inline-block">
+                    <span class="text-[#103020] italic relative z-10 font-[500] pr-1">Charity</span>
+                    <span
+                        class="absolute left-[-0.2em] right-0 bottom-[12%] h-[2px] bg-[#B08968] z-0 origin-left transition-transform duration-700 ease-out group-hover:scale-x-105"></span>
+                </span><span class="text-[#B08968] relative z-10 font-[400] tracking-tight ml-[-0.05em]">Ops</span>
+            </div>
+            <span
+                class="text-[10px] tracking-[0.2em] uppercase text-[#8B7355] font-bold mt-1 group-hover:text-[#2D423F] transition-colors"><i
+                    data-lucide="arrow-left" class="inline w-3 h-3 mr-1"></i> Back to Main</span>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-6 py-16 md:py-24">
+
+        <div class="mb-12">
+            <span class="text-xs font-bold tracking-[0.2em] text-[#8B7355] uppercase flex items-center gap-2 mb-4">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> Philosophy
+            </span>
+            <h1 class="text-5xl md:text-6xl font-serif font-light text-[#1B2B28] leading-[1.1] mb-8">What is a RUT?</h1>
+
+            <p class="text-xl md:text-2xl text-[#5E5A4B] font-light leading-relaxed mb-6">
+                A RUT is not just another app; it is a "micro-tool" designed with a specific DNA. When a user opens a
+                CharityOps RUT, they should immediately feel that it is <strong>fast, focused, and friendly.</strong>
+            </p>
+        </div>
+
+        <div class="space-y-16">
+
+            <!-- Section 1 -->
+            <section class="space-y-6">
+                <h2 class="text-3xl font-serif text-[#1B2B28] border-b border-[#EAE5D8] pb-4 flex items-center gap-3">
+                    <span class="text-[#D2B48C]">1.</span> The Visual Identity (Look & Feel)
+                </h2>
+
+                <ul class="space-y-4 text-[#5E5A4B] text-lg">
+                    <li class="flex gap-4">
+                        <i data-lucide="layout-template" class="w-6 h-6 text-[#8B7355] flex-shrink-0 mt-1"></i>
+                        <div>
+                            <strong class="text-[#1B2B28] block mb-1">Minimalist Interface:</strong>
+                            Every RUT uses a "Clean Slate" design. There are no complex menus or sidebars. The focus is
+                            entirely on the task at hand.
+                        </div>
+                    </li>
+                    <li class="flex gap-4">
+                        <i data-lucide="smile" class="w-6 h-6 text-[#8B7355] flex-shrink-0 mt-1"></i>
+                        <div>
+                            <strong class="text-[#1B2B28] block mb-1">The Signature Header:</strong>
+                            <ul class="list-disc pl-5 mt-2 space-y-2">
+                                <li>Features the <strong>CharityOps Logo</strong>.</li>
+                                <li>Displays the <strong>Tool Name</strong> (e.g., "Board Self-Assessment").</li>
+                                <li>Clearly subtitled as <strong>"A Really Useful Thing."</strong></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="flex gap-4">
+                        <i data-lucide="forward" class="w-6 h-6 text-[#8B7355] flex-shrink-0 mt-1"></i>
+                        <div>
+                            <strong class="text-[#1B2B28] block mb-1">The Progress-Driven Layout:</strong>
+                            Most RUTs follow a vertical, conversational flow. They use clear "Action Buttons" (e.g.,
+                            <em>Start Assessment</em>, <em>Generate Questions</em>) to guide the user step-by-step.
+                        </div>
+                    </li>
+                    <li class="flex gap-4">
+                        <i data-lucide="palette" class="w-6 h-6 text-[#8B7355] flex-shrink-0 mt-1"></i>
+                        <div>
+                            <strong class="text-[#1B2B28] block mb-1">Context-Aware Aesthetic:</strong>
+                            Whether it is a scenario-based simulator or a story generator, the design remains light and
+                            approachable—tech that doesn't feel like "tech."
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Section 2 -->
+            <section class="space-y-6">
+                <h2 class="text-3xl font-serif text-[#1B2B28] border-b border-[#EAE5D8] pb-4 flex items-center gap-3">
+                    <span class="text-[#D2B48C]">2.</span> Standard Features (The RUT Experience)
+                </h2>
+                <p class="text-[#5E5A4B] text-lg mb-4">Every RUT is built with three core technical pillars:</p>
+                <ul class="space-y-4 text-[#5E5A4B] text-lg pl-2">
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">The "One-Click" Start:</strong> There is no long onboarding
+                            or account creation. You arrive and you begin.</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">AI-Powered Personalization:</strong> Whether it’s
+                            generating a random governance scenario or a unique marketing story, the RUT uses AI to
+                            create a custom experience for that specific moment.</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">The 24-Hour/90-Day Lifecycle:</strong> Every RUT is
+                            designed to be discovered and built in 24 hours, intended for 90 days of high-intensity
+                            use.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Section 3 -->
+            <section class="space-y-6">
+                <h2 class="text-3xl font-serif text-[#1B2B28] border-b border-[#EAE5D8] pb-4 flex items-center gap-3">
+                    <span class="text-[#D2B48C]">3.</span> The "Last Mile" Integration (WhatsApp)
+                </h2>
+                <p class="text-[#5E5A4B] text-lg mb-4">A defining feature of a CharityOps RUT is its
+                    <strong>Shareability</strong>.</p>
+                <ul class="space-y-4 text-[#5E5A4B] text-lg pl-2">
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span>Instead of keeping data trapped in a dashboard, RUTs include a <strong>"Share via
+                                WhatsApp"</strong> or <strong>"Copy to Clipboard"</strong> button.</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span>This allows charity workers to move the AI’s output directly into their existing group
+                            chats, where real decisions and conversations happen.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Section 4 -->
+            <section class="space-y-6">
+                <h2 class="text-3xl font-serif text-[#1B2B28] border-b border-[#EAE5D8] pb-4 flex items-center gap-3">
+                    <span class="text-[#D2B48C]">4.</span> The "AI❤️" (爱) Soul (The Vibe)
+                </h2>
+                <ul class="space-y-4 text-[#5E5A4B] text-lg pl-2">
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">Values-First Thinking:</strong> The tone of the RUT is
+                            always supportive and inquisitive, never cold or automated.</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">The "Question Storming" Spirit:</strong> RUTs don't just
+                            give answers; they often challenge the user to think differently (e.g., "What if we looked
+                            at this problem from a different angle?").</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">Singapore Context:</strong> From mentioning the <em>Code of
+                                Governance</em> to local charity scenarios, the RUT feels like it was built in
+                            Singapore, for Singapore.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Section 5 -->
+            <section class="space-y-6">
+                <h2 class="text-3xl font-serif text-[#1B2B28] border-b border-[#EAE5D8] pb-4 flex items-center gap-3">
+                    <span class="text-[#D2B48C]">5.</span> Technical Utility (MAYA Thinking)
+                </h2>
+                <p class="text-[#5E5A4B] text-lg mb-4">RUTs follow the <strong>MAYA Principle</strong> (Most Advanced
+                    Yet Acceptable):</p>
+                <ul class="space-y-4 text-[#5E5A4B] text-lg pl-2">
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">Advanced:</strong> Powered by Large Language Models (LLMs)
+                            and Image Generation.</span>
+                    </li>
+                    <li class="flex gap-3 items-start">
+                        <span class="text-[#D2B48C] text-2xl leading-none">&bull;</span>
+                        <span><strong class="text-[#1B2B28]">Acceptable:</strong> The interface is as simple as a text
+                            message. If you can use WhatsApp, you can use a RUT.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Checklist -->
+            <section
+                class="mt-16 bg-white p-8 md:p-10 border border-[#EAE5D8] rounded-2xl shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-[#8B7355]"></div>
+                <h3 class="text-2xl font-serif text-[#1B2B28] mb-6 flex items-center gap-3">
+                    <i data-lucide="check-square" class="text-[#8B7355]"></i> Summary Checklist: Is it a RUT?
+                </h3>
+
+                <div class="space-y-4 text-lg text-[#1B2B28]">
+                    <label class="flex items-start gap-4 cursor-pointer group checklist-item">
+                        <input type="checkbox" class="mt-1 cursor-pointer" />
+                        <span class="group-hover:text-[#8B7355] transition-colors">Does it have the <strong>CharityOps
+                                "A Really Useful Thing"</strong> branding?</span>
+                    </label>
+                    <label class="flex items-start gap-4 cursor-pointer group checklist-item">
+                        <input type="checkbox" class="mt-1 cursor-pointer" />
+                        <span class="group-hover:text-[#8B7355] transition-colors">Does it solve <strong>one specific
+                                task</strong> (e.g., assessing a board, creating a story)?</span>
+                    </label>
+                    <label class="flex items-start gap-4 cursor-pointer group checklist-item">
+                        <input type="checkbox" class="mt-1 cursor-pointer" />
+                        <span class="group-hover:text-[#8B7355] transition-colors">Can the result be <strong>shared via
+                                WhatsApp</strong> in one click?</span>
+                    </label>
+                    <label class="flex items-start gap-4 cursor-pointer group checklist-item">
+                        <input type="checkbox" class="mt-1 cursor-pointer" />
+                        <span class="group-hover:text-[#8B7355] transition-colors">Does it work <strong>without a
+                                manual</strong>?</span>
+                    </label>
+                    <label class="flex items-start gap-4 cursor-pointer group checklist-item">
+                        <input type="checkbox" class="mt-1 cursor-pointer" />
+                        <span class="group-hover:text-[#8B7355] transition-colors">Is it <strong>purpose-driven</strong>
+                            and rooted in the <strong>AI❤️ mindset</strong>?</span>
+                    </label>
+                </div>
+
+                <p class="mt-8 pt-6 border-t border-[#EAE5D8] text-xl font-serif text-[#1B2B28] text-center italic">
+                    If yes, it’s a CharityOps RUT.
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#1B2B28] text-[#F2EFE9] py-12 px-6 text-center mt-12">
+        <p class="text-sm opacity-80 mb-2">CharityOps Wayfinding &copy; 2026</p>
+        <p class="text-xs text-[#D2B48C] font-mono opacity-80 uppercase tracking-widest">Fail on Purpose</p>
+    </footer>
+
+    <!-- Initialize Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
