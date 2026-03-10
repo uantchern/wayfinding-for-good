@@ -23,43 +23,53 @@
 
         .app-container {
             display: flex;
-            gap: 24px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1024px;
             height: 90vh;
             max-height: 850px;
             min-height: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            overflow: hidden;
         }
 
         /* Setup / Instructions Pane */
         .setup-pane {
-            background: #ffffff;
-            border-radius: 24px;
+            background-color: rgba(255, 255, 255, 0.4);
             padding: 40px;
-            width: 380px;
-            box-shadow: 0 10px 40px rgba(27, 43, 40, 0.08);
+            width: 400px;
             display: flex;
             flex-direction: column;
-            border: 1px solid #D2B48C;
+            border-right: 1px solid rgba(210, 180, 140, 0.3);
             flex-shrink: 0;
             transition: all 0.3s ease;
+            overflow-y: auto;
         }
 
         .setup-pane h1 {
             font-size: 28px;
             color: #1B2B28;
-            font-weight: 800;
-            margin-bottom: 8px;
+            font-weight: 900;
+            margin-bottom: 16px;
             font-family: Georgia, serif;
+            line-height: 1.2;
         }
 
         .setup-pane p.tagline {
             color: #8B7355;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .instructions-list {
@@ -113,14 +123,15 @@
 
         /* Chat / Assessment Interface */
         .chat-pane {
-            background-color: #ffffff;
-            border-radius: 24px;
+            background-color: rgba(255, 255, 255, 0.5);
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(27, 43, 40, 0.08);
-            border: 1px solid #EAE5D8;
+        }
+
+        .chat-pane:not(.started) .chat-header {
+            display: none;
         }
 
         .chat-header {
@@ -141,7 +152,7 @@
         }
 
         .chat-window {
-            background-color: #F9F8F6;
+            background-color: transparent;
             flex: 1;
             overflow-y: auto;
             padding: 24px;
@@ -308,8 +319,14 @@
                 </span><span class="relative z-10 tracking-tight"
                     style="color: #B08968; position: relative; z-index: 10; font-weight: 400; letter-spacing: -0.025em; margin-left: -0.05em;">Ops</span>
             </div>
-            <h1>Board Self-Assessment</h1>
-            <p class="tagline"><i class="fas fa-gem mr-2" style="color: #8B7355;"></i> RUT: A Really Useful Thing</p>
+            <div style="margin-bottom: 32px;">
+                <p class="tagline"><i class="fas fa-gem"></i> RUT: A Really Useful Thing</p>
+                <h1>Board Self-Assessment</h1>
+                <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0;">
+                    Simulate random, uncompromising board dilemmas to evaluate your charity's governance and identify
+                    critical gaps.
+                </p>
+            </div>
 
             <ul class="instructions-list">
                 <li><i class="fas fa-random"></i>
@@ -350,10 +367,18 @@
             </div>
 
             <div class="chat-window" id="chatWindow">
-                <div class="empty-state" id="emptyStatePlaceholder">
-                    <i class="fas fa-clipboard-list text-6xl mb-4 text-[#D2B48C]"></i>
-                    <p class="text-lg font-semibold">Ready to assess.</p>
-                    <p class="text-sm mt-2">Click "Start Assessment" to begin.</p>
+                <div class="empty-state" id="emptyStatePlaceholder"
+                    style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <div
+                        style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3
+                        style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">
+                        Ready to evaluate</h3>
+                    <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">
+                        Review the instructions on the left and click Start Assessment to see your generated scenario
+                        here.</p>
                 </div>
             </div>
         </div>
@@ -662,7 +687,7 @@
                     <button onclick="openWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
                         <i class="fab fa-whatsapp text-xl"></i> Share Details via WhatsApp
                     </button>
-                    <button onclick="document.getElementById('debugDrawer').classList.remove('started'); document.getElementById('chatContainer').classList.remove('started'); chatHistory=[]; document.getElementById('chatWindow').innerHTML='<div class=\\'empty-state\\' id=\\'emptyStatePlaceholder\\'><i class=\\'fas fa-clipboard-list text-6xl mb-4 text-[#D2B48C]\\'></i><p class=\\'text-lg font-semibold\\'>Ready to assess.</p><p class=\\'text-sm mt-2\\'>Click \\'Start Assessment\\' to begin.</p></div>';" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
+                    <button onclick="resetAssessment()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
                         Back to Menu
                     </button>
                 </div>`;
@@ -674,6 +699,21 @@
             let transcript = localStorage.getItem('purposelyTranscript') || '';
             let encodedTranscript = encodeURIComponent(transcript);
             window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
+        }
+
+        function resetAssessment() {
+            document.getElementById('debugDrawer').classList.remove('started');
+            document.getElementById('chatContainer').classList.remove('started');
+            chatHistory = [];
+            currentAssessmentData = null;
+            document.getElementById('chatWindow').innerHTML = `
+                <div class="empty-state" id="emptyStatePlaceholder" style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">Ready to evaluate</h3>
+                    <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">Review the instructions on the left and click Start Assessment to see your generated scenario here.</p>
+                </div>`;
         }
 
         // Drawer starts naturally visible in new layout
