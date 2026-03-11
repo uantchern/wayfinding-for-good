@@ -118,23 +118,15 @@
             const handleGenerate = (e) => {
                 e.preventDefault();
 
-                const promptTemplate = `Hi! I need you to build a new mini web app (a Really Useful Thing) for CharityOps. Please create a single-file, standalone HTML web application using React and Tailwind CSS.
-                
-Here are the design rules to follow:
-1. Glass-Panel UI: Wrap the app in a translucent glass-panel container (blur, semi-transparent white, subtle borders) floating over a light beige (#F2EFE9) background.
-2. Typography: Use Inter for normal text and Georgia for headers. Use earthy colors like deep emerald (#1B2B28), muted brown (#8B7355), and warm beige (#D2B48C).
-3. No Login: It must work immediately without any passwords or backend.
-4. Single-Purpose: It must do EXACTLY one thing and do it exceptionally well.
-5. Simple Output & Sharing: The app's generated output must be in plain English. Also, always include a button to let the user easily share their results via WhatsApp.
+                const promptTemplate = `Think of this as a digital notebook for your charity that helps you ${goal || "assess the impact of what we do"}. Instead of getting lost in complicated data, you simply tell the app what ${inputs || "programs"} you're running. It then transforms that information into an ${tone || "encouraging"} story about ${output || "where and how you've truly made a difference"}. Once you see the impact you've made, you can instantly text that "good news" story to your team via WhatsApp to celebrate together.
 
-APP DETAILS:
-- App Name: ${appName || 'Untitled App'}
-- Core Goal: ${goal || 'Automate a task'}
-- Required User Inputs: ${inputs || 'A few text fields'}
-- Desired Output: ${output || 'A plain English summary'}
-- Style/Tone: ${tone || 'Professional yet approachable'}
+I need you to build this app, called "${appName || 'Impactor'}", as a single-file, standalone HTML web application using React and Tailwind CSS.
 
-Please output ONLY the complete HTML code starting with <!DOCTYPE html> so I can save and run it immediately.`;
+Here is the design vision: Wrap the app in a translucent glass-panel container (blur, semi-transparent white, subtle borders) floating over a light beige (#F2EFE9) background. Use Inter for normal text and Georgia for headers. Use earthy colors like deep emerald (#1B2B28), muted brown (#8B7355), and warm beige (#D2B48C).
+
+It must work immediately without any passwords or backend and it must do exactly one thing and do it exceptionally well.
+
+Please output ONLY the complete HTML code starting with <!DOCTYPE html> so I can save and run it right away.`;
 
                 setGeneratedPrompt(promptTemplate);
                 setCopyStatus(false);
