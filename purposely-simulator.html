@@ -530,22 +530,46 @@
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
-        function addMessage(text, sender) {
-            const chatWindow = document.getElementById('chatWindow');
-            const formattedText = text.replace(/\n/g, '<br>');
-            chatWindow.innerHTML += `
-            <div class="bubble ${sender}">
-                ${formattedText}
-                <span class="timestamp">${getTime()}</span>
-            </div>`;
-            scrollToBottom();
+        function scrollToElement(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const chatWindow = document.getElementById('chatWindow');
+                chatWindow.scrollTo({
+                    top: el.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            } else {
+                scrollToBottom();
+            }
         }
 
-        function addTypingIndicator() {
+        function addMessage(text, sender, elementId = null, fixedAnchorId = null) {
+            const chatWindow = document.getElementById('chatWindow');
+            const formattedText = text.replace(/\n/g, '<br>');
+            const idAttr = elementId ? `id="${elementId}"` : '';
+            chatWindow.insertAdjacentHTML('beforeend', `
+            <div ${idAttr} class="bubble ${sender}">
+                ${formattedText}
+                <span class="timestamp">${getTime()}</span>
+            </div>`);
+
+            if (fixedAnchorId) {
+                scrollToElement(fixedAnchorId);
+            } else {
+                scrollToBottom();
+            }
+        }
+
+        function addTypingIndicator(fixedAnchorId = null) {
             const chatWindow = document.getElementById('chatWindow');
             const id = 'typing-' + Date.now();
-            chatWindow.innerHTML += `<div id="${id}" class="bubble ai" style="color: #8B7355; font-style: italic;">typing...</div>`;
-            scrollToBottom();
+            chatWindow.insertAdjacentHTML('beforeend', `<div id="${id}" class="bubble ai" style="color: #8B7355; font-style: italic;">typing...</div>`);
+
+            if (fixedAnchorId) {
+                scrollToElement(fixedAnchorId);
+            } else {
+                scrollToBottom();
+            }
             return id;
         }
 
@@ -689,27 +713,32 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
 
+                const principleId = 'principle-' + Date.now();
                 const principleMsg = `<div class="blink-text" style="font-size: 1.1em; margin-bottom: 4px;">🌟 [${principleData.title}]</div>`;
-                addMessage(principleMsg, 'ai');
+                addMessage(principleMsg, 'ai', principleId);
 
-                const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec}\n\n*b) Scenario:*\n${injectedDilemma}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
-                addMessage(scenarioMsg, 'ai');
-                chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
-
-                const typing2 = addTypingIndicator();
+                const typingSeq = addTypingIndicator(principleId);
                 setTimeout(() => {
-                    removeTypingIndicator(typing2);
-                    addMessage("d) Has your charity put this principle into action to deal with the scenario?", 'ai');
+                    removeTypingIndicator(typingSeq);
+                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec}\n\n*b) Scenario:*\n${injectedDilemma}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
+                    addMessage(scenarioMsg, 'ai', null, principleId);
+                    chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
-                    // Inject buttons
-                    const chatWindow = document.getElementById('chatWindow');
-                    chatWindow.innerHTML += `
-                    <div class="action-buttons">
-                        <button class="action-btn" onclick="handleAssessmentResponse('Yes')">Yes</button>
-                        <button class="action-btn" style="background-color: #d32f2f;" onclick="handleAssessmentResponse('No')">No</button>
-                        <button class="action-btn" style="background-color: #f57c00;" onclick="handleAssessmentResponse('Partial')">Partial</button>
-                    </div>`;
-                    scrollToBottom();
+                    const typing2 = addTypingIndicator(principleId);
+                    setTimeout(() => {
+                        removeTypingIndicator(typing2);
+                        addMessage("d) Has your charity put this principle into action to deal with the scenario?", 'ai', null, principleId);
+
+                        // Inject buttons
+                        const chatWindow = document.getElementById('chatWindow');
+                        chatWindow.insertAdjacentHTML('beforeend', `
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="handleAssessmentResponse('Yes')">Yes</button>
+                            <button class="action-btn" style="background-color: #d32f2f;" onclick="handleAssessmentResponse('No')">No</button>
+                            <button class="action-btn" style="background-color: #f57c00;" onclick="handleAssessmentResponse('Partial')">Partial</button>
+                        </div>`);
+                        scrollToElement(principleId);
+                    }, 800);
                 }, 800);
 
             }, 800);
