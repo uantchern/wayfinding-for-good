@@ -38,7 +38,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Georgia:wght@400;700;900&display=swap');
 
         body {
             background-color: #F2EFE9;
@@ -62,11 +62,24 @@
             border-radius: 24px;
         }
 
-        .card-shadow {
-            box-shadow: 0 10px 30px rgba(27, 43, 40, 0.08);
-            border: 1px solid rgba(210, 180, 140, 0.3);
-            background-color: rgba(255, 255, 255, 0.4);
-            border-radius: 24px;
+        .drag-item {
+            cursor: grab;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        .drop-zone {
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.active {
+            border-color: #8B7355;
+            background-color: rgba(139, 115, 85, 0.1);
+            transform: scale(1.02);
         }
 
         @keyframes fadeIn {
@@ -85,15 +98,26 @@
             animation: fadeIn 0.4s ease-out forwards;
         }
 
-        textarea,
-        input {
-            font-family: inherit;
+        @keyframes subtlePulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .animate-pulse-subtle {
+            animation: subtlePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
     </style>
 </head>
 
 <body>
-    <div id="root" class="w-full max-w-5xl"></div>
+    <div id="root" class="w-full max-w-6xl"></div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
@@ -105,22 +129,80 @@
             return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
         };
 
-        const App = () => {
-            const [appName, setAppName] = useState('');
-            const [goal, setGoal] = useState('');
-            const [inputs, setInputs] = useState('');
-            const [output, setOutput] = useState('');
-            const [tone, setTone] = useState('');
+        const GOALS = [
+            { id: 'g1', type: 'goal', title: 'Measure Impact', text: 'assess the impact of what we do', icon: 'target' },
+            { id: 'g2', type: 'goal', title: 'Connect People', text: 'match volunteers to events', icon: 'users' },
+            { id: 'g3', type: 'goal', title: 'Track Funds', text: 'track incoming donations', icon: 'coins' },
+            { id: 'g4', type: 'goal', title: 'Get Feedback', text: 'collect feedback from beneficiaries', icon: 'message-circle' }
+        ];
 
-            const [generatedPrompt, setGeneratedPrompt] = useState('');
+        const INPUTS = [
+            { id: 'i1', type: 'input', title: 'Programs', text: 'programs and schedules', icon: 'folder' },
+            { id: 'i2', type: 'input', title: 'Profiles', text: 'volunteer skills and availability', icon: 'user-circle' },
+            { id: 'i3', type: 'input', title: 'Receipts', text: 'donation amounts and dates', icon: 'receipt' },
+            { id: 'i4', type: 'input', title: 'Surveys', text: 'survey responses and comments', icon: 'file-text' }
+        ];
+
+        const OUTPUTS = [
+            {
+                id: 'o1', type: 'output', title: 'Impact Story', text: 'where and how we\\'ve truly made a difference', icon: 'sparkles' },
+            { id: 'o2', type: 'output', title: 'Match List', text: 'a list of perfectly matched volunteers', icon: 'list-checks' },
+            { id: 'o3', type: 'output', title: 'Financial Summary', text: 'a monthly financial summary', icon: 'pie-chart' },
+            { id: 'o4', type: 'output', title: 'Insights', text: 'a report of community satisfaction', icon: 'lightbulb' }
+        ];
+
+        const App = () => {
+            const [selectedGoal, setSelectedGoal] = useState(null);
+            const [selectedInput, setSelectedInput] = useState(null);
+            const [selectedOutput, setSelectedOutput] = useState(null);
+            const [draggedItem, setDraggedItem] = useState(null);
+            const [dragOverZone, setDragOverZone] = useState(null);
+            const [appName, setAppName] = useState('');
             const [copyStatus, setCopyStatus] = useState(false);
 
-            const handleGenerate = (e) => {
+            const handleDragStart = (e, item) => {
+                setDraggedItem(item);
+                // Required for Firefox
+                e.dataTransfer.setData('text/plain', item.id);
+            };
+
+            const handleDragOver = (e, zoneType) => {
                 e.preventDefault();
+                if (draggedItem && draggedItem.type === zoneType) {
+                    setDragOverZone(zoneType);
+                }
+            };
 
-                const promptTemplate = `Dear Santa,
+            const handleDragLeave = () => {
+                setDragOverZone(null);
+            };
 
-I wish for a magical digital notebook called "${appName || 'Impactor'}" for my charity that helps us ${goal || "assess the impact of what we do"}. Instead of getting lost in complicated data, I just want to tell the notebook what ${inputs || "programs"} we're running. It then transforms that information into an ${tone || "encouraging"} story about ${output || "where and how we've truly made a difference"}. Once we see the impact we've made, I wish for a way to instantly text that "good news" story to our team via WhatsApp to celebrate together.
+            const handleDrop = (e, zoneType) => {
+                e.preventDefault();
+                setDragOverZone(null);
+                if (draggedItem && draggedItem.type === zoneType) {
+                    if (zoneType === 'goal') setSelectedGoal(draggedItem);
+                    if (zoneType === 'input') setSelectedInput(draggedItem);
+                    if (zoneType === 'output') setSelectedOutput(draggedItem);
+                }
+                setDraggedItem(null);
+            };
+
+            const handleTileClick = (item) => {
+                if (item.type === 'goal') setSelectedGoal(item);
+                if (item.type === 'input') setSelectedInput(item);
+                if (item.type === 'output') setSelectedOutput(item);
+            };
+
+            const handleRemove = (zoneType) => {
+                if (zoneType === 'goal') setSelectedGoal(null);
+                if (zoneType === 'input') setSelectedInput(null);
+                if (zoneType === 'output') setSelectedOutput(null);
+            };
+
+            const generatedPrompt = (selectedGoal && selectedInput && selectedOutput) ?\`Dear Santa,
+
+I wish for a magical digital notebook called "\${appName || 'My Magic Tool'}" for my charity that helps us \${selectedGoal.text}. Instead of getting lost in complicated data, I just want to tell the notebook what \${selectedInput.text} we're running. It then transforms that information into an encouraging story about \${selectedOutput.text}. Once we see the impact we've made, I wish for a way to instantly text that "good news" story to our team via WhatsApp to celebrate together.
 
 Santa, I don't want any complicated technical stuff—just a magical present that works right out of the box!
 
@@ -130,11 +212,7 @@ It must work immediately without any passwords or logins, and it must do exactly
 
 Please just give me the final gift exactly as one complete file starting with <!DOCTYPE html> so I can open it and see the magic right away!
 
-Thank you, Santa!`;
-
-                setGeneratedPrompt(promptTemplate);
-                setCopyStatus(false);
-            };
+Thank you, Santa!\` : '';
 
             const handleCopy = () => {
                 if (!generatedPrompt) return;
@@ -146,107 +224,121 @@ Thank you, Santa!`;
 
             const shareToWhatsApp = () => {
                 if (!generatedPrompt) return;
-                window.open(`https://wa.me/?text=${encodeURIComponent(generatedPrompt)}`, '_blank');
+                window.open(\`https://wa.me/?text=\${encodeURIComponent(generatedPrompt)}\`, '_blank');
+            };
+
+            const DraggableTile = ({ item }) => (
+                <div 
+                    draggable 
+                    onDragStart={(e) => handleDragStart(e, item)}
+                    onClick={() => handleTileClick(item)}
+                    className="drag-item bg-white/80 p-3 rounded-xl border border-brand-accent/30 shadow-sm flex flex-col items-center justify-center text-center gap-2 hover:bg-brand-accent/10 hover:border-brand-accent w-full aspect-square cursor-pointer transition-all hover:-translate-y-1 hover:shadow-md"
+                >
+                    <div className="w-10 h-10 rounded-full bg-brand-light flex items-center justify-center text-brand">
+                        <Icon name={item.icon} size={20} />
+                    </div>
+                    <div className="text-xs font-semibold text-brand-dark leading-tight">{item.title}</div>
+                </div>
+            );
+
+            const DropZone = ({ type, title, icon, selectedItem, options }) => {
+                const isActive = dragOverZone === type;
+                return (
+                    <div className="flex flex-col gap-3 w-full">
+                        <div className="text-xs font-bold tracking-wider text-brand-dark uppercase flex flex-col md:flex-row items-baseline gap-2">
+                             <span className="flex items-center gap-1"><Icon name={icon} size={14} className="text-brand" /> {title}</span>
+                             <span className="text-[10px] text-brand-muted font-normal normal-case opacity-70">(Click or drag a path here)</span>
+                        </div>
+                        
+                        <div 
+                            onDragOver={(e) => handleDragOver(e, type)}
+                            onDragLeave={handleDragLeave}
+                            onDrop={(e) => handleDrop(e, type)}
+                            className={\`drop-zone border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all \${selectedItem ? 'p-0 border-transparent bg-transparent' : 'p-4 min-h-[120px] bg-white/30'} \${isActive && !selectedItem ? 'active' : 'border-brand-accent/40'}\`}
+                        >
+                            {selectedItem ? (
+                                <div className="bg-brand-dark text-white p-4 rounded-xl shadow-lg flex items-center justify-between w-full animate-fade-in relative group border border-brand-dark/50">
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-2.5 bg-white/10 rounded-lg text-brand-accent">
+                                            <Icon name={selectedItem.icon} size={22} />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <div className="text-xs text-brand-accent/70 uppercase tracking-wider font-bold mb-0.5">{title}</div>
+                                            <div className="text-sm font-medium">{selectedItem.title}</div>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={(e) => { e.stopPropagation(); handleRemove(type); }}
+                                        className="text-white/30 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full"
+                                        title="Remove selection"
+                                    >
+                                        <Icon name="x" size={18} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="text-brand-muted/50 text-sm font-medium flex flex-col items-center gap-2 pointer-events-none">
+                                    <Icon name="grid" size={24} className="opacity-50" />
+                                    <span>Empty Space</span>
+                                </div>
+                            )}
+                        </div>
+                        
+                        {!selectedItem && (
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-2 animate-fade-in">
+                                {options.map(opt => <DraggableTile key={opt.id} item={opt} />)}
+                            </div>
+                        )}
+                    </div>
+                );
             };
 
             return (
-                <div className="glass-panel overflow-hidden flex flex-col md:flex-row min-h-[650px] animate-fade-in w-full">
+                <div className="glass-panel overflow-hidden flex flex-col lg:flex-row min-h-[750px] animate-fade-in w-full items-stretch">
                     {/* Setup Pane */}
-                    <div className="card-shadow p-8 md:p-10 w-full md:w-[450px] flex-shrink-0 overflow-y-auto z-10">
-                        <div className="mb-8">
-                            <div className="text-brand-accent font-bold text-xs tracking-widest uppercase mb-1 flex items-center gap-2">
-                                <Icon name="sparkles" size={14} />
-                                Idea to Prompt
+                    <div className="p-8 lg:p-10 w-full lg:w-1/2 flex-shrink-0 overflow-y-auto z-10 flex flex-col">
+                        <div className="mb-6 border-b border-brand-accent/20 pb-6">
+                            <div className="text-brand-accent font-bold text-xs tracking-widest uppercase mb-2 flex items-center gap-2">
+                                <Icon name="compass" size={14} />
+                                Discover the Destination
                             </div>
-                            <h1 className="font-serif text-3xl font-black text-brand-dark mb-4 leading-tight">
-                                Discover a RUT!
+                            <h1 className="font-serif text-3xl md:text-4xl font-black text-brand-dark mb-3 leading-tight">
+                                Don't pick the path because of the destination...
                             </h1>
-                            <p className="text-brand-muted text-sm leading-relaxed">
-                                Outline what you want to automate, and we'll generate the perfect prompt to feed to your Antigravity AI to build a new "Really Useful Thing" app.
+                            <p className="text-brand-muted text-[15px] leading-relaxed italic">
+                                "...discover the destination because of the path." Build your perfect RUT visually by dragging or clicking the pieces of your journey into place. Minimal typing required.
                             </p>
                         </div>
 
-                        <form onSubmit={handleGenerate} className="space-y-6">
-                            <div>
-                                <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
-                                    RUT App Name
-                                </label>
-                                <input
-                                    type="text"
-                                    className="mt-2 w-full p-3 rounded-xl border border-brand-accent/40 bg-white/60 text-brand-dark text-sm focus:outline-none focus:border-brand transition-colors placeholder-brand-muted/60"
-                                    placeholder="e.g., Volunteer Matcher"
-                                    value={appName}
-                                    onChange={(e) => setAppName(e.target.value)}
-                                    required
-                                    autoFocus
-                                />
-                            </div>
-
-                            <div>
-                                <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
-                                    Core User Goal
-                                </label>
-                                <textarea
-                                    className="mt-2 w-full p-3 rounded-xl border border-brand-accent/40 bg-white/60 text-brand-dark text-sm focus:outline-none focus:border-brand transition-colors placeholder-brand-muted/60 resize-none h-20"
-                                    placeholder="e.g., Quickly pair new volunteers with current pressing events..."
-                                    value={goal}
-                                    onChange={(e) => setGoal(e.target.value)}
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
-                                    Source Inputs
-                                </label>
-                                <textarea
-                                    className="mt-2 w-full p-3 rounded-xl border border-brand-accent/40 bg-white/60 text-brand-dark text-sm focus:outline-none focus:border-brand transition-colors placeholder-brand-muted/60 resize-none h-20"
-                                    placeholder="e.g., Volunteer skill set dropdown, date availability..."
-                                    value={inputs}
-                                    onChange={(e) => setInputs(e.target.value)}
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
-                                    Desired Output
-                                </label>
-                                <textarea
-                                    className="mt-2 w-full p-3 rounded-xl border border-brand-accent/40 bg-white/60 text-brand-dark text-sm focus:outline-none focus:border-brand transition-colors placeholder-brand-muted/60 resize-none h-20"
-                                    placeholder="e.g., A perfectly formatted email ready to be sent..."
-                                    value={output}
-                                    onChange={(e) => setOutput(e.target.value)}
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label className="text-xs font-bold tracking-wider text-brand-dark uppercase">
-                                    Specific Rules / Tone
-                                </label>
-                                <textarea
-                                    className="mt-2 w-full p-3 rounded-xl border border-brand-accent/40 bg-white/60 text-brand-dark text-sm focus:outline-none focus:border-brand transition-colors placeholder-brand-muted/60 resize-none h-16"
-                                    placeholder="e.g., Keep it extremely encouraging and short..."
-                                    value={tone}
-                                    onChange={(e) => setTone(e.target.value)}
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={!appName.trim() || !goal.trim()}
-                                className={"mt-4 w-full py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2 transition-all " + (!appName.trim() || !goal.trim() ? 'bg-brand/50 cursor-not-allowed' : 'bg-brand-dark hover:bg-black hover:shadow-lg')}
-                            >
-                                <Icon name="wand-2" size={18} />
-                                Generate Prompt
-                            </button>
-                        </form>
+                        <div className="flex-1 space-y-8">
+                            <DropZone 
+                                type="goal" 
+                                title="1. The Goal" 
+                                icon="target"
+                                selectedItem={selectedGoal} 
+                                options={GOALS} 
+                            />
+                            
+                            <DropZone 
+                                type="input" 
+                                title="2. The Inputs" 
+                                icon="inbox"
+                                selectedItem={selectedInput} 
+                                options={INPUTS} 
+                            />
+                            
+                            <DropZone 
+                                type="output" 
+                                title="3. The Output" 
+                                icon="sparkles"
+                                selectedItem={selectedOutput} 
+                                options={OUTPUTS} 
+                            />
+                        </div>
                     </div>
 
-                    {/* Editor / Output Pane */}
-                    <div className="flex-1 bg-white/40 flex flex-col relative overflow-hidden">
-                        <div className="bg-brand-dark py-4 px-6 flex items-center justify-between text-white sticky top-0 z-10 shadow-md">
+                    {/* Output Pane */}
+                    <div className="w-full lg:w-1/2 bg-brand-dark flex flex-col relative overflow-hidden border-t lg:border-t-0 lg:border-l border-brand-accent/20 shadow-[-10px_0_30px_rgba(0,0,0,0.1)]">
+                        <div className="bg-[#15211f] py-4 px-6 flex items-center justify-between text-white sticky top-0 z-10 shadow-md">
                             <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center font-bold text-xs ring-2 ring-brand-accent/30 shadow-inner">
                                     DA
@@ -260,37 +352,51 @@ Thank you, Santa!`;
                                         className={"text-sm flex items-center space-x-2 px-3 py-1.5 rounded-lg border transition-all " + (copyStatus ? 'bg-green-500/20 text-green-300 border-green-500/50' : 'bg-white/10 text-brand-light border-white/20 hover:bg-white/20')}
                                     >
                                         <Icon name={copyStatus ? "check" : "copy"} size={16} />
-                                        <span>{copyStatus ? "Copied!" : "Copy"}</span>
+                                        <span className="hidden sm:inline">{copyStatus ? "Copied!" : "Copy"}</span>
                                     </button>
                                     <button
                                         onClick={shareToWhatsApp}
                                         className="text-sm flex items-center space-x-2 px-3 py-1.5 rounded-lg border bg-[#25D366]/20 text-[#25D366] border-[#25D366]/50 hover:bg-[#25D366]/30 transition-all font-semibold"
                                     >
                                         <Icon name="message-circle" size={16} />
-                                        <span>WhatsApp</span>
+                                        <span className="hidden sm:inline">WhatsApp</span>
                                     </button>
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex-1 p-6 md:p-8 overflow-y-auto relative min-h-[400px]">
-                            {!generatedPrompt ? (
-                                <div className="h-full flex flex-col items-center justify-center text-center opacity-60 max-w-sm mx-auto">
-                                    <div className="w-20 h-20 rounded-full bg-brand-light/80 flex items-center justify-center mb-6 text-brand">
-                                        <Icon name="terminal" size={32} />
+                        <div className="flex-1 p-6 md:p-8 overflow-y-auto relative flex flex-col">
+                            {(!selectedGoal || !selectedInput || !selectedOutput) ? (
+                                <div className="flex-1 flex flex-col items-center justify-center text-center opacity-70 max-w-sm mx-auto animate-fade-in m-auto mt-20">
+                                    <div className="w-24 h-24 rounded-full bg-brand-accent/10 flex items-center justify-center mb-6 text-brand-accent border border-brand-accent/20 shadow-[0_0_40px_rgba(210,180,140,0.15)] relative">
+                                        <Icon name="sparkles" size={40} className="animate-pulse-subtle" />
                                     </div>
-                                    <h3 className="text-xl font-serif text-brand-dark mb-2 font-semibold">Ready to compile</h3>
-                                    <p className="text-brand-muted text-sm leading-relaxed">
-                                        Fill out the parameters on the left to structure the perfect instruction set for Antigravity.
+                                    <h3 className="text-2xl font-serif text-white mb-3 font-semibold">The Magic Awaits</h3>
+                                    <p className="text-brand-light/60 text-sm leading-relaxed">
+                                        Drag and drop your desired paths on the left to complete your journey. Once you select all three, your magical letter will appear here.
                                     </p>
                                 </div>
                             ) : (
-                                <div className="h-full flex flex-col animate-fade-in relative z-10 w-full max-w-3xl mx-auto">
-                                    <textarea
-                                        readOnly
-                                        className="w-full h-full min-h-[400px] p-6 rounded-xl bg-brand-dark text-green-400 font-mono text-sm leading-relaxed shadow-inner focus:outline-none resize-none"
-                                        value={generatedPrompt}
-                                    />
+                                <div className="flex-1 flex flex-col animate-fade-in relative z-10 w-full h-full space-y-6">
+                                    <div className="bg-white/5 p-5 rounded-xl border border-white/10 flex flex-col gap-3 shadow-inner">
+                                        <label className="text-xs font-bold tracking-wider text-brand-accent uppercase flex items-center gap-2">
+                                            <Icon name="pen-tool" size={14} /> Name Your Creation (Optional)
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="w-full bg-transparent border-b-2 border-brand-accent/40 text-white pb-2 focus:outline-none focus:border-brand-accent transition-colors placeholder-white/20 text-xl font-serif"
+                                            placeholder="e.g., The Impactor"
+                                            value={appName}
+                                            onChange={(e) => setAppName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex-1 flex flex-col relative h-full min-h-[400px]">
+                                        <textarea
+                                            readOnly
+                                            className="w-full h-full absolute inset-0 p-6 rounded-xl bg-[#0f1816] text-[#6ee7b7] font-mono text-[14px] leading-relaxed shadow-inner border border-white/5 focus:outline-none resize-none"
+                                            value={generatedPrompt}
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </div>
