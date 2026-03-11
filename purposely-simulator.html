@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PURPOSELY - Charity Governance Code Learning Kit</title>
+    <title>PURPOSELY - Charity Code of Governance Learning Kit</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -321,7 +321,7 @@
             </div>
             <div style="margin-bottom: 32px;">
                 <p class="tagline"><i class="fas fa-gem"></i> A Really Useful Thing</p>
-                <h1>Charity Governance Code Learning Kit</h1>
+                <h1>Charity Code of Governance Learning Kit</h1>
                 <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0;">
                     This kit generates realistic scenarios and best practices to help users learn, apply and assess
                     application of the Charity Code of Governance.
@@ -374,6 +374,10 @@
                     <span class="text-white">BA</span>
                 </div>
                 <h2>Session Viewer</h2>
+                <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors ml-auto"
+                    title="Restart Assessment" style="background:transparent; border:none; cursor:pointer;">
+                    <i class="fas fa-redo text-lg"></i>
+                </button>
             </div>
 
             <div class="chat-window" id="chatWindow">
@@ -675,7 +679,7 @@
         function autoExportTranscript() {
             if (chatHistory.length === 0) return;
 
-            let md = "Hi! I just used a Really Useful Thing (RUT) from CharityOps.org: Charity Governance Code Learning Kit.\n\n";
+            let md = "Hi! I just used a Really Useful Thing (RUT) from CharityOps.org: Charity Code of Governance Learning Kit.\n\n";
 
             // Count totals
             let yesCount = 0;
@@ -753,6 +757,8 @@
             document.getElementById('chatContainer').classList.remove('started');
             chatHistory = [];
             currentAssessmentData = null;
+            usedScenarios.clear();
+            updateDashboard();
             document.getElementById('chatWindow').innerHTML = `
                     <div class="empty-state" id="emptyStatePlaceholder" style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
                     <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
