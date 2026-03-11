@@ -356,7 +356,7 @@
                 </div>
             </div>
 
-            <button onclick="startAssessment()" class="primary-btn">
+            <button id="startBtn" onclick="startAssessment()" class="primary-btn">
                 <i class="fas fa-play"></i> Start Assessment
             </button>
         </div>
@@ -600,6 +600,13 @@
         }
 
         function startAssessment() {
+            const btn = document.getElementById('startBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+
             document.getElementById('debugDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
             usedScenarios.clear(); // Reset on start
@@ -771,6 +778,13 @@
         }
 
         function resetAssessment() {
+            const btn = document.getElementById('startBtn');
+            if (btn) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+
             document.getElementById('debugDrawer').classList.remove('started');
             document.getElementById('chatContainer').classList.remove('started');
             chatHistory = [];
