@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PURPOSELY - Charity Board Self-Assessment</title>
+    <title>PURPOSELY - Governance Evaluation Checklist</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -321,7 +321,7 @@
             </div>
             <div style="margin-bottom: 32px;">
                 <p class="tagline"><i class="fas fa-gem"></i> A Really Useful Thing</p>
-                <h1>Charity Board Self-Assessment</h1>
+                <h1>Governance Evaluation Checklist</h1>
                 <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0;">
                     This thing generates realistic scenarios that helps you learn the Singapore Charity Code of
                     Governance. You can assess how your charity handles each scenario and share your assessment via
@@ -611,11 +611,21 @@
 
             const injectedDilemma = randomScenario.dilemma.replace(/{charityType}/g, "charity");
 
+            let bpMapping = {
+                "1": "Ensure alignment with core mission and periodically review strategic plans.",
+                "2": "Maintain strong board independence, regular performance reviews, and clear term limits.",
+                "3": "Enforce strict conflict of interest policies and transparent codes of conduct.",
+                "4": "Establish robust financial controls, clear investment policies, and comprehensive risk management plans.",
+                "5": "Commit to full transparency by timely publishing annual reports and ensuring proper use of funds.",
+                "6": "Actively manage public relations and maintain clear guidelines for stakeholder engagement."
+            };
+
             currentAssessmentData = {
                 id: scenarioId,
                 principleTitle: principleData.title,
                 scenarioText: injectedDilemma,
-                gecText: randomScenario.gec
+                gecText: randomScenario.gec,
+                bestPractice: bpMapping[randomKey] || "Maintain proactive governance practices."
             };
 
             const typingId = addTypingIndicator();
@@ -623,14 +633,14 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
 
-                const scenarioMsg = `*[${principleData.title}]*\n\n*Scenario:*\n${injectedDilemma}\n\n*Relevant Checklist (GEC):*\n${randomScenario.gec}`;
+                const scenarioMsg = `*[${principleData.title}]*\n\n*a) Scenario:*\n${injectedDilemma}\n\n*b) Best Practices:*\n${currentAssessmentData.bestPractice}\n\n*c) Relevant GEC Principle:*\n${randomScenario.gec}`;
                 addMessage(scenarioMsg, 'ai');
                 chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
                 const typing2 = addTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator(typing2);
-                    addMessage("Has your charity put this principle into action to deal with the scenario?", 'ai');
+                    addMessage("d) Has your charity put this principle into action to deal with the scenario?", 'ai');
 
                     // Inject buttons
                     const chatWindow = document.getElementById('chatWindow');
@@ -667,32 +677,15 @@
                     addMessage("You have completed assessing ALL THE GUIDELINES! Assessment concluded. You can safely end the session now.", 'ai');
                     endSession();
                 } else {
-                    addMessage(`Assessment recorded. (${usedScenarios.size} / ${totalScenariosCount} completed). Proceed to the next required scenario?`, 'ai');
-                    const chatWindow = document.getElementById('chatWindow');
-                    chatWindow.innerHTML += `
-                        <div class="action-buttons">
-                        <button class="action-btn" style="background-color: #25D366; color: white; width: 100%; border: none;" onclick="handleContinueResponse('Yes')">Generate Next Scenario</button>
-                    </div>`;
-                    scrollToBottom();
+                    generateRandomScenario();
                 }
             }, 800);
-        }
-
-        function handleContinueResponse(response) {
-            removeActionButtons();
-            addMessage(response, 'user');
-
-            if (response === 'Yes') {
-                generateRandomScenario();
-            } else {
-                endSession();
-            }
         }
 
         function autoExportTranscript() {
             if (chatHistory.length === 0) return;
 
-            let md = "Hi! I just used a Really Useful Thing (RUT) from CharityOps.org to conduct a Board Self-Assessment.\n\n";
+            let md = "Hi! I just used a Really Useful Thing (RUT) from CharityOps.org to conduct a Governance Evaluation Checklist.\n\n";
 
             // Count totals
             let yesCount = 0;
@@ -704,16 +697,21 @@
             assessmentLogs.forEach((log, index) => {
                 const data = log.data;
                 md += `*Assessment ${index + 1}: ${data.principleTitle}*\n`;
-                md += `*Scenario:* ${data.scenarioText}\n`;
-                md += `*GEC Reference:* ${data.gecText}\n`;
-                md += `*My Assessment:* ${data.userResponse || "No answer recorded"}\n\n`;
+                md += `*a) Scenario:* ${data.scenarioText}\n`;
+                md += `*b) Best Practice:* ${data.bestPractice}\n`;
+                md += `*c) GEC Reference:* ${data.gecText}\n`;
+                md += `*d) My Assessment:* ${data.userResponse || "No answer recorded"}\n\n`;
 
                 if (data.userResponse === 'Yes') yesCount++;
                 if (data.userResponse === 'No') noCount++;
                 if (data.userResponse === 'Partial') partialCount++;
             });
 
-            md += `*Summary:*\nYes: ${yesCount} | No: ${noCount} | Partial: ${partialCount}\n`;
+            let score = Math.round(((yesCount * 1) + (partialCount * 0.5)) / assessmentLogs.length * 100) || 0;
+
+            md += `*Summary & Score:*\n`;
+            md += `Yes: ${yesCount} | No: ${noCount} | Partial: ${partialCount}\n`;
+            md += `*Overall Alignment Score: ${score}%*\n`;
 
             localStorage.setItem('purposelyTranscript', md);
         }
