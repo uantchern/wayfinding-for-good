@@ -841,21 +841,7 @@
         function openWhatsApp() {
             autoExportTranscript();
 
-            let topic = "the Charity Code of Governance Learning Kit";
-            if (currentAssessmentData) {
-                const prin = currentAssessmentData.principleTitle.split(':')[0].trim();
-                const gec = currentAssessmentData.gecText.split(':')[0].replace('CODE ID', 'GEC').trim();
-                topic = `${prin} / ${gec}`;
-            } else if (chatHistory.length > 0) {
-                const lastLog = chatHistory[chatHistory.length - 1];
-                if (lastLog.data) {
-                    const prin = lastLog.data.principleTitle.split(':')[0].trim();
-                    const gec = lastLog.data.gecText.split(':')[0].replace('CODE ID', 'GEC').trim();
-                    topic = `${prin} / ${gec}`;
-                }
-            }
-
-            let introMsg = `_Hi I have a query/comment/clarification about ${topic}_\n\n`;
+            let introMsg = `_Hi I have a query/comment/clarification about the Charity Code of Governance_\n\n`;
             let transcript = localStorage.getItem('purposelyTranscript') || '';
             let fullMsg = introMsg + transcript;
 
