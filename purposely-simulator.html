@@ -333,15 +333,25 @@
                 style="margin-bottom: 24px; padding: 16px; background-color: rgba(255, 255, 255, 0.6); border: 1px solid rgba(210, 180, 140, 0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 43, 40, 0.04);">
                 <h3
                     style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8B7355; font-weight: 700; margin: 0 0 12px 0;">
-                    <i class="fas fa-chart-pie"></i> Assessment Progress
-                </h3>
-                <div id="progressGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <i class="fas fa-chart-pie"></i> GEC Guidelines Assessed</h3>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; padding-bottom: 8px; border-bottom: 1px solid rgba(210, 180, 140, 0.3); margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #1B2B28; flex: 1.5;">PRINCIPLES</span>
+                    <span style="font-weight: 700; color: #1B2B28; flex: 1; text-align: center;">TIER 1</span>
+                    <span style="font-weight: 700; color: #1B2B28; flex: 1; text-align: center;">TIER 2</span>
+                </div>
+                <div id="progressGrid" style="display: flex; flex-direction: column; gap: 4px;">
                     <!-- Filled by JS -->
                 </div>
                 <div
-                    style="margin-top: 12px; border-top: 1px solid rgba(210, 180, 140, 0.3); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 13px; font-weight: 600; color: #1B2B28;">Total Scenarios Assessed</span>
-                    <span id="totalProgress" style="font-size: 14px; font-weight: 700; color: #8B7355;">0 / 18</span>
+                    style="margin-top: 8px; border-top: 1px solid rgba(210, 180, 140, 0.3); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 12px; font-weight: 700; color: #1B2B28; flex: 1.5;">TOTAL GEC</span>
+                    <span id="t1Progress"
+                        style="font-size: 14px; font-weight: 700; color: #8B7355; flex: 1; text-align: center;">0 /
+                        30</span>
+                    <span id="t2Progress"
+                        style="font-size: 14px; font-weight: 700; color: #8B7355; flex: 1; text-align: center;">0 /
+                        38</span>
                 </div>
             </div>
 
@@ -537,40 +547,55 @@
 
         function updateDashboard() {
             const grid = document.getElementById('progressGrid');
-            const totalText = document.getElementById('totalProgress');
+            const t1Text = document.getElementById('t1Progress');
+            const t2Text = document.getElementById('t2Progress');
             if (!grid) return;
 
-            let totalAssessed = 0;
-            let grandTotal = 0;
+            const tierTargets = {
+                "1": { t1: 3, t2: 4 },
+                "2": { t1: 8, t2: 10 },
+                "3": { t1: 6, t2: 6 },
+                "4": { t1: 4, t2: 7 },
+                "5": { t1: 7, t2: 8 },
+                "6": { t1: 2, t2: 3 }
+            };
+
+            let t1TotalAssessed = 0;
+            let t2TotalAssessed = 0;
             let html = '';
 
-            Object.keys(scenarios).forEach(key => {
-                const principle = scenarios[key];
-                const totalInPrinciple = principle.pool.length;
-                grandTotal += totalInPrinciple;
-
+            Object.keys(tierTargets).forEach(key => {
                 let assessedCount = 0;
                 chatHistory.forEach(log => {
                     if (log.step === 'Scenario' && log.data && log.data.userResponse && log.data.id && log.data.id.startsWith(key + '-')) {
                         assessedCount++;
                     }
                 });
-                totalAssessed += assessedCount;
 
-                let colorStyle = assessedCount === totalInPrinciple ? 'color: #25D366;' : 'color: #1B2B28;';
+                const t1Max = tierTargets[key].t1;
+                const t2Max = tierTargets[key].t2;
+
+                let t1Count = Math.min(assessedCount, t1Max);
+                let t2Count = Math.min(assessedCount, t2Max);
+
+                t1TotalAssessed += t1Count;
+                t2TotalAssessed += t2Count;
+
+                let t1Style = t1Count === t1Max ? 'color: #25D366;' : 'color: #1B2B28;';
+                let t2Style = t2Count === t2Max ? 'color: #25D366;' : 'color: #1B2B28;';
 
                 html += `
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 6px; background: rgba(255,255,255,0.4); border-radius: 6px;">
-                    <span style="color: #5E5A4B;">Principle ${key}</span>
-                    <span style="font-weight: 600; ${colorStyle}">${assessedCount} / ${totalInPrinciple}</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 0; background: transparent;">
+                    <span style="color: #5E5A4B; flex: 1.5;">Principle ${key}</span>
+                    <span style="font-weight: 600; flex: 1; text-align: center; ${t1Style}">${t1Count} / ${t1Max}</span>
+                    <span style="font-weight: 600; flex: 1; text-align: center; ${t2Style}">${t2Count} / ${t2Max}</span>
                 </div>
                 `;
             });
 
             grid.innerHTML = html;
-            if (totalText) {
-                totalText.innerHTML = `${totalAssessed} / ${grandTotal}`;
-            }
+            if (t1Text) t1Text.innerHTML = `${t1TotalAssessed} / 30`;
+            if (t2Text) t2Text.innerHTML = `${t2TotalAssessed} / 38`;
         }
 
         function startAssessment() {
