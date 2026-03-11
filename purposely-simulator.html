@@ -329,6 +329,22 @@
                 </p>
             </div>
 
+            <div id="progressDashboard"
+                style="margin-bottom: 24px; padding: 16px; background-color: rgba(255, 255, 255, 0.6); border: 1px solid rgba(210, 180, 140, 0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 43, 40, 0.04);">
+                <h3
+                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8B7355; font-weight: 700; margin: 0 0 12px 0;">
+                    <i class="fas fa-chart-pie"></i> Assessment Progress
+                </h3>
+                <div id="progressGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <!-- Filled by JS -->
+                </div>
+                <div
+                    style="margin-top: 12px; border-top: 1px solid rgba(210, 180, 140, 0.3); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 13px; font-weight: 600; color: #1B2B28;">Total Scenarios Assessed</span>
+                    <span id="totalProgress" style="font-size: 14px; font-weight: 700; color: #8B7355;">0 / 18</span>
+                </div>
+            </div>
+
             <button onclick="startAssessment()" class="primary-btn">
                 <i class="fas fa-play"></i> Start Assessment
             </button>
@@ -479,6 +495,8 @@
         let usedScenarios = new Set();
         let totalScenariosCount = Object.values(scenarios).reduce((acc, curr) => acc + curr.pool.length, 0);
 
+        document.addEventListener('DOMContentLoaded', updateDashboard);
+
         function getTime() {
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
@@ -517,6 +535,44 @@
             btns.forEach(b => b.remove());
         }
 
+        function updateDashboard() {
+            const grid = document.getElementById('progressGrid');
+            const totalText = document.getElementById('totalProgress');
+            if (!grid) return;
+
+            let totalAssessed = 0;
+            let grandTotal = 0;
+            let html = '';
+
+            Object.keys(scenarios).forEach(key => {
+                const principle = scenarios[key];
+                const totalInPrinciple = principle.pool.length;
+                grandTotal += totalInPrinciple;
+
+                let assessedCount = 0;
+                chatHistory.forEach(log => {
+                    if (log.step === 'Scenario' && log.data && log.data.userResponse && log.data.id && log.data.id.startsWith(key + '-')) {
+                        assessedCount++;
+                    }
+                });
+                totalAssessed += assessedCount;
+
+                let colorStyle = assessedCount === totalInPrinciple ? 'color: #25D366;' : 'color: #1B2B28;';
+
+                html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 6px; background: rgba(255,255,255,0.4); border-radius: 6px;">
+                    <span style="color: #5E5A4B;">Principle ${key}</span>
+                    <span style="font-weight: 600; ${colorStyle}">${assessedCount} / ${totalInPrinciple}</span>
+                </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (totalText) {
+                totalText.innerHTML = `${totalAssessed} / ${grandTotal}`;
+            }
+        }
+
         function startAssessment() {
             document.getElementById('debugDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
@@ -548,7 +604,7 @@
                 randomKey = keys[Math.floor(Math.random() * keys.length)];
                 principleData = scenarios[randomKey];
                 randomScenarioIndex = Math.floor(Math.random() * principleData.pool.length);
-                scenarioId = `${randomKey}-${randomScenarioIndex}`;
+                scenarioId = `${randomKey} -${randomScenarioIndex} `;
             } while (usedScenarios.has(scenarioId));
 
             usedScenarios.add(scenarioId);
@@ -557,6 +613,7 @@
             const injectedDilemma = randomScenario.dilemma.replace(/{charityType}/g, "charity");
 
             currentAssessmentData = {
+                id: scenarioId,
                 principleTitle: principleData.title,
                 scenarioText: injectedDilemma,
                 gecText: randomScenario.gec
@@ -567,7 +624,7 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
 
-                const scenarioMsg = `*[${principleData.title}]*\n\n*Scenario:*\n${injectedDilemma}\n\n*Relevant Checklist (GEC):*\n${randomScenario.gec}`;
+                const scenarioMsg = `* [${principleData.title}] *\n\n * Scenario:*\n${injectedDilemma} \n\n * Relevant Checklist(GEC):*\n${randomScenario.gec} `;
                 addMessage(scenarioMsg, 'ai');
                 chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
@@ -579,11 +636,11 @@
                     // Inject buttons
                     const chatWindow = document.getElementById('chatWindow');
                     chatWindow.innerHTML += `
-                    <div class="action-buttons">
+                    < div class="action-buttons" >
                         <button class="action-btn" onclick="handleAssessmentResponse('Yes')">Yes</button>
                         <button class="action-btn" style="background-color: #d32f2f;" onclick="handleAssessmentResponse('No')">No</button>
                         <button class="action-btn" style="background-color: #f57c00;" onclick="handleAssessmentResponse('Partial')">Partial</button>
-                    </div>`;
+                    </div > `;
                     scrollToBottom();
                 }, 800);
 
@@ -593,12 +650,14 @@
         function handleAssessmentResponse(response) {
             removeActionButtons();
 
-            addMessage(`*My Assessment:* ${response}`, 'user');
+            addMessage(`* My Assessment:* ${response} `, 'user');
 
             // Update the last history item with the response
             if (currentAssessmentData) {
                 currentAssessmentData.userResponse = response;
             }
+
+            updateDashboard();
 
             const typingId = addTypingIndicator();
 
@@ -608,10 +667,10 @@
 
                 const chatWindow = document.getElementById('chatWindow');
                 chatWindow.innerHTML += `
-                <div class="action-buttons">
+                    < div class="action-buttons" >
                     <button class="action-btn" onclick="handleContinueResponse('Yes')">Yes, Generate Next</button>
                     <button class="action-btn" style="background-color: #d32f2f;" onclick="handleContinueResponse('No')">No, End Session</button>
-                </div>`;
+                </div > `;
                 scrollToBottom();
             }, 800);
         }
@@ -641,17 +700,17 @@
 
             assessmentLogs.forEach((log, index) => {
                 const data = log.data;
-                md += `*Assessment ${index + 1}: ${data.principleTitle}*\n`;
-                md += `*Scenario:* ${data.scenarioText}\n`;
-                md += `*GEC Reference:* ${data.gecText}\n`;
-                md += `*My Assessment:* ${data.userResponse || "No answer recorded"}\n\n`;
+                md += `* Assessment ${index + 1}: ${data.principleTitle}*\n`;
+                md += `* Scenario:* ${data.scenarioText} \n`;
+                md += `* GEC Reference:* ${data.gecText} \n`;
+                md += `* My Assessment:* ${data.userResponse || "No answer recorded"} \n\n`;
 
                 if (data.userResponse === 'Yes') yesCount++;
                 if (data.userResponse === 'No') noCount++;
                 if (data.userResponse === 'Partial') partialCount++;
             });
 
-            md += `*Summary:*\nYes: ${yesCount} | No: ${noCount} | Partial: ${partialCount}\n`;
+            md += `* Summary:*\nYes: ${yesCount} | No: ${noCount} | Partial: ${partialCount} \n`;
 
             localStorage.setItem('purposelyTranscript', md);
         }
@@ -667,14 +726,14 @@
 
                 const chatWindow = document.getElementById('chatWindow');
                 chatWindow.innerHTML += `
-                <div class="w-full flex flex-col gap-3 mt-4 mb-4">
+                    < div class="w-full flex flex-col gap-3 mt-4 mb-4" >
                     <button onclick="openWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
                         <i class="fab fa-whatsapp text-xl"></i> Share Details via WhatsApp
                     </button>
                     <button onclick="resetAssessment()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
                         Back to Menu
                     </button>
-                </div>`;
+                </div > `;
                 scrollToBottom();
             }, 800);
         }
@@ -691,13 +750,13 @@
             chatHistory = [];
             currentAssessmentData = null;
             document.getElementById('chatWindow').innerHTML = `
-                <div class="empty-state" id="emptyStatePlaceholder" style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    < div class="empty-state" id = "emptyStatePlaceholder" style = "opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;" >
                     <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
                         <i class="fas fa-clipboard-check"></i>
                     </div>
                     <h3 style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">Ready to evaluate</h3>
                     <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">Review the instructions on the left and click Start Assessment to see your generated scenario here.</p>
-                </div>`;
+                </div >`;
         }
 
         // Drawer starts naturally visible in new layout
