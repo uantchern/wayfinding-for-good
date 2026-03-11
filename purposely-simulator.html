@@ -841,11 +841,9 @@
         function openWhatsApp() {
             autoExportTranscript();
 
-            let introMsg = `_Hi I have a query/comment/clarification about the Charity Code of Governance_\n\n`;
-            let transcript = localStorage.getItem('purposelyTranscript') || '';
-            let fullMsg = introMsg + transcript;
+            let introMsg = `_Hi I have a query/comment/clarification about the Charity Code of Governance_`;
 
-            let encodedTranscript = encodeURIComponent(fullMsg);
+            let encodedTranscript = encodeURIComponent(introMsg);
             window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
         }
 
