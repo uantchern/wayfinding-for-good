@@ -477,9 +477,32 @@
         let chatHistory = [];
         let currentAssessmentData = null;
         let usedScenarios = new Set();
-        let totalScenariosCount = Object.values(scenarios).reduce((acc, curr) => acc + curr.pool.length, 0);
+        let totalScenariosCount = 0;
+        let currentScenarioIndex = 0;
+        let sequentialScenarios = [];
 
-        document.addEventListener('DOMContentLoaded', updateDashboard);
+        document.addEventListener('DOMContentLoaded', () => {
+            Object.keys(scenarios).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
+                const principleData = scenarios[key];
+                const sortedPool = [...principleData.pool].sort((a, b) => {
+                    const matchA = a.gec.match(/CODE ID (\d+\.\d+)/);
+                    const matchB = b.gec.match(/CODE ID (\d+\.\d+)/);
+                    const idA = matchA ? parseFloat(matchA[1]) : 0;
+                    const idB = matchB ? parseFloat(matchB[1]) : 0;
+                    return idA - idB;
+                });
+                sortedPool.forEach((scenario, index) => {
+                    sequentialScenarios.push({
+                        key: key,
+                        principleData: principleData,
+                        scenario: scenario,
+                        id: `${key}-${index}`
+                    });
+                });
+            });
+            totalScenariosCount = sequentialScenarios.length;
+            updateDashboard();
+        });
 
         function getTime() {
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -583,16 +606,17 @@
             document.getElementById('debugDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
             usedScenarios.clear(); // Reset on start
-            generateRandomScenario();
+            currentScenarioIndex = 0;
+            generateNextScenario();
         }
 
-        function generateRandomScenario() {
+        function generateNextScenario() {
             const p = document.getElementById('emptyStatePlaceholder');
             if (p) p.remove();
 
             removeActionButtons();
 
-            if (usedScenarios.size >= totalScenariosCount) {
+            if (currentScenarioIndex >= totalScenariosCount || usedScenarios.size >= totalScenariosCount) {
                 const typingId = addTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator(typingId);
@@ -602,19 +626,13 @@
                 return;
             }
 
-            const keys = Object.keys(scenarios);
-            let randomKey, principleData, randomScenarioIndex, randomScenario, scenarioId;
-
-            // Pick a random un-used scenario
-            do {
-                randomKey = keys[Math.floor(Math.random() * keys.length)];
-                principleData = scenarios[randomKey];
-                randomScenarioIndex = Math.floor(Math.random() * principleData.pool.length);
-                scenarioId = `${randomKey}-${randomScenarioIndex}`;
-            } while (usedScenarios.has(scenarioId));
+            const current = sequentialScenarios[currentScenarioIndex];
+            const principleData = current.principleData;
+            const randomScenario = current.scenario;
+            const scenarioId = current.id;
 
             usedScenarios.add(scenarioId);
-            randomScenario = principleData.pool[randomScenarioIndex];
+            currentScenarioIndex++;
 
             const injectedDilemma = randomScenario.dilemma.replace(/{charityType}/g, "charity");
 
@@ -671,11 +689,11 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
 
-                if (usedScenarios.size >= totalScenariosCount) {
+                if (currentScenarioIndex >= totalScenariosCount || usedScenarios.size >= totalScenariosCount) {
                     addMessage("You have completed assessing ALL THE GUIDELINES! Assessment concluded. You can safely end the session now.", 'ai');
                     endSession();
                 } else {
-                    generateRandomScenario();
+                    generateNextScenario();
                 }
             }, 800);
         }
@@ -762,6 +780,7 @@
             chatHistory = [];
             currentAssessmentData = null;
             usedScenarios.clear();
+            currentScenarioIndex = 0;
             updateDashboard();
             document.getElementById('chatWindow').innerHTML = `
                     <div class="empty-state" id="emptyStatePlaceholder" style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
