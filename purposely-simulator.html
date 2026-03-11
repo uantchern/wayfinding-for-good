@@ -649,7 +649,7 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
 
-                const scenarioMsg = `*[${principleData.title}]*\n\n*a) Scenario:*\n${injectedDilemma}\n\n*b) Best Practices:*\n${currentAssessmentData.bestPractice}\n\n*c) Relevant GEC Principle:*\n${randomScenario.gec}`;
+                const scenarioMsg = `*[${principleData.title}]*\n\n*a) Relevant GEC Principle:*\n${randomScenario.gec}\n\n*b) Scenario:*\n${injectedDilemma}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
                 addMessage(scenarioMsg, 'ai');
                 chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
@@ -713,9 +713,9 @@
             assessmentLogs.forEach((log, index) => {
                 const data = log.data;
                 md += `*Assessment ${index + 1}: ${data.principleTitle}*\n`;
-                md += `*a) Scenario:* ${data.scenarioText}\n`;
-                md += `*b) Best Practice:* ${data.bestPractice}\n`;
-                md += `*c) GEC Reference:* ${data.gecText}\n`;
+                md += `*a) Relevant GEC Principle:* ${data.gecText}\n`;
+                md += `*b) Scenario:* ${data.scenarioText}\n`;
+                md += `*c) Best Practice:* ${data.bestPractice}\n`;
 
                 let pts = data.userResponse === 'Yes' ? 2 : (data.userResponse === 'Partial' ? 1 : 0);
                 md += `*d) My Assessment:* ${data.userResponse || "No answer recorded"} (${pts} pts)\n\n`;
