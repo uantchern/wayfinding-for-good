@@ -155,6 +155,7 @@
             background-color: transparent;
             flex: 1;
             overflow-y: auto;
+            position: relative;
             padding: 24px;
             display: flex;
             flex-direction: column;
@@ -535,7 +536,7 @@
             if (el) {
                 const chatWindow = document.getElementById('chatWindow');
                 chatWindow.scrollTo({
-                    top: el.offsetTop - 20,
+                    top: el.offsetTop - 24,
                     behavior: 'smooth'
                 });
             } else {
