@@ -118,15 +118,19 @@
             const handleGenerate = (e) => {
                 e.preventDefault();
 
-                const promptTemplate = `Think of this as a digital notebook for your charity that helps you ${goal || "assess the impact of what we do"}. Instead of getting lost in complicated data, you simply tell the app what ${inputs || "programs"} you're running. It then transforms that information into an ${tone || "encouraging"} story about ${output || "where and how you've truly made a difference"}. Once you see the impact you've made, you can instantly text that "good news" story to your team via WhatsApp to celebrate together.
+                const promptTemplate = `Dear Santa,
 
-I need you to build this app, called "${appName || 'Impactor'}", as a single-file, standalone HTML web application using React and Tailwind CSS.
+I wish for a magical digital notebook called "${appName || 'Impactor'}" for my charity that helps us ${goal || "assess the impact of what we do"}. Instead of getting lost in complicated data, I just want to tell the notebook what ${inputs || "programs"} we're running. It then transforms that information into an ${tone || "encouraging"} story about ${output || "where and how we've truly made a difference"}. Once we see the impact we've made, I wish for a way to instantly text that "good news" story to our team via WhatsApp to celebrate together.
 
-Here is the design vision: Wrap the app in a translucent glass-panel container (blur, semi-transparent white, subtle borders) floating over a light beige (#F2EFE9) background. Use Inter for normal text and Georgia for headers. Use earthy colors like deep emerald (#1B2B28), muted brown (#8B7355), and warm beige (#D2B48C).
+Santa, I don't want any complicated technical stuff—just a magical present that works right out of the box!
 
-It must work immediately without any passwords or backend and it must do exactly one thing and do it exceptionally well.
+Here is how I wish it to look: wrapped in a beautiful translucent glass-panel container (blur, semi-transparent white, subtle borders) floating over a light beige (#F2EFE9) background. I'd love it if you use Inter for normal text and Georgia for headers, and paint it with earthy colors like deep emerald (#1B2B28), muted brown (#8B7355), and warm beige (#D2B48C).
 
-Please output ONLY the complete HTML code starting with <!DOCTYPE html> so I can save and run it right away.`;
+It must work immediately without any passwords or logins, and it must do exactly this one thing and do it exceptionally well.
+
+Please just give me the final gift exactly as one complete file starting with <!DOCTYPE html> so I can open it and see the magic right away!
+
+Thank you, Santa!`;
 
                 setGeneratedPrompt(promptTemplate);
                 setCopyStatus(false);
