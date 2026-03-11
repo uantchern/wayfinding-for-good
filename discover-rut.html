@@ -123,10 +123,16 @@
         const { useState, useEffect } = React;
 
         const Icon = ({ name, size = 24, className = "" }) => {
+            const spanRef = React.useRef(null);
             React.useEffect(() => {
-                lucide.createIcons();
+                if (spanRef.current) {
+                    spanRef.current.innerHTML = `<i data-lucide="${name}"></i>`;
+                    if (window.lucide) {
+                        window.lucide.createIcons();
+                    }
+                }
             }, [name]);
-            return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
+            return <span ref={spanRef} style={{ display: 'inline-flex', width: size, height: size, alignItems: 'center', justifyContent: 'center' }} className={className}></span>;
         };
 
         const GOALS = [
