@@ -144,8 +144,7 @@
         ];
 
         const OUTPUTS = [
-            {
-                id: 'o1', type: 'output', title: 'Impact Story', text: 'where and how we\\'ve truly made a difference', icon: 'sparkles' },
+            { id: 'o1', type: 'output', title: 'Impact Story', text: 'where and how we\'ve truly made a difference', icon: 'sparkles' },
             { id: 'o2', type: 'output', title: 'Match List', text: 'a list of perfectly matched volunteers', icon: 'list-checks' },
             { id: 'o3', type: 'output', title: 'Financial Summary', text: 'a monthly financial summary', icon: 'pie-chart' },
             { id: 'o4', type: 'output', title: 'Insights', text: 'a report of community satisfaction', icon: 'lightbulb' }
@@ -200,9 +199,9 @@
                 if (zoneType === 'output') setSelectedOutput(null);
             };
 
-            const generatedPrompt = (selectedGoal && selectedInput && selectedOutput) ?\`Dear Santa,
+            const generatedPrompt = (selectedGoal && selectedInput && selectedOutput) ? `Dear Santa,
 
-I wish for a magical digital notebook called "\${appName || 'My Magic Tool'}" for my charity that helps us \${selectedGoal.text}. Instead of getting lost in complicated data, I just want to tell the notebook what \${selectedInput.text} we're running. It then transforms that information into an encouraging story about \${selectedOutput.text}. Once we see the impact we've made, I wish for a way to instantly text that "good news" story to our team via WhatsApp to celebrate together.
+I wish for a magical digital notebook called "${appName || 'My Magic Tool'}" for my charity that helps us ${selectedGoal.text}. Instead of getting lost in complicated data, I just want to tell the notebook what ${selectedInput.text} we're running. It then transforms that information into an encouraging story about ${selectedOutput.text}. Once we see the impact we've made, I wish for a way to instantly text that "good news" story to our team via WhatsApp to celebrate together.
 
 Santa, I don't want any complicated technical stuff—just a magical present that works right out of the box!
 
@@ -212,7 +211,7 @@ It must work immediately without any passwords or logins, and it must do exactly
 
 Please just give me the final gift exactly as one complete file starting with <!DOCTYPE html> so I can open it and see the magic right away!
 
-Thank you, Santa!\` : '';
+Thank you, Santa!` : '';
 
             const handleCopy = () => {
                 if (!generatedPrompt) return;
@@ -224,12 +223,12 @@ Thank you, Santa!\` : '';
 
             const shareToWhatsApp = () => {
                 if (!generatedPrompt) return;
-                window.open(\`https://wa.me/?text=\${encodeURIComponent(generatedPrompt)}\`, '_blank');
+                window.open(`https://wa.me/?text=${encodeURIComponent(generatedPrompt)}`, '_blank');
             };
 
             const DraggableTile = ({ item }) => (
-                <div 
-                    draggable 
+                <div
+                    draggable
                     onDragStart={(e) => handleDragStart(e, item)}
                     onClick={() => handleTileClick(item)}
                     className="drag-item bg-white/80 p-3 rounded-xl border border-brand-accent/30 shadow-sm flex flex-col items-center justify-center text-center gap-2 hover:bg-brand-accent/10 hover:border-brand-accent w-full aspect-square cursor-pointer transition-all hover:-translate-y-1 hover:shadow-md"
@@ -246,15 +245,15 @@ Thank you, Santa!\` : '';
                 return (
                     <div className="flex flex-col gap-3 w-full">
                         <div className="text-xs font-bold tracking-wider text-brand-dark uppercase flex flex-col md:flex-row items-baseline gap-2">
-                             <span className="flex items-center gap-1"><Icon name={icon} size={14} className="text-brand" /> {title}</span>
-                             <span className="text-[10px] text-brand-muted font-normal normal-case opacity-70">(Click or drag a path here)</span>
+                            <span className="flex items-center gap-1"><Icon name={icon} size={14} className="text-brand" /> {title}</span>
+                            <span className="text-[10px] text-brand-muted font-normal normal-case opacity-70">(Click or drag a path here)</span>
                         </div>
-                        
-                        <div 
+
+                        <div
                             onDragOver={(e) => handleDragOver(e, type)}
                             onDragLeave={handleDragLeave}
                             onDrop={(e) => handleDrop(e, type)}
-                            className={\`drop-zone border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all \${selectedItem ? 'p-0 border-transparent bg-transparent' : 'p-4 min-h-[120px] bg-white/30'} \${isActive && !selectedItem ? 'active' : 'border-brand-accent/40'}\`}
+                            className={`drop-zone border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all ${selectedItem ? 'p-0 border-transparent bg-transparent' : 'p-4 min-h-[120px] bg-white/30'} ${isActive && !selectedItem ? 'active' : 'border-brand-accent/40'}`}
                         >
                             {selectedItem ? (
                                 <div className="bg-brand-dark text-white p-4 rounded-xl shadow-lg flex items-center justify-between w-full animate-fade-in relative group border border-brand-dark/50">
@@ -267,7 +266,7 @@ Thank you, Santa!\` : '';
                                             <div className="text-sm font-medium">{selectedItem.title}</div>
                                         </div>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={(e) => { e.stopPropagation(); handleRemove(type); }}
                                         className="text-white/30 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full"
                                         title="Remove selection"
@@ -282,7 +281,7 @@ Thank you, Santa!\` : '';
                                 </div>
                             )}
                         </div>
-                        
+
                         {!selectedItem && (
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-2 animate-fade-in">
                                 {options.map(opt => <DraggableTile key={opt.id} item={opt} />)}
@@ -310,28 +309,28 @@ Thank you, Santa!\` : '';
                         </div>
 
                         <div className="flex-1 space-y-8">
-                            <DropZone 
-                                type="goal" 
-                                title="1. The Goal" 
+                            <DropZone
+                                type="goal"
+                                title="1. The Goal"
                                 icon="target"
-                                selectedItem={selectedGoal} 
-                                options={GOALS} 
+                                selectedItem={selectedGoal}
+                                options={GOALS}
                             />
-                            
-                            <DropZone 
-                                type="input" 
-                                title="2. The Inputs" 
+
+                            <DropZone
+                                type="input"
+                                title="2. The Inputs"
                                 icon="inbox"
-                                selectedItem={selectedInput} 
-                                options={INPUTS} 
+                                selectedItem={selectedInput}
+                                options={INPUTS}
                             />
-                            
-                            <DropZone 
-                                type="output" 
-                                title="3. The Output" 
+
+                            <DropZone
+                                type="output"
+                                title="3. The Output"
                                 icon="sparkles"
-                                selectedItem={selectedOutput} 
-                                options={OUTPUTS} 
+                                selectedItem={selectedOutput}
+                                options={OUTPUTS}
                             />
                         </div>
                     </div>
