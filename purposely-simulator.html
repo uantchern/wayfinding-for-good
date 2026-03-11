@@ -700,18 +700,24 @@
                 md += `*a) Scenario:* ${data.scenarioText}\n`;
                 md += `*b) Best Practice:* ${data.bestPractice}\n`;
                 md += `*c) GEC Reference:* ${data.gecText}\n`;
-                md += `*d) My Assessment:* ${data.userResponse || "No answer recorded"}\n\n`;
+
+                let pts = data.userResponse === 'Yes' ? 2 : (data.userResponse === 'Partial' ? 1 : 0);
+                md += `*d) My Assessment:* ${data.userResponse || "No answer recorded"} (${pts} pts)\n\n`;
 
                 if (data.userResponse === 'Yes') yesCount++;
                 if (data.userResponse === 'No') noCount++;
                 if (data.userResponse === 'Partial') partialCount++;
             });
 
-            let score = Math.round(((yesCount * 1) + (partialCount * 0.5)) / assessmentLogs.length * 100) || 0;
+            let totalPoints = (yesCount * 2) + (partialCount * 1);
+            let maxPoints = assessmentLogs.length * 2;
+            let scorePct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
 
-            md += `*Summary & Score:*\n`;
-            md += `Yes: ${yesCount} | No: ${noCount} | Partial: ${partialCount}\n`;
-            md += `*Overall Alignment Score: ${score}%*\n`;
+            md += `*GEC Scoring Matrix Summary:*\n`;
+            md += `Yes (2 pts): ${yesCount}\nPartial (1 pt): ${partialCount}\nNo (0 pts): ${noCount}\n`;
+            md += `*Total Points: ${totalPoints} / ${maxPoints}*\n`;
+            md += `*Overall Alignment Score: ${scorePct}%*\n\n`;
+            md += `_For good governance, all IPCs and large non-IPC charities under Tier 2 should minimally attain 80% of the GEC score._\n`;
 
             localStorage.setItem('purposelyTranscript', md);
         }
