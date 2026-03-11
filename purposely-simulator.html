@@ -333,7 +333,8 @@
                 style="margin-bottom: 24px; padding: 16px; background-color: rgba(255, 255, 255, 0.6); border: 1px solid rgba(210, 180, 140, 0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 43, 40, 0.04);">
                 <h3
                     style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8B7355; font-weight: 700; margin: 0 0 12px 0;">
-                    <i class="fas fa-chart-pie"></i> GEC Guidelines Assessed</h3>
+                    <i class="fas fa-chart-pie"></i> GEC Guidelines Assessed
+                </h3>
                 <div
                     style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; padding-bottom: 8px; border-bottom: 1px solid rgba(210, 180, 140, 0.3); margin-bottom: 8px;">
                     <span style="font-weight: 700; color: #1B2B28; flex: 1.5;">PRINCIPLES</span>
@@ -629,7 +630,7 @@
                 randomKey = keys[Math.floor(Math.random() * keys.length)];
                 principleData = scenarios[randomKey];
                 randomScenarioIndex = Math.floor(Math.random() * principleData.pool.length);
-                scenarioId = `${randomKey} -${randomScenarioIndex} `;
+                scenarioId = `${randomKey}-${randomScenarioIndex}`;
             } while (usedScenarios.has(scenarioId));
 
             usedScenarios.add(scenarioId);
@@ -649,7 +650,7 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
 
-                const scenarioMsg = `* [${principleData.title}] *\n\n * Scenario:*\n${injectedDilemma} \n\n * Relevant Checklist(GEC):*\n${randomScenario.gec} `;
+                const scenarioMsg = `*[${principleData.title}]*\n\n*Scenario:*\n${injectedDilemma}\n\n*Relevant Checklist (GEC):*\n${randomScenario.gec}`;
                 addMessage(scenarioMsg, 'ai');
                 chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
@@ -661,11 +662,11 @@
                     // Inject buttons
                     const chatWindow = document.getElementById('chatWindow');
                     chatWindow.innerHTML += `
-                    < div class="action-buttons" >
+                    <div class="action-buttons">
                         <button class="action-btn" onclick="handleAssessmentResponse('Yes')">Yes</button>
                         <button class="action-btn" style="background-color: #d32f2f;" onclick="handleAssessmentResponse('No')">No</button>
                         <button class="action-btn" style="background-color: #f57c00;" onclick="handleAssessmentResponse('Partial')">Partial</button>
-                    </div > `;
+                    </div>`;
                     scrollToBottom();
                 }, 800);
 
@@ -675,7 +676,7 @@
         function handleAssessmentResponse(response) {
             removeActionButtons();
 
-            addMessage(`* My Assessment:* ${response} `, 'user');
+            addMessage(`*My Assessment:* ${response}`, 'user');
 
             // Update the last history item with the response
             if (currentAssessmentData) {
@@ -692,10 +693,10 @@
 
                 const chatWindow = document.getElementById('chatWindow');
                 chatWindow.innerHTML += `
-                    < div class="action-buttons" >
+                    <div class="action-buttons">
                     <button class="action-btn" onclick="handleContinueResponse('Yes')">Yes, Generate Next</button>
                     <button class="action-btn" style="background-color: #d32f2f;" onclick="handleContinueResponse('No')">No, End Session</button>
-                </div > `;
+                </div>`;
                 scrollToBottom();
             }, 800);
         }
@@ -725,17 +726,17 @@
 
             assessmentLogs.forEach((log, index) => {
                 const data = log.data;
-                md += `* Assessment ${index + 1}: ${data.principleTitle}*\n`;
-                md += `* Scenario:* ${data.scenarioText} \n`;
-                md += `* GEC Reference:* ${data.gecText} \n`;
-                md += `* My Assessment:* ${data.userResponse || "No answer recorded"} \n\n`;
+                md += `*Assessment ${index + 1}: ${data.principleTitle}*\n`;
+                md += `*Scenario:* ${data.scenarioText}\n`;
+                md += `*GEC Reference:* ${data.gecText}\n`;
+                md += `*My Assessment:* ${data.userResponse || "No answer recorded"}\n\n`;
 
                 if (data.userResponse === 'Yes') yesCount++;
                 if (data.userResponse === 'No') noCount++;
                 if (data.userResponse === 'Partial') partialCount++;
             });
 
-            md += `* Summary:*\nYes: ${yesCount} | No: ${noCount} | Partial: ${partialCount} \n`;
+            md += `*Summary:*\nYes: ${yesCount} | No: ${noCount} | Partial: ${partialCount}\n`;
 
             localStorage.setItem('purposelyTranscript', md);
         }
@@ -751,14 +752,14 @@
 
                 const chatWindow = document.getElementById('chatWindow');
                 chatWindow.innerHTML += `
-                    < div class="w-full flex flex-col gap-3 mt-4 mb-4" >
+                    <div class="w-full flex flex-col gap-3 mt-4 mb-4">
                     <button onclick="openWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
                         <i class="fab fa-whatsapp text-xl"></i> Share Details via WhatsApp
                     </button>
                     <button onclick="resetAssessment()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
                         Back to Menu
                     </button>
-                </div > `;
+                </div>`;
                 scrollToBottom();
             }, 800);
         }
@@ -775,13 +776,13 @@
             chatHistory = [];
             currentAssessmentData = null;
             document.getElementById('chatWindow').innerHTML = `
-                    < div class="empty-state" id = "emptyStatePlaceholder" style = "opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;" >
+                    <div class="empty-state" id="emptyStatePlaceholder" style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
                     <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
                         <i class="fas fa-clipboard-check"></i>
                     </div>
                     <h3 style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">Ready to evaluate</h3>
                     <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">Review the instructions on the left and click Start Assessment to see your generated scenario here.</p>
-                </div >`;
+                </div>`;
         }
 
         // Drawer starts naturally visible in new layout
