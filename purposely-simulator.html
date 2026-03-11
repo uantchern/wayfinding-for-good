@@ -236,6 +236,24 @@
             color: #5E5A4B;
         }
 
+        .blink-text {
+            animation: blink 2s linear infinite;
+            color: #8B7355;
+            font-weight: 800;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
         /* Responsiveness */
         @media (max-width: 850px) {
             .app-container {
@@ -367,9 +385,7 @@
         <!-- Chat / Assessment Pane -->
         <div class="chat-pane" id="chatContainer">
             <div class="chat-header">
-                <button
-                    onclick="document.getElementById('debugDrawer').classList.remove('started'); document.getElementById('chatContainer').classList.remove('started');"
-                    class="md:hidden text-white hover:text-[#D2B48C] mr-2"
+                <button onclick="goBackToSummary()" class="md:hidden text-white hover:text-[#D2B48C] mr-2"
                     style="background:transparent; border:none; cursor:pointer;">
                     <i class="fas fa-arrow-left text-xl"></i>
                 </button>
@@ -379,8 +395,9 @@
                 </div>
                 <h2>Session Viewer</h2>
                 <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors ml-auto"
-                    title="Restart Assessment" style="background:transparent; border:none; cursor:pointer;">
-                    <i class="fas fa-redo text-lg"></i>
+                    title="Restart Assessment"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fas fa-redo text-lg"></i> Restart
                 </button>
             </div>
 
@@ -595,18 +612,41 @@
             if (t2Text) t2Text.innerHTML = `${t2TotalAssessed} / 38`;
         }
 
+        function goBackToSummary() {
+            document.getElementById('debugDrawer').classList.remove('started');
+            document.getElementById('chatContainer').classList.remove('started');
+            const btn = document.getElementById('startBtn');
+            if (chatHistory.length > 0 && currentScenarioIndex <= totalScenariosCount) {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                    btn.innerHTML = '<i class="fas fa-play"></i> Resume Assessment';
+                }
+            }
+        }
+
         function startAssessment() {
             const btn = document.getElementById('startBtn');
+
+            if (chatHistory.length > 0 && currentScenarioIndex <= totalScenariosCount) {
+                document.getElementById('debugDrawer').classList.add('started');
+                document.getElementById('chatContainer').classList.add('started');
+                return;
+            }
+
             if (btn) {
                 btn.disabled = true;
                 btn.style.opacity = '0.5';
                 btn.style.cursor = 'not-allowed';
+                btn.innerHTML = '<i class="fas fa-play"></i> Assessment Active';
             }
 
             document.getElementById('debugDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
             usedScenarios.clear(); // Reset on start
             currentScenarioIndex = 0;
+            chatHistory = [];
             generateNextScenario();
         }
 
@@ -649,7 +689,10 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
 
-                const scenarioMsg = `*[${principleData.title}]*\n\n*a) Relevant GEC Principle:*\n${randomScenario.gec}\n\n*b) Scenario:*\n${injectedDilemma}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
+                const principleMsg = `<div class="blink-text" style="font-size: 1.1em; margin-bottom: 4px;">🌟 [${principleData.title}]</div>`;
+                addMessage(principleMsg, 'ai');
+
+                const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec}\n\n*b) Scenario:*\n${injectedDilemma}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
                 addMessage(scenarioMsg, 'ai');
                 chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
@@ -773,6 +816,7 @@
                 btn.disabled = false;
                 btn.style.opacity = '1';
                 btn.style.cursor = 'pointer';
+                btn.innerHTML = '<i class="fas fa-play"></i> Start';
             }
 
             document.getElementById('debugDrawer').classList.remove('started');
