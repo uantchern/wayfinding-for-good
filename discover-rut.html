@@ -118,19 +118,20 @@
             const handleGenerate = (e) => {
                 e.preventDefault();
 
-                const promptTemplate = `I need you (Antigravity) to build a new RUT (Really Useful Thing) for CharityOps. Please create a single-file, standalone HTML web application using React (via Babel/CDN) and Tailwind CSS.
+                const promptTemplate = `Hi! I need you to build a new mini web app (a Really Useful Thing) for CharityOps. Please create a single-file, standalone HTML web application using React and Tailwind CSS.
                 
-CRITICAL RUT MANIFESTO RULES:
-1. Glass-Panel UI: The app must be wrapped in a translucent \`glass-panel\` container (using backdrop-filter: blur(16px), background: rgba(255, 255, 255, 0.7), and subtle borders) floating over a #F2EFE9 body background.
-2. Beautiful Typography: Use Inter for sans-serif and Georgia for serif headers. Text colors should center around deep emerald (#1B2B28), muted brown (#8B7355), and warm beige (#D2B48C).
-3. No Login Required: It must function instantaneously without backend auth.
+Here are the design rules to follow:
+1. Glass-Panel UI: Wrap the app in a translucent glass-panel container (blur, semi-transparent white, subtle borders) floating over a light beige (#F2EFE9) background.
+2. Typography: Use Inter for normal text and Georgia for headers. Use earthy colors like deep emerald (#1B2B28), muted brown (#8B7355), and warm beige (#D2B48C).
+3. No Login: It must work immediately without any passwords or backend.
 4. Single-Purpose: It must do EXACTLY one thing and do it exceptionally well.
+5. Simple Output & Sharing: The app's generated output must be in plain English. Also, always include a button to let the user easily share their results via WhatsApp.
 
 APP DETAILS:
-- App Name: ${appName || 'Untitled RUT'}
-- Core Goal: ${goal || 'Automate a tedious task'}
+- App Name: ${appName || 'Untitled App'}
+- Core Goal: ${goal || 'Automate a task'}
 - Required User Inputs: ${inputs || 'A few text fields'}
-- Desired AI/System Output: ${output || 'A formatted summary'}
+- Desired Output: ${output || 'A plain English summary'}
 - Style/Tone: ${tone || 'Professional yet approachable'}
 
 Please output ONLY the complete HTML code starting with <!DOCTYPE html> so I can save and run it immediately.`;
@@ -145,6 +146,11 @@ Please output ONLY the complete HTML code starting with <!DOCTYPE html> so I can
                     setCopyStatus(true);
                     setTimeout(() => setCopyStatus(false), 2000);
                 });
+            };
+
+            const shareToWhatsApp = () => {
+                if (!generatedPrompt) return;
+                window.open(`https://wa.me/?text=${encodeURIComponent(generatedPrompt)}`, '_blank');
             };
 
             return (
@@ -252,13 +258,22 @@ Please output ONLY the complete HTML code starting with <!DOCTYPE html> so I can
                                 <h2 className="font-serif font-semibold text-lg tracking-wide">AI Prompt Compiler</h2>
                             </div>
                             {generatedPrompt && (
-                                <button
-                                    onClick={handleCopy}
-                                    className={"text-sm flex items-center space-x-2 px-3 py-1.5 rounded-lg border transition-all " + (copyStatus ? 'bg-green-500/20 text-green-300 border-green-500/50' : 'bg-white/10 text-brand-light border-white/20 hover:bg-white/20')}
-                                >
-                                    <Icon name={copyStatus ? "check" : "copy"} size={16} />
-                                    <span>{copyStatus ? "Copied!" : "Copy Prompt"}</span>
-                                </button>
+                                <div className="flex items-center space-x-2">
+                                    <button
+                                        onClick={handleCopy}
+                                        className={"text-sm flex items-center space-x-2 px-3 py-1.5 rounded-lg border transition-all " + (copyStatus ? 'bg-green-500/20 text-green-300 border-green-500/50' : 'bg-white/10 text-brand-light border-white/20 hover:bg-white/20')}
+                                    >
+                                        <Icon name={copyStatus ? "check" : "copy"} size={16} />
+                                        <span>{copyStatus ? "Copied!" : "Copy"}</span>
+                                    </button>
+                                    <button
+                                        onClick={shareToWhatsApp}
+                                        className="text-sm flex items-center space-x-2 px-3 py-1.5 rounded-lg border bg-[#25D366]/20 text-[#25D366] border-[#25D366]/50 hover:bg-[#25D366]/30 transition-all font-semibold"
+                                    >
+                                        <Icon name="message-circle" size={16} />
+                                        <span>WhatsApp</span>
+                                    </button>
+                                </div>
                             )}
                         </div>
 
