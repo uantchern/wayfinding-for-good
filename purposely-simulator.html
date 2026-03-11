@@ -392,7 +392,13 @@
                 </button>
 
                 <h2>Learning Session</h2>
-                <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors ml-auto"
+                <button onclick="openWhatsApp()"
+                    class="text-[#25D366] hover:text-[#128C7E] transition-colors ml-auto mr-2 md:mr-4"
+                    title="Ask via WhatsApp"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fab fa-whatsapp text-xl"></i> Ask
+                </button>
+                <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors"
                     title="Restart Assessment"
                     style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
                     <i class="fas fa-redo text-lg"></i> Restart
@@ -669,6 +675,7 @@
             usedScenarios.clear(); // Reset on start
             currentScenarioIndex = 0;
             chatHistory = [];
+            localStorage.removeItem('purposelyTranscript');
             generateNextScenario();
         }
 
@@ -832,8 +839,27 @@
         }
 
         function openWhatsApp() {
+            autoExportTranscript();
+
+            let topic = "the Charity Code of Governance Learning Kit";
+            if (currentAssessmentData) {
+                const prin = currentAssessmentData.principleTitle.split(':')[0].trim();
+                const gec = currentAssessmentData.gecText.split(':')[0].replace('CODE ID', 'GEC').trim();
+                topic = `${prin} / ${gec}`;
+            } else if (chatHistory.length > 0) {
+                const lastLog = chatHistory[chatHistory.length - 1];
+                if (lastLog.data) {
+                    const prin = lastLog.data.principleTitle.split(':')[0].trim();
+                    const gec = lastLog.data.gecText.split(':')[0].replace('CODE ID', 'GEC').trim();
+                    topic = `${prin} / ${gec}`;
+                }
+            }
+
+            let introMsg = `_Hi I have a query/comment/clarification about ${topic}_\n\n`;
             let transcript = localStorage.getItem('purposelyTranscript') || '';
-            let encodedTranscript = encodeURIComponent(transcript);
+            let fullMsg = introMsg + transcript;
+
+            let encodedTranscript = encodeURIComponent(fullMsg);
             window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
         }
 
