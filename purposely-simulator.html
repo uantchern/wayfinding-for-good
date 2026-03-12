@@ -864,6 +864,18 @@
 
             let introMsg = `_Hi I have a query/comment/clarification about the Charity Code of Governance_`;
 
+            if (chatHistory.length > 0 && currentScenarioIndex >= totalScenariosCount) {
+                let md = localStorage.getItem('purposelyTranscript') || '';
+                let match = md.match(/\*Overall Alignment Score: (\d+%)\*/);
+                let score = match ? match[1] : '';
+                introMsg = `_Hi! I just completed my Charity Governance Assessment and scored ${score}._`;
+            } else if (currentAssessmentData && currentAssessmentData.gecText) {
+                const match = currentAssessmentData.gecText.match(/CODE ID \d+\.\d+[a-z]?/i);
+                if (match) {
+                    introMsg = `_Hi I have a query/clarification specifically regarding ${match[0]}_`;
+                }
+            }
+
             let encodedTranscript = encodeURIComponent(introMsg);
             window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
         }
