@@ -824,7 +824,24 @@
 
             setTimeout(() => {
                 removeTypingIndicator(typingId);
-                addMessage("Your session has concluded. You can share your assessment details via WhatsApp.", 'ai');
+
+                let yesCount = 0;
+                let noCount = 0;
+                let partialCount = 0;
+                const assessmentLogs = chatHistory.filter(log => log.step === 'Scenario');
+                assessmentLogs.forEach((log) => {
+                    if (log.data && log.data.userResponse === 'Yes') yesCount++;
+                    if (log.data && log.data.userResponse === 'No') noCount++;
+                    if (log.data && log.data.userResponse === 'Partial') partialCount++;
+                });
+                
+                let totalPoints = (yesCount * 2) + (partialCount * 1);
+                let maxPoints = assessmentLogs.length * 2;
+                let scorePct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+
+                let summaryMsg = `*Assessment Summary:*\nTotal Scenarios Assessed: ${assessmentLogs.length}\n\n• Yes (Fully Aligned): ${yesCount}\n• Partial (Needs Polish): ${partialCount}\n• No (Action Required): ${noCount}\n\n*Overall GEC Score: ${scorePct}%*\n\nYour session has concluded. You can share your full assessment details via WhatsApp.`;
+                
+                addMessage(summaryMsg, 'ai');
 
                 autoExportTranscript();
 
