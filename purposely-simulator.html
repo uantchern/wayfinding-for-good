@@ -581,52 +581,10 @@
         let totalScenariosCount = 0;
         let currentScenarioIndex = 0;
         let sequentialScenarios = [];
+        let activeTier = 0;
+        let targetCodeCounts = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0 };
 
         document.addEventListener('DOMContentLoaded', () => {
-            const tempCodeIdGroups = {};
-            const allAvailable = [];
-            
-            Object.keys(scenarios).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
-                const principleData = scenarios[key];
-                principleData.pool.forEach((scenario, index) => {
-                    const match = scenario.gec.match(/CODE ID (\d+\.\d+[a-z]?)/i);
-                    const codeIdKey = match ? match[1].toLowerCase() : `unknown-${key}-${index}`;
-                    if (!tempCodeIdGroups[codeIdKey]) {
-                        tempCodeIdGroups[codeIdKey] = [];
-                    }
-                    const item = {
-                        key: key,
-                        principleData: principleData,
-                        scenario: scenario,
-                        id: `${key}-${index}-${Math.floor(Math.random() * 10000)}`
-                    };
-                    tempCodeIdGroups[codeIdKey].push(item);
-                    allAvailable.push(item);
-                });
-            });
-
-            // 1. Guarantee coverage: pick 1 random scenario per distinct Code ID
-            const selectedIds = new Set();
-            Object.keys(tempCodeIdGroups).forEach(codeId => {
-                const group = tempCodeIdGroups[codeId];
-                const randomChoice = group[Math.floor(Math.random() * group.length)];
-                sequentialScenarios.push(randomChoice);
-                selectedIds.add(randomChoice.id);
-            });
-
-            // 2. Pad up to exactly 38 total scenarios (as requested by user)
-            const remainingPool = allAvailable.filter(item => !selectedIds.has(item.id));
-            shuffleArray(remainingPool);
-            
-            const targetLength = 38;
-            while (sequentialScenarios.length < targetLength && remainingPool.length > 0) {
-                sequentialScenarios.push(remainingPool.pop());
-            }
-
-            // Shuffle the finalized 38 scenarios so they don't always start with Code ID 1.1
-            shuffleArray(sequentialScenarios);
-
-            totalScenariosCount = sequentialScenarios.length;
             updateDashboard();
         });
 
@@ -693,56 +651,70 @@
         }
 
         function updateDashboard() {
-            const grid = document.getElementById('progressGrid');
-            const t1Text = document.getElementById('t1Progress');
-            const t2Text = document.getElementById('t2Progress');
-            if (!grid) return;
+            const container = document.getElementById('progressDashboard');
+            if (!container) return;
 
-            const tierTargets = {
-                "1": { t1: 3, t2: 4 },
-                "2": { t1: 8, t2: 10 },
-                "3": { t1: 6, t2: 6 },
-                "4": { t1: 4, t2: 7 },
-                "5": { t1: 7, t2: 8 },
-                "6": { t1: 2, t2: 3 }
-            };
-
-            let t1TotalAssessed = 0;
-            let t2TotalAssessed = 0;
-            let html = '';
-
-            Object.keys(tierTargets).forEach(key => {
-                let assessedCount = 0;
-                chatHistory.forEach(log => {
-                    if (log.step === 'Scenario' && log.data && log.data.userResponse && log.data.id && log.data.id.startsWith(key + '-')) {
-                        assessedCount++;
+            let assessedCounts = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0 };
+            chatHistory.forEach(log => {
+                if (log.step === 'Scenario' && log.data && log.data.userResponse && log.data.id) {
+                    const match = log.data.id.match(/^(\d+)-/);
+                    if (match) {
+                        assessedCounts[match[1]]++;
                     }
-                });
-
-                const t1Max = tierTargets[key].t1;
-                const t2Max = tierTargets[key].t2;
-
-                let t1Count = Math.min(assessedCount, t1Max);
-                let t2Count = Math.min(assessedCount, t2Max);
-
-                t1TotalAssessed += t1Count;
-                t2TotalAssessed += t2Count;
-
-                let t1Style = t1Count === t1Max ? 'color: #25D366;' : 'color: #1B2B28;';
-                let t2Style = t2Count === t2Max ? 'color: #25D366;' : 'color: #1B2B28;';
-
-                html += `
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 0; background: transparent;">
-                    <span style="color: #5E5A4B; flex: 1.5;">Principle ${key}</span>
-                    <span style="font-weight: 600; flex: 1; text-align: center; ${t1Style}">${t1Count} / ${t1Max}</span>
-                    <span style="font-weight: 600; flex: 1; text-align: center; ${t2Style}">${t2Count} / ${t2Max}</span>
-                </div>
-                `;
+                }
             });
 
-            grid.innerHTML = html;
-            if (t1Text) t1Text.innerHTML = `${t1TotalAssessed} / 30`;
-            if (t2Text) t2Text.innerHTML = `${t2TotalAssessed} / 38`;
+            const dashArray = "39.88 211.32"; // 60 degrees - gap for radius 40
+            const angles = [-90, -30, 30, 90, 150, 210];
+            const px = [60, 96, 96, 60, 24, 24];
+            const py = [6, 27, 93, 114, 93, 27];
+
+            let totalTarget = 0;
+            let totalAssessed = 0;
+
+            let svgHtml = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <svg width="120" height="120" viewBox="0 0 120 120" style="overflow: visible;">
+                    <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(210,180,140,0.2)" stroke-width="12" />`;
+
+            for (let i = 1; i <= 6; i++) {
+                const key = i.toString();
+                const target = targetCodeCounts[key] || 0;
+                const assessed = Math.min(assessedCounts[key] || 0, target);
+                
+                totalTarget += target;
+                totalAssessed += assessed;
+
+                const isComplete = target > 0 && assessed >= target;
+                const strokeColor = isComplete ? '#25D366' : '#D2B48C';
+                const opacity = isComplete ? '1' : (assessed > 0 ? '0.6' : '0.1');
+
+                svgHtml += `
+                    <circle cx="60" cy="60" r="40" fill="none" stroke="${strokeColor}" stroke-width="12"
+                        stroke-dasharray="${dashArray}"
+                        transform="rotate(${angles[i-1]} 60 60)"
+                        style="transition: all 0.5s ease; opacity: ${opacity};" />
+                    <text x="${px[i-1]}" y="${py[i-1]}" font-size="10" font-family="Georgia, serif" font-weight="700"
+                        fill="${isComplete ? '#1B2B28' : '#8B7355'}" text-anchor="middle" dominant-baseline="middle">P${i}</text>
+                `;
+            }
+
+            svgHtml += `
+                    <circle cx="60" cy="60" r="18" fill="#ffffff" stroke="rgba(210,180,140,0.5)" stroke-width="1" />
+                    <path d="M60 46 L64 60 L60 74 L56 60 Z" fill="#D2B48C" />
+                    <circle cx="60" cy="60" r="3" fill="#1B2B28" />
+                </svg>
+                <div style="margin-top: 16px; font-size: 14px; font-weight: 700; color: #1B2B28; font-family: Georgia, serif;">
+                    COMPASS: ${totalAssessed} / ${totalTarget > 0 ? totalTarget : '--'}
+                </div>
+            </div>`;
+
+            container.innerHTML = `
+                <h3 style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8B7355; font-weight: 700; margin: 0 0 16px 0;">
+                    <i class="fas fa-compass"></i> GEC Wayfinding Compass
+                </h3>
+                ${svgHtml}
+            `;
         }
 
         function goBackToSummary() {
@@ -788,8 +760,89 @@
             currentScenarioIndex = 0;
             chatHistory = [];
             localStorage.removeItem('purposelyTranscript');
+            
+            askTierSelection();
+        }
+
+        function askTierSelection() {
+            const typingId = addTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                const p = document.getElementById('emptyStatePlaceholder');
+                if (p) p.remove();
+                
+                const tierMsgId = 'tierSelect-' + Date.now();
+                addMessage(`Welcome to the Journey.\n\nPlease select your organization's Regulatory Tier to focus the wayfinding path:\n\n**Tier 1**: Small/Medium Non-IPC (30 Steps)\n**Tier 2**: Large Non-IPC or IPC (38 Steps)`, 'ai', tierMsgId);
+                
+                const chatWindow = document.getElementById('chatWindow');
+                chatWindow.insertAdjacentHTML('beforeend', `
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="selectTier(1)">Tier 1 Path</button>
+                    <button class="action-btn" onclick="selectTier(2)">Tier 2 Path</button>
+                </div>`);
+                scrollToElement(tierMsgId);
+            }, 800);
+        }
+
+        function selectTier(tier) {
+            removeActionButtons();
+            activeTier = tier;
+            addMessage(`I am requesting the Tier ${tier} Assessment Path.`, 'user');
+            
+            sequentialScenarios = [];
+            targetCodeCounts = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0 };
+            
+            const tempCodeIdGroups = {};
+            const allAvailable = [];
+            
+            Object.keys(scenarios).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
+                const principleData = scenarios[key];
+                principleData.pool.forEach((scenario, index) => {
+                    const match = scenario.gec.match(/CODE ID (\d+\.\d+[a-z]?)/i);
+                    const codeIdKey = match ? match[1].toLowerCase() : `unknown-${key}-${index}`;
+                    if (!tempCodeIdGroups[codeIdKey]) {
+                        tempCodeIdGroups[codeIdKey] = [];
+                    }
+                    const item = {
+                        key: key,
+                        principleData: principleData,
+                        scenario: scenario,
+                        id: `${key}-${index}-${Math.floor(Math.random() * 10000)}`
+                    };
+                    tempCodeIdGroups[codeIdKey].push(item);
+                    allAvailable.push(item);
+                });
+            });
+
+            const selectedIds = new Set();
+            Object.keys(tempCodeIdGroups).forEach(codeId => {
+                const group = tempCodeIdGroups[codeId];
+                const randomChoice = group[Math.floor(Math.random() * group.length)];
+                sequentialScenarios.push(randomChoice);
+                selectedIds.add(randomChoice.id);
+            });
+
+            const targetLength = tier === 1 ? 30 : 38;
+            const remainingPool = allAvailable.filter(item => !selectedIds.has(item.id));
+            shuffleArray(remainingPool);
+            
+            while (sequentialScenarios.length < targetLength && remainingPool.length > 0) {
+                sequentialScenarios.push(remainingPool.pop());
+            }
+
             shuffleArray(sequentialScenarios);
-            generateNextScenario();
+            sequentialScenarios.forEach(s => {
+                targetCodeCounts[s.key] = (targetCodeCounts[s.key] || 0) + 1;
+            });
+
+            totalScenariosCount = sequentialScenarios.length;
+            updateDashboard();
+
+            const typingId = addTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                generateNextScenario();
+            }, 800);
         }
 
         function generateNextScenario() {
@@ -838,7 +891,8 @@
                 const typingSeq = addTypingIndicator(principleId);
                 setTimeout(() => {
                     removeTypingIndicator(typingSeq);
-                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec}\n\n*b) Scenario:*\n${injectedscenario}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
+                    const safeGuidanceText = currentAssessmentData.bestPractice.replace(/"/g, '&quot;');
+                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec} <i class="fas fa-info-circle" style="color: #D2B48C; cursor: help; margin-left: 6px;" title="Example: ${safeGuidanceText}"></i>\n\n*b) Scenario:*\n${injectedscenario}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
                     addMessage(scenarioMsg, 'ai', null, principleId);
                     chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
