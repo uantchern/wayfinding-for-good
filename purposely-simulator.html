@@ -942,7 +942,7 @@
                 setTimeout(() => {
                     removeTypingIndicator(typingSeq);
                     const safeGuidanceText = currentAssessmentData.bestPractice.replace(/"/g, '&quot;').replace(/'/g, "\\'");
-                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec} <i class="fas fa-info-circle" style="color: #D2B48C; cursor: pointer; margin-left: 6px;" title="Example: ${safeGuidanceText}" onclick="showWispModal('${safeGuidanceText}')"></i>\n\n*b) Scenario:*\n${injectedscenario}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
+                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec} <i class="fas fa-info-circle" style="color: #D2B48C; cursor: pointer; margin-left: 6px;" onclick="showWispModal('${safeGuidanceText}')"></i>\n\n*b) Scenario:*\n${injectedscenario}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
                     addMessage(scenarioMsg, 'ai', null, principleId);
                     chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
