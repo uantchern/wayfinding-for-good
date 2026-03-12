@@ -320,6 +320,26 @@
         .hover\:bg-slate-600:hover {
             background-color: #EAE5D8 !important;
         }
+
+        .wisp-modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(27, 43, 40, 0.4); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .wisp-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .wisp-modal {
+            background: #ffffff; border-radius: 16px; width: 90%; max-width: 400px; padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); transform: translateY(20px); transition: transform 0.3s ease;
+            position: relative;
+        }
+        .wisp-modal-overlay.active .wisp-modal { transform: translateY(0); }
+        .wisp-modal-close {
+            position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer;
+            color: #8B7355; font-size: 18px; transition: color 0.2s;
+        }
+        .wisp-modal-close:hover { color: #1B2B28; }
+        .wisp-modal-icon { font-size: 32px; color: #D2B48C; margin-bottom: 16px; text-align: center; }
     </style>
 </head>
 
@@ -420,6 +440,16 @@
                         here.</p>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Wisp Modal -->
+    <div class="wisp-modal-overlay" id="wispModalOverlay" onclick="closeWispModal(event)">
+        <div class="wisp-modal" onclick="event.stopPropagation()">
+            <button class="wisp-modal-close" onclick="closeWispModal()"><i class="fas fa-times"></i></button>
+            <div class="wisp-modal-icon"><i class="fas fa-info-circle"></i></div>
+            <h3 style="font-family: Georgia, serif; font-size: 18px; color: #1B2B28; margin-bottom: 8px; text-align: center; font-weight: 600;">Wayfinding Wisp</h3>
+            <p id="wispModalContent" style="color: #5E5A4B; font-size: 15px; line-height: 1.6; text-align: center; margin: 0;"></p>
         </div>
     </div>
 
@@ -911,8 +941,8 @@
                 const typingSeq = addTypingIndicator(principleId);
                 setTimeout(() => {
                     removeTypingIndicator(typingSeq);
-                    const safeGuidanceText = currentAssessmentData.bestPractice.replace(/"/g, '&quot;');
-                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec} <i class="fas fa-info-circle" style="color: #D2B48C; cursor: pointer; margin-left: 6px;" title="Example: ${safeGuidanceText}" data-tooltip="Example: ${safeGuidanceText}" onclick="alert(this.getAttribute('data-tooltip'))"></i>\n\n*b) Scenario:*\n${injectedscenario}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
+                    const safeGuidanceText = currentAssessmentData.bestPractice.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec} <i class="fas fa-info-circle" style="color: #D2B48C; cursor: pointer; margin-left: 6px;" title="Example: ${safeGuidanceText}" onclick="showWispModal('${safeGuidanceText}')"></i>\n\n*b) Scenario:*\n${injectedscenario}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
                     addMessage(scenarioMsg, 'ai', null, principleId);
                     chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
 
@@ -1087,6 +1117,15 @@
                     <h3 style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">Ready to evaluate</h3>
                     <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">Review the instructions on the left and click Start to see your generated scenario here.</p>
                 </div>`;
+        }
+
+        function showWispModal(text) {
+            document.getElementById('wispModalContent').innerHTML = "<b>Example:</b><br>" + text;
+            document.getElementById('wispModalOverlay').classList.add('active');
+        }
+
+        function closeWispModal(event) {
+            document.getElementById('wispModalOverlay').classList.remove('active');
         }
 
         // Drawer starts naturally visible in new layout
