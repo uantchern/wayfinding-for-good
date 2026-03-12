@@ -648,7 +648,7 @@
             document.getElementById('debugDrawer').classList.remove('started');
             document.getElementById('chatContainer').classList.remove('started');
             const btn = document.getElementById('startBtn');
-            if (chatHistory.length > 0 && currentScenarioIndex <= totalScenariosCount) {
+            if (chatHistory.length > 0 && currentScenarioIndex < totalScenariosCount) {
                 if (btn) {
                     btn.disabled = false;
                     btn.style.opacity = '1';
@@ -658,10 +658,17 @@
             }
         }
 
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
         function startAssessment() {
             const btn = document.getElementById('startBtn');
 
-            if (chatHistory.length > 0 && currentScenarioIndex <= totalScenariosCount) {
+            if (chatHistory.length > 0 && currentScenarioIndex < totalScenariosCount) {
                 document.getElementById('debugDrawer').classList.add('started');
                 document.getElementById('chatContainer').classList.add('started');
                 return;
@@ -680,6 +687,7 @@
             currentScenarioIndex = 0;
             chatHistory = [];
             localStorage.removeItem('purposelyTranscript');
+            shuffleArray(sequentialScenarios);
             generateNextScenario();
         }
 
