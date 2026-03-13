@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PURPOSELY - Charity Governance Code Learning Kit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1024px;
+            height: 90vh;
+            max-height: 850px;
+            min-height: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        /* Setup / Instructions Pane */
+        .setup-pane {
+            background-color: rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(210, 180, 140, 0.3);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .setup-pane h1 {
+            font-size: 28px;
+            color: #1B2B28;
+            font-weight: 900;
+            margin-bottom: 16px;
+            font-family: Georgia, serif;
+            line-height: 1.2;
+        }
+
+        .setup-pane p.tagline {
+            color: #8B7355;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .instructions-list li {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 15px;
+            color: #5E5A4B;
+            line-height: 1.5;
+        }
+
+        .instructions-list li i {
+            color: #D2B48C;
+            font-size: 22px;
+            margin-top: 2px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .primary-btn {
+            background-color: #1B2B28;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(27, 43, 40, 0.2);
+        }
+
+        .primary-btn:hover {
+            background-color: #8B7355;
+            transform: translateY(-2px);
+        }
+
+        /* Chat / Assessment Interface */
+        .chat-pane {
+            background-color: rgba(255, 255, 255, 0.5);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-pane:not(.started) .chat-header {
+            display: none;
+        }
+
+        .chat-header {
+            background-color: #1B2B28;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            color: white;
+            gap: 12px;
+        }
+
+        .chat-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            flex-grow: 1;
+            font-family: Georgia, serif;
+        }
+
+        .chat-window {
+            background-color: transparent;
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 16px;
+            line-height: 1.5;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .bubble.ai {
+            background-color: #ffffff;
+            color: #1B2B28;
+            align-self: flex-start;
+            border-top-left-radius: 4px;
+            border: 1px solid #EAE5D8;
+        }
+
+        .bubble.user {
+            background-color: #8B7355;
+            color: #ffffff;
+            align-self: flex-end;
+            border-top-right-radius: 4px;
+        }
+
+        .timestamp {
+            display: block;
+            font-size: 11px;
+            opacity: 0.6;
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        /* Action Buttons generated by JS */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            align-self: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .action-btn {
+            background-color: #1B2B28;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(27, 43, 40, 0.15);
+        }
+
+        .action-btn:hover {
+            background-color: #8B7355;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            opacity: 0.6;
+            text-align: center;
+            color: #5E5A4B;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 850px) {
+            .app-container {
+                flex-direction: column;
+                height: 100vh;
+                max-height: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                padding: 0;
+                background: #ffffff;
+            }
+
+            .setup-pane {
+                width: 100%;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+                padding: 24px;
+            }
+
+            .chat-pane {
+                display: none;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+                border-top: 1px solid #EAE5D8;
+            }
+
+            .chat-pane.started {
+                display: flex;
+                height: 100%;
+            }
+
+            .setup-pane.started {
+                display: none;
+            }
+        }
+
+        /* Overrides for specific inline styles injected by JS */
+        button[style*="#f57c00"] {
+            background-color: #D2B48C !important;
+            color: #1B2B28 !important;
+        }
+
+        button[style*="#d32f2f"] {
+            background-color: #5E5A4B !important;
+            color: #ffffff !important;
+        }
+
+        .bg-\[\#25D366\] {
+            background-color: #25D366 !important;
+        }
+
+        .bg-slate-700 {
+            background-color: #F2EFE9 !important;
+            color: #1B2B28 !important;
+            border: 1px solid #D2B48C;
+        }
+
+        .hover\:bg-slate-600:hover {
+            background-color: #EAE5D8 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Setup Pane -->
+        <div class="setup-pane" id="debugDrawer">
+            <div class="font-serif text-3xl leading-none cursor-default select-none group"
+                style="font-family: Georgia, serif; margin-bottom: 1.5rem;">
+                <span class="relative inline-block" style="position: relative; display: inline-block;">
+                    <span class="italic relative z-10"
+                        style="color: #103020; font-weight: 500; padding-right: 0.25rem; position: relative; z-index: 10; font-style: italic;">Charity</span>
+                    <span
+                        style="position: absolute; left:-0.2em; right:0; bottom:12%; height:2px; background:#B08968; z-index:0; transform-origin:left; transition: transform 0.7s ease-out;"></span>
+                </span><span class="relative z-10 tracking-tight"
+                    style="color: #B08968; position: relative; z-index: 10; font-weight: 400; letter-spacing: -0.025em; margin-left: -0.05em;">Ops</span>
+            </div>
+            <div style="margin-bottom: 32px;">
+                <p class="tagline"><i class="fas fa-gem"></i> A Really Useful Thing</p>
+                <h1>Charity Governance Code Learning Kit</h1>
+                <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0;">
+                    This kit generates realistic scenarios and best practices to help users learn, apply and assess
+                    application of the Charity Code of Governance.
+                </p>
+            </div>
+
+            <div id="progressDashboard"
+                style="margin-bottom: 24px; padding: 16px; background-color: rgba(255, 255, 255, 0.6); border: 1px solid rgba(210, 180, 140, 0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 43, 40, 0.04);">
+                <h3
+                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8B7355; font-weight: 700; margin: 0 0 12px 0;">
+                    <i class="fas fa-chart-pie"></i> GEC Guidelines Assessed
+                </h3>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; padding-bottom: 8px; border-bottom: 1px solid rgba(210, 180, 140, 0.3); margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #1B2B28; flex: 1.5;">PRINCIPLES</span>
+                    <span style="font-weight: 700; color: #1B2B28; flex: 1; text-align: center;">TIER 1</span>
+                    <span style="font-weight: 700; color: #1B2B28; flex: 1; text-align: center;">TIER 2</span>
+                </div>
+                <div id="progressGrid" style="display: flex; flex-direction: column; gap: 4px;">
+                    <!-- Filled by JS -->
+                </div>
+                <div
+                    style="margin-top: 8px; border-top: 1px solid rgba(210, 180, 140, 0.3); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 12px; font-weight: 700; color: #1B2B28; flex: 1.5;">TOTAL GEC</span>
+                    <span id="t1Progress"
+                        style="font-size: 14px; font-weight: 700; color: #8B7355; flex: 1; text-align: center;">0 /
+                        30</span>
+                    <span id="t2Progress"
+                        style="font-size: 14px; font-weight: 700; color: #8B7355; flex: 1; text-align: center;">0 /
+                        38</span>
+                </div>
+            </div>
+
+            <button id="startBtn" onclick="startAssessment()" class="primary-btn">
+                <i class="fas fa-play"></i> Start Assessment
+            </button>
+        </div>
+
+        <!-- Chat / Assessment Pane -->
+        <div class="chat-pane" id="chatContainer">
+            <div class="chat-header">
+                <button
+                    onclick="document.getElementById('debugDrawer').classList.remove('started'); document.getElementById('chatContainer').classList.remove('started');"
+                    class="md:hidden text-white hover:text-[#D2B48C] mr-2"
+                    style="background:transparent; border:none; cursor:pointer;">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+                <div
+                    class="w-8 h-8 rounded-full bg-[#8B7355] flex items-center justify-center text-sm font-bold border border-[#D2B48C] overflow-hidden">
+                    <span class="text-white">BA</span>
+                </div>
+                <h2>Session Viewer</h2>
+            </div>
+
+            <div class="chat-window" id="chatWindow">
+                <div class="empty-state" id="emptyStatePlaceholder"
+                    style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <div
+                        style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3
+                        style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">
+                        Ready to evaluate</h3>
+                    <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">
+                        Review the instructions on the left and click Start Assessment to see your generated scenario
+                        here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const scenarios = {
+            "1": {
+                title: "Principle 1: The charity serves its mission and achieves its objectives.",
+                pool: [
+                    { dilemma: "A corporate donor offers your {charityType} a $500k restricted grant, but stipulations require diverting 40% of funds to launch an unrelated youth mentorship program. The management team is eager to accept, but it fundamentally distracts from your core mission.", gec: "CODE ID 1.1: Clearly state the charitable purposes and include the objectives in the charity's governing instrument." },
+                    { dilemma: "A prominent board member proposes changing your {charityType} main focus to jump on a new trending social cause that attracts easy funding, effectively abandoning your legacy beneficiaries.", gec: "CODE ID 1.2: Develop and implement strategic plans to achieve the stated charitable purposes." },
+                    { dilemma: "The Executive Director of your {charityType} has quietly started expanding operations overseas without board approval, arguing that the local mission is 'already fulfilled'.", gec: "CODE ID 1.3: Have the Board review the charity's strategic plans regularly to ensure that the charity is achieving its charitable purposes." },
+                    { dilemma: "A major shift in government policy renders your {charityType} main program less effective, yet the management refuses to evaluate new ways of operating because 'this is how we have always done it'.", gec: "CODE ID 1.4: The Board should ensure that the charity's activities continue to be relevant and aligned with its objectives." }
+                ]
+            },
+            "2": {
+                title: "Principle 2: The charity has an effective Board and Management.",
+                pool: [
+                    { dilemma: "The Board Chair of your {charityType} has served for 12 years and firmly resists stepping down, citing a 'lack of ready successors'. Key independent directors are frustrated and threatening to resign over the stagnant leadership.", gec: "CODE ID 2.8: The Board should have a maximum term limit of 10 consecutive years for the Board members. If retained, the Board should document the reasons." },
+                    { dilemma: "It is discovered that three of the eight board members of your {charityType} have missed over 50% of meetings in the last two years, yet the Chair refuses to ask them to step down because they are 'well connected'.", gec: "CODE ID 2.5: The Board should conduct regular meetings with a quorum to effectively oversee the management of the charity." },
+                    { dilemma: "The board of your {charityType} consists entirely of close friends of the founder, lacking crucial skills in finance, legal, and digital strategy. They govern primarily by rubber-stamping the founder's decisions.", gec: "CODE ID 2.2: The Board should ensure that there is an appropriate mix of core competencies and diversity on the Board to fulfill its roles and responsibilities." },
+                    { dilemma: "The Chairman of your {charityType} also actively serves as the Executive Director and CEO, granting them total control without any independent checks.", gec: "CODE ID 2.1: The roles of the Chairman and the head of management must be separate to maintain a balance of power." },
+                    { dilemma: "When a new director is appointed to your {charityType}, there is no formal letter of appointment or onboarding document explaining their fiduciary duties, leaving them confused about their operational role.", gec: "CODE ID 2.3: Provide new Board members with a formal letter of appointment and induction on their roles and responsibilities." },
+                    { dilemma: "During the annual general meeting, it is noted that the Board has never conducted any form of self-evaluation or performance review for its members over the past five years.", gec: "CODE ID 2.4: The Board should evaluate its performance and effectiveness regularly, at least once every term or every 3 years." },
+                    { dilemma: "A board committee takes it upon itself to approve a massive IT overhaul contract without referring back to the main Board, bypassing standard corporate governance protocols.", gec: "CODE ID 2.6: The Board may delegate its authority to Board committees, but the Board retains ultimate responsibility." },
+                    { dilemma: "Your {charityType} operates without a clear set of documented terms of reference for any of its sub-committees, causing overlapping decisions on finance and HR.", gec: "CODE ID 2.7: Document the terms of reference for all Board committees." },
+                    { dilemma: "There is no formal succession plan established for the aging leadership of your {charityType}, posing a massive operational risk should the CEO retire abruptly.", gec: "CODE ID 2.9: The Board should plan for succession to key positions in the Board and management." },
+                    { dilemma: "The staff turnover is incredibly high, yet the Board considers HR management strictly an 'operational' issue and refuses to review the management's deeply flawed employee retention strategy.", gec: "CODE ID 2.10: The Board should exercise oversight over the recruitment, evaluation and compensation of the management." }
+                ]
+            },
+            "3": {
+                title: "Principle 3: The charity acts responsibly, fairly and with integrity.",
+                pool: [
+                    { dilemma: "The Executive Director of your {charityType} awarded a lucrative contract to a vendor firm owned by his brother-in-law without a tender. Although the price was competitive, no conflict of interest was officially declared.", gec: "CODE ID 3.2: There are documented procedures for Board members and staff to declare actual or potential conflicts of interest to the Board at the earliest opportunity." },
+                    { dilemma: "A board member of your {charityType} silently votes to approve a massive office relocation, failing to disclose they own the new building being leased.", gec: "CODE ID 3.1: Board members should not vote or participate in decision-making on matters where they have a conflict of interest." },
+                    { dilemma: "Your {charityType} accepts a huge anonymous donation from a shell company discovered to be linked to a controversial industry that fundamentally conflicts with the charity's values.", gec: "CODE ID 3.3: The Board ensures no person in a position to influence the charity's decisions derives any unfair or improper advantage." },
+                    { dilemma: "A staff member is found using charity funds to host private dinners for their family, but the Board writes it off as a simple 'accounting error'.", gec: "CODE ID 3.4: Establish a code of conduct for Board members, staff, and volunteers." },
+                    { dilemma: "Your {charityType} regularly receives expensive corporate gifts from major vendors during holidays, but there is no policy indicating what staff should do with them.", gec: "CODE ID 3.5: Implement policies to guide Board members, staff, and volunteers on accepting gifts and favors." },
+                    { dilemma: "A significant error in the past year's charity tax returns goes entirely unreported because there is no procedure for raising compliance matters to the regulators or the board.", gec: "CODE ID 3.6: Ensure the charity complies with all applicable laws and regulations." }
+                ]
+            },
+            "4": {
+                title: "Principle 4: The charity is well-managed and plans for the future.",
+                pool: [
+                    { dilemma: "Your {charityType} runs entirely on yearly government grants and currently maintains zero financial reserves. A sudden policy change delays the next grant disbursement by 6 months, leaving the charity unable to make payroll next week.", gec: "CODE ID 4.1: The Board should establish and disclose a reserves policy. The reserves level should be regularly reviewed." },
+                    { dilemma: "The finance manager of your {charityType} has been single-handedly approving all expenses without dual signatories for two years, and an internal audit reveals $50,000 in 'unexplained' miscellaneous spending.", gec: "CODE ID 4.4: The Board ensures that internal controls are in place with documented procedures for financial matters in key areas." },
+                    { dilemma: "Your {charityType} decides to invest 80% of its cash reserves into a high-risk crypto-currency fund, promising double-digit returns to quickly solve a funding deficit.", gec: "CODE ID 4.2: The Board should approve an investment policy, setting out the objectives, risk tolerance, and the types of investments allowed." },
+                    { dilemma: "The charity consistently runs enormous multi-year operational deficits but has no formal plan to restore its financial health beyond hoping for a sudden influx of public donations.", gec: "CODE ID 4.3: Ensure that financial plans are aligned with the charity's strategic plan and resources." },
+                    { dilemma: "Your {charityType} signs a complex and extremely expensive 10-year IT software license, but no comprehensive risk assessment or budget analysis was presented to the Board.", gec: "CODE ID 4.5: Ensure a risk management process is in place to identify and mitigate key risks." },
+                    { dilemma: "An aging IT system crashes for two days, and it is discovered the charity has zero data backup facilities or any documented business continuity plan.", gec: "CODE ID 4.6: Implement a resilient disaster recovery and business continuity plan." },
+                    { dilemma: "Third-party fundraiser agents contracted by your charity are misleading donors on the streets with aggressive hard-sell tactics that clearly violate the sector's ethical guidelines.", gec: "CODE ID 4.7: Ensure that fundraising activities are transparent, ethical, and preserve the integrity of the charity." }
+                ]
+            },
+            "5": {
+                title: "Principle 5: The charity is accountable and transparent.",
+                pool: [
+                    { dilemma: "A server containing sensitive personal data of 2,000 donors to your {charityType} was inadvertently exposed online. The Executive Director suggests quietly patching it without notifying the Board or Authorities to avoid jeopardizing a major fundraising campaign.", gec: "CODE ID 5.4: The charity should put in place policies and procedures to ensure that it complies with the Personal Data Protection Act (PDPA)." },
+                    { dilemma: "Your {charityType} quietly decides to not publish its annual report or financial statements online, claiming 'administrative burden', leading to public speculation about mismanagement of public donations.", gec: "CODE ID 5.1: The charity makes available to its stakeholders an annual report on its programmes, activities, and finances." },
+                    { dilemma: "Whistleblowers within your {charityType} formally report severe workplace harassment to the board, but the HR committee buries the report entirely to protect a 'star' fundraising executive.", gec: "CODE ID 5.3: The charity should establish a whistle-blowing policy to provide a confidential channel for staff to report improprieties." },
+                    { dilemma: "A major international donor explicitly demands detailed reporting on exactly how their restricted grant was spent, but the finance department lacks project-based accounting to trace the exact expenses.", gec: "CODE ID 5.2: Ensure that funds received are strictly used for the designated purposes and proper reports are provided." },
+                    { dilemma: "There is no formal external audit of the charity's financial records despite its income significantly exceeding the legal threshold that mandates one.", gec: "CODE ID 5.5: Timely submission of exact financial reports to relevant regulatory bodies." },
+                    { dilemma: "The board members regularly use their charity email to conduct personal business, bringing the charity into potentially awkward liability issues without a clear IT usage policy.", gec: "CODE ID 5.6: Maintain policies for accountability of all organizational resources including IT." },
+                    { dilemma: "A large number of volunteers are operating high-risk machinery at a charity event without adequate safety briefings or liability waivers because 'they are just helping out'.", gec: "CODE ID 5.7: Ensure proper management, training, and accountability regarding all volunteers." },
+                    { dilemma: "Top executives are receiving excessively lavish salaries that total over 60% of the entire charity’s operational budget, yet these figures are intentionally hidden from the public.", gec: "CODE ID 5.8: Disclose the exact remuneration of key management personnel to ensure full transparency." }
+                ]
+            },
+            "6": {
+                title: "Principle 6: The charity communicates actively to instil public confidence.",
+                pool: [
+                    { dilemma: "A viral social media post falsely accuses your {charityType} of wasting funds on 'lavish staff retreats', utilizing out-of-context photos. Angry donors are flooding your inbox threatening to pull funding, yet the internal comms team remains silent.", gec: "CODE ID 6.1: The charity actively communicates with its stakeholders to instil public confidence and maintains its public image." },
+                    { dilemma: "A major celebrity ambassador for your {charityType} is embroiled in a massive criminal scandal, and the media is demanding to know directly if the charity condones their actions.", gec: "CODE ID 6.2: The Board should establish guidelines on how the charity engages with the media and the public to protect its reputation." },
+                    { dilemma: "Your {charityType} launches an awareness campaign that is widely criticized as culturally insensitive and highly offensive to a minority group in Singapore, sparking trending outrage across local forums.", gec: "CODE ID 6.3: The charity should carefully review public communications to ensure they accurately represent its mission and maintain public trust." }
+                ]
+            }
+        };
+
+        let chatHistory = [];
+        let currentAssessmentData = null;
+        let usedScenarios = new Set();
+        let totalScenariosCount = Object.values(scenarios).reduce((acc, curr) => acc + curr.pool.length, 0);
+
+        document.addEventListener('DOMContentLoaded', updateDashboard);
+
+        function getTime() {
+            return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function scrollToBottom() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function addMessage(text, sender) {
+            const chatWindow = document.getElementById('chatWindow');
+            const formattedText = text.replace(/\n/g, '<br>');
+            chatWindow.innerHTML += `
+            <div class="bubble ${sender}">
+                ${formattedText}
+                <span class="timestamp">${getTime()}</span>
+            </div>`;
+            scrollToBottom();
+        }
+
+        function addTypingIndicator() {
+            const chatWindow = document.getElementById('chatWindow');
+            const id = 'typing-' + Date.now();
+            chatWindow.innerHTML += `<div id="${id}" class="bubble ai" style="color: #8B7355; font-style: italic;">typing...</div>`;
+            scrollToBottom();
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function removeActionButtons() {
+            const btns = document.querySelectorAll('.action-buttons');
+            btns.forEach(b => b.remove());
+        }
+
+        function updateDashboard() {
+            const grid = document.getElementById('progressGrid');
+            const t1Text = document.getElementById('t1Progress');
+            const t2Text = document.getElementById('t2Progress');
+            if (!grid) return;
+
+            const tierTargets = {
+                "1": { t1: 3, t2: 4 },
+                "2": { t1: 8, t2: 10 },
+                "3": { t1: 6, t2: 6 },
+                "4": { t1: 4, t2: 7 },
+                "5": { t1: 7, t2: 8 },
+                "6": { t1: 2, t2: 3 }
+            };
+
+            let t1TotalAssessed = 0;
+            let t2TotalAssessed = 0;
+            let html = '';
+
+            Object.keys(tierTargets).forEach(key => {
+                let assessedCount = 0;
+                chatHistory.forEach(log => {
+                    if (log.step === 'Scenario' && log.data && log.data.userResponse && log.data.id && log.data.id.startsWith(key + '-')) {
+                        assessedCount++;
+                    }
+                });
+
+                const t1Max = tierTargets[key].t1;
+                const t2Max = tierTargets[key].t2;
+
+                let t1Count = Math.min(assessedCount, t1Max);
+                let t2Count = Math.min(assessedCount, t2Max);
+
+                t1TotalAssessed += t1Count;
+                t2TotalAssessed += t2Count;
+
+                let t1Style = t1Count === t1Max ? 'color: #25D366;' : 'color: #1B2B28;';
+                let t2Style = t2Count === t2Max ? 'color: #25D366;' : 'color: #1B2B28;';
+
+                html += `
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 0; background: transparent;">
+                    <span style="color: #5E5A4B; flex: 1.5;">Principle ${key}</span>
+                    <span style="font-weight: 600; flex: 1; text-align: center; ${t1Style}">${t1Count} / ${t1Max}</span>
+                    <span style="font-weight: 600; flex: 1; text-align: center; ${t2Style}">${t2Count} / ${t2Max}</span>
+                </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            if (t1Text) t1Text.innerHTML = `${t1TotalAssessed} / 30`;
+            if (t2Text) t2Text.innerHTML = `${t2TotalAssessed} / 38`;
+        }
+
+        function startAssessment() {
+            const btn = document.getElementById('startBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+
+            document.getElementById('debugDrawer').classList.add('started');
+            document.getElementById('chatContainer').classList.add('started');
+            usedScenarios.clear(); // Reset on start
+            generateRandomScenario();
+        }
+
+        function generateRandomScenario() {
+            const p = document.getElementById('emptyStatePlaceholder');
+            if (p) p.remove();
+
+            removeActionButtons();
+
+            if (usedScenarios.size >= totalScenariosCount) {
+                const typingId = addTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator(typingId);
+                    addMessage("You have completed all available scenarios! Assessment concluded.", 'ai');
+                    endSession();
+                }, 800);
+                return;
+            }
+
+            const keys = Object.keys(scenarios);
+            let randomKey, principleData, randomScenarioIndex, randomScenario, scenarioId;
+
+            // Pick a random un-used scenario
+            do {
+                randomKey = keys[Math.floor(Math.random() * keys.length)];
+                principleData = scenarios[randomKey];
+                randomScenarioIndex = Math.floor(Math.random() * principleData.pool.length);
+                scenarioId = `${randomKey}-${randomScenarioIndex}`;
+            } while (usedScenarios.has(scenarioId));
+
+            usedScenarios.add(scenarioId);
+            randomScenario = principleData.pool[randomScenarioIndex];
+
+            const injectedDilemma = randomScenario.dilemma.replace(/{charityType}/g, "charity");
+
+            let bpMapping = {
+                "1": "Ensure alignment with core mission and periodically review strategic plans.",
+                "2": "Maintain strong board independence, regular performance reviews, and clear term limits.",
+                "3": "Enforce strict conflict of interest policies and transparent codes of conduct.",
+                "4": "Establish robust financial controls, clear investment policies, and comprehensive risk management plans.",
+                "5": "Commit to full transparency by timely publishing annual reports and ensuring proper use of funds.",
+                "6": "Actively manage public relations and maintain clear guidelines for stakeholder engagement."
+            };
+
+            currentAssessmentData = {
+                id: scenarioId,
+                principleTitle: principleData.title,
+                scenarioText: injectedDilemma,
+                gecText: randomScenario.gec,
+                bestPractice: bpMapping[randomKey] || "Maintain proactive governance practices."
+            };
+
+            const typingId = addTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+
+                const scenarioMsg = `*[${principleData.title}]*\n\n*a) Scenario:*\n${injectedDilemma}\n\n*b) Best Practices:*\n${currentAssessmentData.bestPractice}\n\n*c) Relevant GEC Principle:*\n${randomScenario.gec}`;
+                addMessage(scenarioMsg, 'ai');
+                chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
+
+                const typing2 = addTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator(typing2);
+                    addMessage("d) Has your charity put this principle into action to deal with the scenario?", 'ai');
+
+                    // Inject buttons
+                    const chatWindow = document.getElementById('chatWindow');
+                    chatWindow.innerHTML += `
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="handleAssessmentResponse('Yes')">Yes</button>
+                        <button class="action-btn" style="background-color: #d32f2f;" onclick="handleAssessmentResponse('No')">No</button>
+                        <button class="action-btn" style="background-color: #f57c00;" onclick="handleAssessmentResponse('Partial')">Partial</button>
+                    </div>`;
+                    scrollToBottom();
+                }, 800);
+
+            }, 800);
+        }
+
+        function handleAssessmentResponse(response) {
+            removeActionButtons();
+
+            addMessage(`*My Assessment:* ${response}`, 'user');
+
+            // Update the last history item with the response
+            if (currentAssessmentData) {
+                currentAssessmentData.userResponse = response;
+            }
+
+            updateDashboard();
+
+            const typingId = addTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+
+                if (usedScenarios.size >= totalScenariosCount) {
+                    addMessage("You have completed assessing ALL THE GUIDELINES! Assessment concluded. You can safely end the session now.", 'ai');
+                    endSession();
+                } else {
+                    generateRandomScenario();
+                }
+            }, 800);
+        }
+
+        function autoExportTranscript() {
+            if (chatHistory.length === 0) return;
+
+            let md = "Hi! I just used a Really Useful Thing (RUT) from CharityOps.org: Charity Governance Code Learning Kit.\n\n";
+
+            // Count totals
+            let yesCount = 0;
+            let noCount = 0;
+            let partialCount = 0;
+
+            const assessmentLogs = chatHistory.filter(log => log.step === 'Scenario');
+
+            assessmentLogs.forEach((log, index) => {
+                const data = log.data;
+                md += `*Assessment ${index + 1}: ${data.principleTitle}*\n`;
+                md += `*a) Scenario:* ${data.scenarioText}\n`;
+                md += `*b) Best Practice:* ${data.bestPractice}\n`;
+                md += `*c) GEC Reference:* ${data.gecText}\n`;
+
+                let pts = data.userResponse === 'Yes' ? 2 : (data.userResponse === 'Partial' ? 1 : 0);
+                md += `*d) My Assessment:* ${data.userResponse || "No answer recorded"} (${pts} pts)\n\n`;
+
+                if (data.userResponse === 'Yes') yesCount++;
+                if (data.userResponse === 'No') noCount++;
+                if (data.userResponse === 'Partial') partialCount++;
+            });
+
+            let totalPoints = (yesCount * 2) + (partialCount * 1);
+            let maxPoints = assessmentLogs.length * 2;
+            let scorePct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+
+            md += `*GEC Scoring Matrix Summary:*\n`;
+            md += `Yes (2 pts): ${yesCount}\nPartial (1 pt): ${partialCount}\nNo (0 pts): ${noCount}\n`;
+            md += `*Total Points: ${totalPoints} / ${maxPoints}*\n`;
+            md += `*Overall Alignment Score: ${scorePct}%*\n\n`;
+            md += `_For good governance, all IPCs and large non-IPC charities under Tier 2 should minimally attain 80% of the GEC score._\n`;
+
+            localStorage.setItem('purposelyTranscript', md);
+        }
+
+        function endSession() {
+            const typingId = addTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                addMessage("Your session has concluded. You can share your assessment details via WhatsApp.", 'ai');
+
+                autoExportTranscript();
+
+                const chatWindow = document.getElementById('chatWindow');
+                chatWindow.innerHTML += `
+                    <div class="w-full flex flex-col gap-3 mt-4 mb-4">
+                    <button onclick="openWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
+                        <i class="fab fa-whatsapp text-xl"></i> Share Details via WhatsApp
+                    </button>
+                    <button onclick="resetAssessment()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
+                        Back to Menu
+                    </button>
+                </div>`;
+                scrollToBottom();
+            }, 800);
+        }
+
+        function openWhatsApp() {
+            let transcript = localStorage.getItem('purposelyTranscript') || '';
+            let encodedTranscript = encodeURIComponent(transcript);
+            window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
+        }
+
+        function resetAssessment() {
+            const btn = document.getElementById('startBtn');
+            if (btn) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+
+            document.getElementById('debugDrawer').classList.remove('started');
+            document.getElementById('chatContainer').classList.remove('started');
+            chatHistory = [];
+            currentAssessmentData = null;
+            document.getElementById('chatWindow').innerHTML = `
+                    <div class="empty-state" id="emptyStatePlaceholder" style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">Ready to evaluate</h3>
+                    <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">Review the instructions on the left and click Start Assessment to see your generated scenario here.</p>
+                </div>`;
+        }
+
+        // Drawer starts naturally visible in new layout
+    </script>
+</body>
+
+</html>
