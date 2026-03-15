@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walk the TOC | CharityOps</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1024px;
+            height: 90vh;
+            max-height: 850px;
+            min-height: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        /* Setup / Instructions Pane */
+        .setup-pane {
+            background-color: rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(210, 180, 140, 0.3);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .setup-pane h1 {
+            font-size: 28px;
+            color: #1B2B28;
+            font-weight: 900;
+            margin-bottom: 16px;
+            font-family: Georgia, serif;
+            line-height: 1.2;
+        }
+
+        .setup-pane p.tagline {
+            color: #8B7355;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #8B7355;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .preset-select {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #D2B48C;
+            font-size: 14px;
+            color: #5E5A4B;
+            background-color: #F9F8F6;
+            margin-bottom: 8px;
+            outline: none;
+            cursor: pointer;
+            font-family: inherit;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B7355' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .preset-select:focus {
+            border-color: #8B7355;
+            box-shadow: 0 0 0 4px rgba(210, 180, 140, 0.3);
+        }
+
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #D2B48C;
+            font-size: 15px;
+            color: #1B2B28;
+            background-color: white;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .input-group textarea:focus {
+            border-color: #8B7355;
+            box-shadow: 0 0 0 4px rgba(210, 180, 140, 0.3);
+        }
+
+        .primary-btn {
+            background-color: #1B2B28;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(27, 43, 40, 0.2);
+        }
+
+        .primary-btn:hover {
+            background-color: #8B7355;
+            transform: translateY(-2px);
+        }
+        
+        .primary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Chat / Assessment Interface */
+        .chat-pane {
+            background-color: rgba(255, 255, 255, 0.5);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-pane:not(.started) .chat-header {
+            display: none;
+        }
+
+        .chat-header {
+            background-color: #1B2B28;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            color: white;
+            gap: 12px;
+        }
+
+        .chat-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            flex-grow: 1;
+            font-family: Georgia, serif;
+        }
+
+        .chat-window {
+            background-color: transparent;
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 16px;
+            line-height: 1.5;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .bubble.ai {
+            background-color: #ffffff;
+            color: #1B2B28;
+            align-self: flex-start;
+            border-top-left-radius: 4px;
+            border: 1px solid #EAE5D8;
+        }
+
+        .bubble.user {
+            background-color: #8B7355;
+            color: #ffffff;
+            align-self: flex-end;
+            border-top-right-radius: 4px;
+        }
+
+        .timestamp {
+            display: block;
+            font-size: 11px;
+            opacity: 0.6;
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        /* Action Buttons generated by JS */
+        .slider-container {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #5E5A4B;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #8B7355;
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #D2B48C;
+            border-radius: 3px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            align-self: flex-start;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .question-btn {
+            background-color: #ffffff;
+            color: #1B2B28;
+            border: 1px solid #D2B48C;
+            border-radius: 12px;
+            padding: 16px;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(27, 43, 40, 0.05);
+            display: flex;
+            gap: 12px;
+        }
+
+        .question-btn:hover {
+            border-color: #8B7355;
+            background-color: #F9F8F6;
+            transform: translateY(-2px);
+        }
+
+        .question-btn span.num {
+            font-family: Georgia, serif;
+            color: #8B7355;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .action-btn {
+            background-color: #1B2B28;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            align-self: center;
+            margin-top: 10px;
+        }
+
+        .action-btn:hover {
+            background-color: #8B7355;
+        }
+
+        .text-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .text-input-container input {
+            flex-grow: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #D2B48C;
+            font-size: 15px;
+            color: #1B2B28;
+            outline: none;
+        }
+
+        .text-input-container input:focus {
+            border-color: #8B7355;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            opacity: 0.6;
+            text-align: center;
+            color: #5E5A4B;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 850px) {
+            .app-container {
+                flex-direction: column;
+                height: 100dvh;
+                max-height: none;
+                margin: 0;
+                padding: 0;
+                border: none;
+                border-radius: 0;
+            }
+
+            body {
+                padding: 0;
+                background: #ffffff;
+            }
+
+            .setup-pane {
+                width: 100%;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+                padding: 24px;
+                flex: 1;
+            }
+
+            .chat-pane {
+                display: none;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+                border-top: 1px solid #EAE5D8;
+            }
+
+            .chat-pane.started {
+                display: flex;
+                height: 100%;
+            }
+
+            .setup-pane.started {
+                display: none;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 24px 0 24px;
+            background-color: transparent;
+            display: none;
+        }
+
+        .chat-pane.started .progress-bar-container {
+            display: flex;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: #D2B48C;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step.active {
+            color: #8B7355;
+            opacity: 1;
+        }
+
+        .step.completed {
+            color: #5E5A4B;
+            opacity: 1;
+        }
+
+        .step.completed .step-icon {
+            background-color: #8B7355;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-icon {
+            box-shadow: 0 0 0 4px rgba(210, 180, 140, 0.3);
+        }
+
+        .step span {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step-connector {
+            flex-grow: 1;
+            height: 2px;
+            background-color: #D2B48C;
+            opacity: 0.3;
+            margin: 0 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-connector.completed {
+            background-color: #8B7355;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Setup Pane -->
+        <div class="setup-pane" id="setupDrawer">
+            <div class="font-serif text-3xl leading-none cursor-default select-none group"
+                style="font-family: Georgia, serif; margin-bottom: 1.5rem;">
+                <span class="relative inline-block" style="position: relative; display: inline-block;">
+                    <span class="italic relative z-10"
+                        style="color: #103020; font-weight: 500; padding-right: 0.25rem; position: relative; z-index: 10; font-style: italic;">Charity</span>
+                    <span
+                        style="position: absolute; left:-0.2em; right:0; bottom:12%; height:2px; background:#B08968; z-index:0; transform-origin:left; transition: transform 0.7s ease-out;"></span>
+                </span><span class="relative z-10 tracking-tight"
+                    style="color: #B08968; position: relative; z-index: 10; font-weight: 400; letter-spacing: -0.025em; margin-left: -0.05em;">Ops</span>
+            </div>
+            <div style="margin-bottom: 24px;">
+                <p class="tagline"><i class="fas fa-bolt"></i> A Really Useful Thing</p>
+                <h1>Walk the TOC</h1>
+                <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0 0 12px 0;">
+                    A "temperature check" to ensure your daily activities align with your Theory of Change (TOC). Let's filter out the busy work.
+                </p>
+            </div>
+
+            <div class="input-group">
+                <div>
+                    <label for="missionInput">1. What problem are you dealing with?</label>
+                    <select class="preset-select" onchange="if(this.value){ document.getElementById('missionInput').value = this.value; validateSetup(); this.value=''; }">
+                        <option value="">-- Choose a common problem or type your own below --</option>
+                        <option value="Funders keep asking what exactly we do, but very hard to show real results.">Hard to show real results to funders</option>
+                        <option value="Our team is entirely bogged down by admin and compliance paperwork.">Team drowning in admin/paperwork</option>
+                        <option value="We keep running the same old programmes but few people are joining anymore.">Nobody joining our old programmes</option>
+                        <option value="We want to try new things but everyone is too busy fighting fires every day.">Always fighting fires, no time to innovate</option>
+                        <option value="Donors only want to fund sexy new projects, not our core operations.">Donors only want to fund new projects</option>
+                    </select>
+                    <textarea id="missionInput" rows="2" placeholder="e.g., We need to reduce youth isolation in our community because..." oninput="validateSetup()"></textarea>
+                </div>
+                <div>
+                    <label for="activityInput">2. This Morning's Activity</label>
+                    <select class="preset-select" onchange="if(this.value){ document.getElementById('activityInput').value = this.value; validateSetup(); this.value=''; }">
+                        <option value="">-- Choose a common activity or type your own below --</option>
+                        <option value="Filled up multiple compliance spreadsheets and rushed regulatory reports.">Rushing out reports and spreadsheets</option>
+                        <option value="Stuck in back-to-back internal meetings that could have been an email.">Back-to-back internal meetings</option>
+                        <option value="Directly served and interacted with our core beneficiaries on the ground.">On the ground with beneficiaries</option>
+                        <option value="Firefighting sudden operational issues and covering for absent staff.">Firefighting sudden issues</option>
+                        <option value="Writing a grant proposal trying to fit our work into a funder's criteria.">Writing proposals to please funders</option>
+                    </select>
+                    <textarea id="activityInput" rows="2" placeholder="e.g., Filled up 4 compliance spreadsheets" oninput="validateSetup()"></textarea>
+                </div>
+            </div>
+
+            <button id="startBtn" onclick="startRUT()" class="primary-btn" disabled>
+                <i class="fas fa-compass"></i> Let's Walk
+            </button>
+            <p style="font-size: 12px; color: #8B7355; text-align: center; margin-top: 16px;">
+                <i class="fas fa-lock"></i> 100% private. Runs in your browser.
+            </p>
+        </div>
+
+        <!-- Chat / Assessment Pane -->
+        <div class="chat-pane" id="chatContainer">
+            <div class="chat-header">
+                <button onclick="goBackToSetup()" class="md:hidden text-white hover:text-[#D2B48C] mr-2"
+                    style="background:transparent; border:none; cursor:pointer;" title="Back">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+
+                <h2>TOC Temperature Check</h2>
+                <button onclick="generateWhatsAppReport()" id="whatsappHeaderBtn"
+                    class="text-[#25D366] hover:text-[#128C7E] transition-colors ml-auto mr-2 md:mr-4 hidden"
+                    title="Share Pulse Check"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fab fa-whatsapp text-xl"></i> Share
+                </button>
+                <button onclick="location.reload()" class="text-white hover:text-[#D2B48C] transition-colors"
+                    title="Restart"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fas fa-redo text-lg"></i> Reset
+                </button>
+            </div>
+
+            <div class="progress-bar-container" id="progressBar">
+                <div class="step active" id="step-1">
+                    <div class="step-icon"><i class="fas fa-shoe-prints"></i></div>
+                    <span>Walk</span>
+                </div>
+                <div class="step-connector" id="connector-1"></div>
+                <div class="step" id="step-2">
+                    <div class="step-icon"><i class="fas fa-thermometer-half"></i></div>
+                    <span>Check</span>
+                </div>
+                <div class="step-connector" id="connector-2"></div>
+                <div class="step" id="step-3">
+                    <div class="step-icon"><i class="fas fa-question"></i></div>
+                    <span>Question</span>
+                </div>
+                <div class="step-connector" id="connector-3"></div>
+                <div class="step" id="step-4">
+                    <div class="step-icon"><i class="fas fa-crosshairs"></i></div>
+                    <span>Action</span>
+                </div>
+            </div>
+
+            <div class="chat-window" id="chatWindow">
+                <div class="empty-state" id="emptyStatePlaceholder">
+                    <div
+                        style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
+                        <i class="fas fa-shoe-prints"></i>
+                    </div>
+                    <h3
+                        style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">
+                        Ready for a check-in</h3>
+                    <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">
+                        Fill in the problem you're dealing with and this morning's activity to start your temperature check.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State variables
+        let appState = {
+            mission: '',
+            activity: '',
+            temperature: 5,
+            selectedQuestion: '',
+            stopAction: ''
+        };
+
+        function validateSetup() {
+            const mission = document.getElementById('missionInput').value.trim();
+            const activity = document.getElementById('activityInput').value.trim();
+            document.getElementById('startBtn').disabled = !(mission.length > 5 && activity.length > 5);
+        }
+
+        function getTime() {
+            return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function scrollToBottom() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function addMessage(text, sender, elementId = null) {
+            const chatWindow = document.getElementById('chatWindow');
+            const formattedText = text.replace(/\n/g, '<br>');
+            const idAttr = elementId ? `id="${elementId}"` : '';
+            chatWindow.insertAdjacentHTML('beforeend', `
+            <div ${idAttr} class="bubble ${sender}">
+                ${formattedText}
+                <span class="timestamp">${getTime()}</span>
+            </div>`);
+            scrollToBottom();
+        }
+
+        function addTypingIndicator() {
+            const chatWindow = document.getElementById('chatWindow');
+            const id = 'typing-' + Date.now();
+            chatWindow.insertAdjacentHTML('beforeend', `<div id="${id}" class="bubble ai" style="color: #8B7355; font-style: italic;">typing...</div>`);
+            scrollToBottom();
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function goBackToSetup() {
+            document.getElementById('setupDrawer').classList.remove('started');
+            document.getElementById('chatContainer').classList.remove('started');
+        }
+
+        function updateProgress(stepNum) {
+            const icons = [
+                '<i class="fas fa-shoe-prints"></i>',
+                '<i class="fas fa-thermometer-half"></i>',
+                '<i class="fas fa-question"></i>',
+                '<i class="fas fa-crosshairs"></i>'
+            ];
+
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById('step-' + i);
+                const connector = document.getElementById('connector-' + i);
+                
+                if (!el) continue;
+
+                if (i < stepNum) {
+                    el.className = 'step completed';
+                    el.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+                    if (connector) connector.classList.add('completed');
+                } else if (i === stepNum) {
+                    el.className = 'step active';
+                    el.querySelector('.step-icon').innerHTML = icons[i-1];
+                    if (connector) connector.classList.remove('completed');
+                } else {
+                    el.className = 'step';
+                    el.querySelector('.step-icon').innerHTML = icons[i-1];
+                    if (connector) connector.classList.remove('completed');
+                }
+            }
+        }
+
+        function startRUT() {
+            appState.mission = document.getElementById('missionInput').value.trim();
+            appState.activity = document.getElementById('activityInput').value.trim();
+            
+            document.getElementById('setupDrawer').classList.add('started');
+            document.getElementById('chatContainer').classList.add('started');
+            
+            const p = document.getElementById('emptyStatePlaceholder');
+            if (p) p.remove();
+
+            chatWindow.innerHTML = ''; // clear slate
+
+            // Add user's context
+            addMessage(`<b>Problem:</b> ${appState.mission} \n<b>Activity:</b> ${appState.activity}`, 'user');
+
+            // System prompt for slider
+            const typingId = addTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                
+                const prompt = "Think about your main activity this morning. How much of what you did was actually impactful, versus just paperwork?\n\n<b>1</b> = 100% Paperwork\n<b>10</b> = 100% Impact Work (Solving the problem)";
+                
+                const chatWindow = document.getElementById('chatWindow');
+                const bubbleId = 'slider-bubble-' + Date.now();
+                
+                chatWindow.insertAdjacentHTML('beforeend', `
+                <div id="${bubbleId}" class="bubble ai w-full">
+                    ${prompt.replace(/\n/g, '<br>')}
+                    
+                    <div class="slider-container mt-6">
+                        <input type="range" id="tempSlider" min="1" max="10" value="5" oninput="document.getElementById('sliderValDisplay').innerText = this.value">
+                        <div class="slider-labels">
+                            <span>1 (Paperwork)</span>
+                            <span id="sliderValDisplay" style="font-size: 16px; color: #1B2B28; font-family: Georgia, serif; font-weight: 700;">5</span>
+                            <span>10 (Impact)</span>
+                        </div>
+                        <div style="text-align: center; margin-top: 16px;">
+                            <button onclick="submitTemperature('${bubbleId}')" class="action-btn">Confirm Assessment</button>
+                        </div>
+                    </div>
+                </div>`);
+                scrollToBottom();
+                updateProgress(2);
+            }, 800);
+        }
+
+        function submitTemperature(bubbleId) {
+            const slider = document.getElementById('tempSlider');
+            appState.temperature = parseInt(slider.value, 10);
+            
+            // Lock the bubble
+            const bubble = document.getElementById(bubbleId);
+            bubble.innerHTML = `I rated my activity a <b>${appState.temperature} / 10</b> on the impact scale.<span class="timestamp">${getTime()}</span>`;
+            bubble.className = "bubble user";
+
+            const typingId = addTypingIndicator();
+            
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                generateZoneQuestions();
+            }, 1000);
+        }
+
+        function generateZoneQuestions() {
+            let vibe = "";
+            let questionPool = [];
+
+            if (appState.temperature <= 3) {
+                // Zone A: Paperwork
+                vibe = "Ahh, stuck in the paperwork and daily grind today? It happens to the best of us. But let's be real—busy doesn't always mean effective. Let's do a quick temperature check:";
+                questionPool = [
+                    "If we stopped doing this 'busy work' completely tomorrow, would our beneficiaries actually notice, or just the auditors?",
+                    "Is this activity solving the root cause of our community's problem, or are we just treating the symptoms day after day?",
+                    "If we were forced to cut our time spent on this by 50%, what is the very first thing we would throw out?",
+                    "Are we doing this because it actually helps, or just because 'we have always done it this way'?",
+                    "If a new staff came in today, how long would it take them to realise this task is just saikang?",
+                    "Is this task genuinely driven by our mission, or by our fear of a bad audit?",
+                    "Who is actually reading the output of all this effort? If nobody, why are we still generating it?",
+                    "Are we confusing being 'very busy' with actually 'moving the needle'?",
+                    "If you had to pay for this activity out of your own pocket, would you still authorise it?",
+                    "Does this paperwork exist to serve the community, or just to serve the bureaucracy?",
+                    "If we deleted this task from our SOPs forever, would the charity collapse?",
+                    "Could this entire block of work have been replaced with a simple 5-minute conversation?",
+                    "Are we just rearranging deck chairs on the Titanic by doing this?",
+                    "How much of this is just covering our own backsides (CYA) rather than helping the vulnerable?",
+                    "If our founders saw us spending hours on this, would they say 'well done' or 'what are you doing'?",
+                    "Is this activity a distraction we are using so we don't have to face the harder, real problems?",
+                    "If this was a corporate startup, would the boss have fired us for wasting time on this?",
+                    "Does this task make us feel tired but unfulfilled at the end of the day?",
+                    "We complain about lack of manpower, but how many man-hours are we burning on this exact thing?",
+                    "If an intern asked you 'why are we doing this', what is the honest, no-BS answer?"
+                ];
+            } else if (appState.temperature <= 7) {
+                // Zone B: Limbo
+                vibe = "Okay, quite balanced. Making some impact, but maybe carrying a bit too much baggage. Let's see how we can tip the scales back to the real work:";
+                questionPool = [
+                    "If solving the problem is the true destination, is everyone involved in this activity looking at the same map, or are some just following the crowd?",
+                    "What is the *one* bureaucratic process in this activity we can 'kill' right now that would free up 20% more time for actual human connection?",
+                    "Are we confusing 'effort spent' with 'impact created'? Can we achieve this exact same outcome with half the sweat?",
+                    "This feels like a 5/10. What minor tweak could turn this into an 8/10 for impact?",
+                    "Which part of this activity is just legacy baggage we are dragging along needlessly?",
+                    "Are the beneficiaries actually asking for this, or did we just assume they want it?",
+                    "If we only had half the budget for this activity, what fluff would we immediately cut out?",
+                    "Is this task creating a band-aid solution that we will just have to rip off again next year?",
+                    "We are moving forward, but are we driving with the handbrake on? What's the handbrake?",
+                    "Is the amount of reporting we do for this activity completely disproportionate to the actual work done?",
+                    "Could someone else in the sector do this much better, and should we just partner with them instead?",
+                    "Are we trying to please too many stakeholders at once with this? Who should be our primary focus?",
+                    "If we stripped this down to its bare, raw essentials, what would it look like?",
+                    "Is this activity actually scalable, or will it break if we double the number of beneficiaries?",
+                    "We say this is for the community, but how much friction are we accidentally creating for them?",
+                    "Are we just hitting our KPIs, or are we actually changing lives here?",
+                    "What happens if we stop doing the bottom 20% of this task? Will the sky fall down?",
+                    "Are our staff energized after doing this, or just mildly drained?",
+                    "Is the technology or software we are using for this helping us, or getting in our way?",
+                    "Does this feel like 'good enough', and is 'good enough' acceptable for our sector?"
+                ];
+            } else {
+                // Zone C: North Star
+                vibe = "Solid work! This is what 'Walking the TOC' looks like in real life. But even on a good path, we must ensure we don't trip. Let's stress-test this:";
+                questionPool = [
+                    "If this is our highest impact activity, why aren't we doing it 100% of the time? What is the invisible bottleneck holding us back from scaling this?",
+                    "Are the positive outcomes from this activity sustainable, or are they entirely dependent on one 'super-staff' burning out behind the scenes?",
+                    "How do we ensure that by next year, this 'impact work' doesn't slowly degrade into 'busy work' due to new red tape?",
+                    "This is great work. Who else in the ecosystem needs to learn how we did this?",
+                    "We are hitting the mark here. How do we fiercely protect this time from being eaten up by admin?",
+                    "Are we capturing the magic of this activity in a way that outlasts any single employee?",
+                    "If a major funder offered us $100k tomorrow to expand this, would our current structure survive the growth?",
+                    "Are the beneficiaries walking away from this feeling empowered, or just serviced?",
+                    "This is moving the needle. Have we truly identified what makes it work so well, or was it just luck?",
+                    "How do we stop other distracting projects from cannibalising the resources going into this winner?",
+                    "Is this impact coming at the cost of our team's mental health or work-life balance?",
+                    "Could this be the one thing our charity becomes known for nationwide? If so, what's next?",
+                    "We nailed it. But is the problem we are solving evolving faster than our solution?",
+                    "Are we celebrating this win enough with the team, or just immediately moving to the next fire?",
+                    "If we had to handover this high-impact activity to a partner charity, what are the undocumented secrets we'd have to tell them?",
+                    "The impact is real. But is it genuinely ending the cycle, or just providing the best temporary relief?",
+                    "How do we make this 10/10 activity easier to execute so it feels like a 5/10 effort?",
+                    "Are the people we are helping actually the ones who need it the absolute most?",
+                    "We are on the right track. Can we be brave enough to say 'no' to three other things to protect this?",
+                    "Does our Board fully understand *why* this worked so well, beyond just seeing the good numbers?"
+                ];
+            }
+
+            // Randomly select 3 questions
+            const shuffled = [...questionPool].sort(() => 0.5 - Math.random());
+            const questions = shuffled.slice(0, 3);
+
+            const chatWindow = document.getElementById('chatWindow');
+            const interactionId = 'question-interaction-' + Date.now();
+            
+            chatWindow.insertAdjacentHTML('beforeend', `
+            <div id="${interactionId}" class="bubble ai" style="max-width: 90%;">
+                ${vibe}
+                <div class="action-buttons">
+                    <button class="question-btn" onclick="selectQuestion(0, '${interactionId}')">
+                        <span class="num">1.</span>
+                        <span>${questions[0]}</span>
+                    </button>
+                    <button class="question-btn" onclick="selectQuestion(1, '${interactionId}')">
+                        <span class="num">2.</span>
+                        <span>${questions[1]}</span>
+                    </button>
+                    <button class="question-btn" onclick="selectQuestion(2, '${interactionId}')">
+                        <span class="num">3.</span>
+                        <span>${questions[2]}</span>
+                    </button>
+                </div>
+            </div>`);
+            
+            // Store questions temporarily to retrieve on selection
+            window.currentQuestions = questions;
+            scrollToBottom();
+            updateProgress(3);
+        }
+
+        function selectQuestion(idx, containerId) {
+            appState.selectedQuestion = window.currentQuestions[idx];
+            
+            document.getElementById(containerId).innerHTML = `<b>My Hard Question:</b><br>${appState.selectedQuestion}<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).className = "bubble user";
+
+            const typingId = addTypingIndicator();
+            
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                promptStopAction();
+            }, 800);
+        }
+
+        function promptStopAction() {
+            const chatWindow = document.getElementById('chatWindow');
+            const interactionId = 'stop-action-' + Date.now();
+            
+            chatWindow.insertAdjacentHTML('beforeend', `
+            <div id="${interactionId}" class="bubble ai">
+                To get back on the path to solving <i>"${appState.mission}"</i>, what is the <b>ONE activity</b> we should stop doing right now?
+                
+                <div class="text-input-container">
+                    <input type="text" id="stopInput" placeholder="e.g., checking emails before 10 AM, making useless reports..." onkeypress="if(event.key === 'Enter') submitStopAction('${interactionId}')">
+                    <button onclick="submitStopAction('${interactionId}')" class="primary-btn" style="width: auto; padding: 12px 20px;">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>`);
+            scrollToBottom();
+            updateProgress(4);
+            
+            setTimeout(() => {
+                document.getElementById('stopInput').focus();
+            }, 100);
+        }
+
+        function submitStopAction(containerId) {
+            const val = document.getElementById('stopInput').value.trim();
+            if(!val) return;
+            
+            appState.stopAction = val;
+            
+            document.getElementById(containerId).innerHTML = `<b>We should stop:</b><br>${appState.stopAction}<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).className = "bubble user";
+            
+            const typingId = addTypingIndicator();
+            
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                showFinalSummary();
+            }, 800);
+        }
+        
+        function showFinalSummary() {
+            document.getElementById('whatsappHeaderBtn').classList.remove('hidden');
+
+            const summaryHtml = `
+            <b>🚨 TOC Pulse Check 🚨</b><br><br>
+            <b>*The Problem:*</b> ${appState.mission}<br>
+            <b>*My Morning:*</b> ${appState.activity}<br><br>
+            <b>*My Temperature Check:*</b> ${appState.temperature}/10<br>
+            <i style="opacity: 0.8; font-size: 13px;">(1 = Paperwork, 10 = Impact Work)</i><br><br>
+            <b>*The Hard Question I'm Asking Myself:*</b><br>
+            ${appState.selectedQuestion}<br><br>
+            <b>*Wayfinding Action:*</b><br>
+            To get back on the path, the one thing we need to stop doing right now is: <b>${appState.stopAction}</b>.
+            `;
+            
+            addMessage(summaryHtml, 'ai');
+            
+            const btnHtml = `
+            <button onclick="generateWhatsAppReport()" class="primary-btn" style="background-color: #25D366; margin-top: 16px;">
+                <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Share to WhatsApp
+            </button>
+            <button onclick="location.reload()" style="background: transparent; color: #8B7355; border: none; font-weight: 600; text-decoration: underline; cursor: pointer; margin-top: 16px; width: 100%; text-align: center;">
+                Start another check-in
+            </button>
+            `;
+            
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.insertAdjacentHTML('beforeend', `<div style="display: flex; flex-direction: column; max-width: 85%; align-self: flex-start;">${btnHtml}</div>`);
+            scrollToBottom();
+        }
+
+        function generateWhatsAppReport() {
+            const text = `🚨 *TOC Pulse Check* 🚨\n\n*The Problem:* ${appState.mission}\n*My Morning:* ${appState.activity}\n\n*My Temperature Check:* ${appState.temperature}/10\n_(1 = Paperwork, 10 = Impact Work)_\n\n*The Hard Question I'm Asking Myself:*\n${appState.selectedQuestion}\n\n*Wayfinding Action:*\nTo get back on the path, the one thing we need to stop doing right now is: ${appState.stopAction}.\n\n_Powered by CharityOps RUT_`;
+
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    </script>
+</body>
+
+</html>

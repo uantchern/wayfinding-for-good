@@ -360,36 +360,117 @@
                             </div>
                         </div>
 
-                        <!-- 4. Our Approach -->
+                        <!-- 4. Case Study -->
                         <div class="faq-item border-b border-[#E0D7C6] py-1 md:py-2">
                             <button class="w-full flex justify-between items-center text-left group outline-none"
                                 onclick="toggleFaq(this)">
                                 <div class="flex items-center gap-6">
                                     <div
                                         class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
-                                        <i data-lucide="heart" class="w-4 h-4"></i>
+                                        <i data-lucide="book-open" class="w-4 h-4"></i>
                                     </div>
                                     <h3
                                         class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
-                                        4. Our Approach: <a
-                                            href="https://www.failonpurpose.com/copy-of-readers-feedback"
-                                            target="_blank"
-                                            class="hover:underline decoration-[#D2B48C] transition-all">Project
-                                            AI<span class="pulse-heart">❤️</span>爱</a>
+                                        4. Case Study: Walk the TOC
                                     </h3>
                                 </div>
                                 <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
                             </button>
-                            <div class="faq-content text-left pl-12 md:pl-16 text-[#5E5A4B] space-y-4">
-                                <p>Our RUT discovery process is guided by the <strong><a
-                                            href="https://www.failonpurpose.com/copy-of-readers-feedback"
-                                            target="_blank"
-                                            class="hover:underline decoration-[#D2B48C] transition-all">Project
-                                            AI<span class="pulse-heart">❤️</span>爱</a></strong> mindset:
-                                    <strong>Values-first, tech-second</strong>. We believe AI should be human-centered,
-                                    focusing on <em>Ai</em> (compassion and care). We don't just build software; we
-                                    solve human problems through experimentation and listening.
+                            <div class="faq-content text-left pl-12 md:pl-16 text-[#5E5A4B] space-y-6 pt-2 pb-4">
+                                <p class="text-lg">
+                                    To understand what makes a RUT so powerful, let's look at a concrete example: <strong>Walk the TOC</strong>.
                                 </p>
+
+                                <div>
+                                    <h4 class="text-md font-bold text-[#1B2B28] mb-1">The Problem: Traditional Theory of Change (TOC) is Broken</h4>
+                                    <p>
+                                        In most charities, the Theory of Change is a static, academic diagram locked in a boardroom drawer. Impact reporting happens recursively, months after activities conclude. For a frontline worker deciding what to do at 9:00 AM on a Tuesday, the TOC provides zero operational guidance. It fails to answer the critical question: <em>"Is the activity I am doing right now actually moving the needle, or is it just paperwork?"</em>
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h4 class="text-md font-bold text-[#1B2B28] mb-1">The Solution: Vibes Coding for Rapid Deployment</h4>
+                                    <p>
+                                        Instead of investing months in heavy tracking software, we needed a lightweight intervention. Using <strong>"Vibes Coding"</strong>—leveraging AI for rapid, iterative prototyping focused on user feeling and flow rather than raw technical architecture—we built a stateless, browser-based tool in hours. It required no databases, no logins, and zero onboarding. We focused entirely on the <em>vibe</em>: making the user feel supported, challenged, and immediately capable.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <h4 class="text-md font-bold text-[#1B2B28] mb-4">How the RUT Works</h4>
+                                    
+                                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                        <div class="bg-[#EAE5D8] p-4 rounded-xl border border-[#D2B48C] relative overflow-hidden flex flex-col justify-center shadow-inner h-full">
+                                            <div class="text-xs uppercase tracking-widest text-[#8B7355] font-bold mb-3 flex items-center gap-2">
+                                                <i class="fas fa-shoe-prints"></i> 1. Walk
+                                            </div>
+                                            <div class="bg-white p-3 rounded-lg shadow-sm border border-[#D2B48C] mb-2">
+                                                <div class="text-[10px] text-[#8B7355] font-bold mb-1 uppercase">What problem are you dealing with?</div>
+                                                <div class="text-[#1B2B28] text-xs">We are struggling to prove the tangible impact of our programs.</div>
+                                            </div>
+                                            <div class="bg-white p-3 rounded-lg shadow-sm border border-[#D2B48C]">
+                                                <div class="text-[10px] text-[#8B7355] font-bold mb-1 uppercase">This Morning's Activity</div>
+                                                <div class="text-[#1B2B28] text-xs">Filled up multiple compliance spreadsheets.</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col justify-center">
+                                            <strong class="text-[#1B2B28] text-md mb-1">Instant Setup</strong>
+                                            <p class="text-sm">Users simply state the problem they are dealing with and what activity they focused on this morning. Context is established in seconds via a minimalist interface with pre-written dropdown options.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                        <div class="flex flex-col justify-center md:order-1 order-2">
+                                            <strong class="text-[#1B2B28] text-md mb-1">The Vibe Check (Slider)</strong>
+                                            <p class="text-sm">A conversational UI prompts the user to rate their activity on a slider from 1 (Paperwork) to 10 (Impact). The AI responds with localized, empathetic 'vibes' and challenges them with randomized questions based on their score.</p>
+                                        </div>
+                                        <div class="bg-[#EAE5D8] p-4 rounded-xl border border-[#D2B48C] relative overflow-hidden flex flex-col justify-center shadow-inner h-full md:order-2 order-1">
+                                            <div class="text-xs uppercase tracking-widest text-[#8B7355] font-bold mb-3 flex items-center gap-2">
+                                                <i class="fas fa-thermometer-half"></i> 2. Check & <i class="fas fa-question pl-1"></i> 3. Question
+                                            </div>
+                                            <div class="bg-white p-3 rounded-lg shadow-sm border border-[#EAE5D8] rounded-tl-sm w-[90%] self-start flex flex-col gap-2">
+                                                 <div class="text-[#1B2B28] text-[11px] font-medium leading-snug">Ahh, stuck in the paperwork and daily grind today? Let's do a quick temperature check...</div>
+                                                 <div class="w-full text-left bg-[#F9F8F6] p-2 rounded border border-[#D2B48C] text-[10px] font-bold text-[#8B7355] shadow-sm transform transition hover:-translate-y-1">1. If we stopped doing this tomorrow, would our beneficiaries actually notice?</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid md:grid-cols-2 gap-6 mb-2">
+                                        <div class="bg-[#EAE5D8] p-4 rounded-xl border border-[#D2B48C] relative overflow-hidden flex flex-col justify-center shadow-inner h-full">
+                                             <div class="text-xs uppercase tracking-widest text-[#8B7355] font-bold mb-3 flex items-center gap-2">
+                                                 <i class="fas fa-crosshairs"></i> 4. Action & Share
+                                             </div>
+                                             <div class="bg-[#8B7355] p-3 rounded-lg shadow-sm w-[85%] self-end rounded-tr-sm text-white md:text-xs text-[11px] mb-4">
+                                                 <div class="font-bold opacity-80 text-[10px] mb-1 uppercase">Wayfinding Action</div>
+                                                 Stop checking emails and filling logs before 10 AM.
+                                             </div>
+                                             <div class="bg-[#25D366] text-white py-1.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-md w-max mx-auto">
+                                                 <i class="fab fa-whatsapp text-sm"></i> Share to WhatsApp
+                                             </div>
+                                        </div>
+                                        <div class="flex flex-col justify-center">
+                                            <strong class="text-[#1B2B28] text-md mb-1">The "Last Mile"</strong>
+                                            <p class="text-sm">It culminates in a single, hard question and a mandatory wayfinding action. The result is packaged into a beautiful WhatsApp summary directly accessible via deep link.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="text-md font-bold text-[#1B2B28] mb-2">Why It's a "Really Useful Thing"</h4>
+                                    <ul class="space-y-2 text-sm">
+                                        <li class="flex gap-2 items-start">
+                                            <span class="text-[#D2B48C] text-lg leading-none">&bull;</span>
+                                            <span><strong class="text-[#1B2B28]">Action over Analysis:</strong> It interrupts the "paperwork grind" and forces charity workers to reconnect activities to actual outcomes in real-time.</span>
+                                        </li>
+                                        <li class="flex gap-2 items-start">
+                                            <span class="text-[#D2B48C] text-lg leading-none">&bull;</span>
+                                            <span><strong class="text-[#1B2B28]">Micro-Tool Mindset:</strong> It takes under 60 seconds to run. It does one exact thing flawlessly, making it hyper-accessible to busy operators.</span>
+                                        </li>
+                                        <li class="flex gap-2 items-start">
+                                            <span class="text-[#D2B48C] text-lg leading-none">&bull;</span>
+                                            <span><strong class="text-[#1B2B28]">Safe and Private:</strong> Stateless by design. No form data is permanently stored outside of the current browser session.</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
 
@@ -451,6 +532,17 @@
                                                 </p>
                                                 <p class="text-sm text-[#5E5A4B]">Automatically generate compelling
                                                     social media narratives and visuals.</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex gap-4 items-start">
+                                            <i data-lucide="compass" class="text-[#8B7355] w-5 h-5 mt-1"></i>
+                                            <div>
+                                                <p class="font-bold text-[#1B2B28] text-sm">
+                                                    <a href="https://uantchern.github.io/wayfinding-for-good/walk-the-toc.html"
+                                                        target="_blank"
+                                                        class="hover:underline decoration-[#D2B48C] transition-all">Walk the TOC</a>
+                                                </p>
+                                                <p class="text-sm text-[#5E5A4B]">Break out of the paperwork grind and ensure your activities actually align with your Theory of Change.</p>
                                             </div>
                                         </div>
 
