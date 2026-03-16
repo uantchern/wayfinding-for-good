@@ -1086,7 +1086,8 @@
             }
 
             let encodedTranscript = encodeURIComponent(introMsg);
-            window.open('https://wa.me/?text=' + encodedTranscript, '_blank');
+            // Use location.assign to bypass pop-up blockers in mobile in-app browsers (e.g. LinkedIn)
+            window.location.assign('https://api.whatsapp.com/send?text=' + encodedTranscript);
         }
 
         function resetAssessment() {

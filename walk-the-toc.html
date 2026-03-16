@@ -1085,7 +1085,8 @@
         function generateWhatsAppReport() {
             const text = `🚨 *TOC Pulse Check* 🚨\n\n*The Problem:* ${appState.mission}\n*My Morning:* ${appState.activity}\n\n*My Temperature Check:* ${appState.temperature}/10\n_(1 = Paperwork, 10 = Impact Work)_\n\n*The Hard Question I'm Asking Myself:*\n${appState.selectedQuestion}\n\n*Wayfinding Action:*\nTo get back on the path, the one thing we need to stop doing right now is: ${appState.stopAction}.\n\n_Powered by CharityOps RUT_`;
 
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            // Use location.assign to bypass pop-up blockers in mobile in-app browsers (e.g. LinkedIn)
+            window.location.assign(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
         }
     </script>
 </body>
