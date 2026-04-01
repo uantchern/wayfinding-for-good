@@ -531,15 +531,15 @@
             </div>
             <div style="margin-bottom: 24px;">
                 <p class="tagline"><i class="fas fa-bolt"></i> A Really Useful Thing</p>
-                <h1>Walk the TOC</h1>
+                <h1>Impact Tracker</h1>
                 <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0 0 12px 0;">
-                    Align your daily activities with the <b>NCSS Sector Evaluation Framework (SEF)</b> and the <b>4A Change Model</b>. Let's filter out the busy work.
+                    A simple tool to measure the real impact of your daily work and gather data for your reporting.
                 </p>
             </div>
 
             <div class="input-group">
                 <div>
-                    <label for="missionInput">1. What problem are you dealing with?</label>
+                    <label for="missionInput">1. What challenge are you tackling today?</label>
                     <select class="preset-select" onchange="if(this.value){ document.getElementById('missionInput').value = this.value; validateSetup(); this.value=''; }">
                         <option value="">-- Choose a common problem or type your own below --</option>
                         <option value="Funders keep asking what exactly we do, but very hard to show real results.">Hard to show real results to funders</option>
@@ -551,7 +551,7 @@
                     <textarea id="missionInput" rows="2" placeholder="e.g., We need to reduce youth isolation in our community because..." oninput="validateSetup()"></textarea>
                 </div>
                 <div>
-                    <label for="activityInput">2. This Morning's Activity</label>
+                    <label for="activityInput">2. What activity did you do this morning to address it?</label>
                     <select class="preset-select" onchange="if(this.value){ document.getElementById('activityInput').value = this.value; validateSetup(); this.value=''; }">
                         <option value="">-- Choose a common activity or type your own below --</option>
                         <option value="Filled up multiple compliance spreadsheets and rushed regulatory reports.">Rushing out reports and spreadsheets</option>
@@ -565,7 +565,7 @@
             </div>
 
             <button id="startBtn" onclick="startRUT()" class="primary-btn" disabled>
-                <i class="fas fa-compass"></i> Let's Walk
+                <i class="fas fa-hand-sparkles"></i> Let's Track IT
             </button>
             <p style="font-size: 12px; color: #8B7355; text-align: center; margin-top: 16px;">
                 <i class="fas fa-lock"></i> 100% private. Runs in your browser.
@@ -580,7 +580,7 @@
                     <i class="fas fa-arrow-left text-xl"></i>
                 </button>
 
-                <h2>TOC Validator</h2>
+                <h2>Impact Tracker</h2>
                 <button onclick="generateWhatsAppReport()" id="whatsappHeaderBtn"
                     class="text-[#25D366] hover:text-[#128C7E] transition-colors ml-auto mr-2 md:mr-4 hidden"
                     title="Share Pulse Check"
@@ -596,61 +596,49 @@
 
             <div class="progress-bar-container" id="progressBar">
                 <div class="step active" id="step-1">
-                    <div class="step-icon"><i class="fas fa-shoe-prints"></i></div>
-                    <span>Walk</span>
+                    <div class="step-icon"><i class="fas fa-bullhorn"></i></div>
+                    <span>Action</span>
                 </div>
                 <div class="step-connector" id="connector-1"></div>
                 <div class="step" id="step-2">
-                    <div class="step-icon"><i class="fas fa-thermometer-half"></i></div>
-                    <span>Check</span>
+                    <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                    <span>Measure</span>
                 </div>
                 <div class="step-connector" id="connector-2"></div>
                 <div class="step" id="step-3">
-                    <div class="step-icon"><i class="fas fa-question"></i></div>
-                    <span>Question</span>
-                </div>
-                <div class="step-connector" id="connector-3"></div>
-                <div class="step" id="step-4">
-                    <div class="step-icon"><i class="fas fa-crosshairs"></i></div>
-                    <span>Action</span>
+                    <div class="step-icon"><i class="fas fa-file-export"></i></div>
+                    <span>Report</span>
                 </div>
             </div>
 
             <div class="chat-window" id="chatWindow">
                 <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%;">
                     <div style="max-width: 480px; margin: 0 auto;">
-                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">This tool validates your daily workflow against the NCSS Sector Evaluation Framework (SEF).</p>
+                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Track your daily activities and generate clean impact reporting data in 3 simple steps.</p>
                         
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">1</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Walk</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Call to Action</strong>
                             </div>
                         </div>
 
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">2</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Model</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Measure</strong>
                             </div>
                         </div>
 
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">3</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Link</strong>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 16px;">
-                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">4</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Action</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Report</strong>
                             </div>
                         </div>
 
                         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
-                            App Version: V2.1 | Last Updated: 02 April 2026, 03:32 AM (HKT)
+                            App Version: V3.0 | Last Updated: 02 April 2026, 03:52 AM (HKT)
                         </div>
                     </div>
                 </div>
@@ -664,10 +652,8 @@
         let appState = {
             mission: '',
             activity: '',
-            fourA: '',
-            causalLink: '',
-            selectedQuestion: '',
-            action: ''
+            impactCategory: '',
+            causalExplanation: ''
         };
 
         function validateSetup() {
@@ -717,30 +703,27 @@
 
         function updateProgress(stepNum) {
             const icons = [
-                '<i class="fas fa-shoe-prints"></i>',
-                '<i class="fas fa-cubes"></i>',
-                '<i class="fas fa-link"></i>',
-                '<i class="fas fa-crosshairs"></i>'
+                '<i class="fas fa-bullhorn"></i>',
+                '<i class="fas fa-chart-line"></i>',
+                '<i class="fas fa-file-export"></i>'
             ];
-
-            for (let i = 1; i <= 4; i++) {
-                const el = document.getElementById('step-' + i);
-                const connector = document.getElementById('connector-' + i);
-                
-                if (!el) continue;
-
-                if (i < stepNum) {
-                    el.className = 'step completed';
-                    el.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
-                    if (connector) connector.classList.add('completed');
-                } else if (i === stepNum) {
-                    el.className = 'step active';
-                    el.querySelector('.step-icon').innerHTML = icons[i-1];
-                    if (connector) connector.classList.remove('completed');
-                } else {
-                    el.className = 'step';
-                    el.querySelector('.step-icon').innerHTML = icons[i-1];
-                    if (connector) connector.classList.remove('completed');
+            
+            for (let i = 1; i <= 3; i++) {
+                const step = document.getElementById(`step-${i}`);
+                if (step) {
+                    if (i <= stepNum) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                }
+                const connector = document.getElementById(`connector-${i}`);
+                if (connector) {
+                    if (i < stepNum) {
+                        connector.classList.add('completed');
+                    } else {
+                        connector.classList.remove('completed');
+                    }
                 }
             }
         }
@@ -760,23 +743,23 @@
             // Add user's context
             addMessage(`<b>Scenario:</b> ${appState.mission} \n<b>Activity:</b> ${appState.activity}`, 'user');
 
-            // System prompt for 4A Model
+            // System prompt for Impact Category
             const typingId = addTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator(typingId);
                 
-                const prompt = "To map to the **NCSS SEF**, which part of the **4A Change Model** does your activity primarily target?";
+                const prompt = "Great. Now let's measure the real impact of this activity. Which of these best describes the change you aim to see on the ground?";
                 
-                const bubbleId = 'fourA-bubble-' + Date.now();
+                const bubbleId = 'category-bubble-' + Date.now();
                 
                 chatWindow.insertAdjacentHTML('beforeend', `
                 <div id="${bubbleId}" class="bubble ai w-full">
                     ${prompt.replace(/\n/g, '<br>')}
-                    <div class="action-buttons mt-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <button onclick="submitFourA('Attitude', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Attitude</button>
-                        <button onclick="submitFourA('Ability', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Ability</button>
-                        <button onclick="submitFourA('Access', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Access</button>
-                        <button onclick="submitFourA('Action', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Action</button>
+                    <div class="action-buttons mt-4" style="display: flex; flex-direction: column; gap: 8px;">
+                        <button onclick="submitCategory('Changing Mindsets', '${bubbleId}')" class="question-btn text-left p-3">Changing Mindsets (e.g. they feel more heard or capable)</button>
+                        <button onclick="submitCategory('Building Skills', '${bubbleId}')" class="question-btn text-left p-3">Building Skills (e.g. they learn how to do something new)</button>
+                        <button onclick="submitCategory('Improving Access', '${bubbleId}')" class="question-btn text-left p-3">Improving Access (e.g. we removed a barrier to services)</button>
+                        <button onclick="submitCategory('Taking Positive Action', '${bubbleId}')" class="question-btn text-left p-3">Taking Positive Action (e.g. they took a concrete positive step)</button>
                     </div>
                 </div>`);
                 scrollToBottom();
@@ -784,172 +767,51 @@
             }, 800);
         }
 
-        function submitFourA(selectedA, bubbleId) {
-            appState.fourA = selectedA;
+        function submitCategory(selectedCategory, bubbleId) {
+            appState.impactCategory = selectedCategory;
             
             // Lock the bubble
             const bubble = document.getElementById(bubbleId);
-            bubble.innerHTML = `I am targeting **${appState.fourA}**.<span class="timestamp">${getTime()}</span>`;
+            bubble.innerHTML = `I am aiming for **${appState.impactCategory}**.<span class="timestamp">${getTime()}</span>`;
             bubble.className = "bubble user";
 
             const typingId = addTypingIndicator();
             
             setTimeout(() => {
                 removeTypingIndicator(typingId);
-                promptCausalLink();
+                promptCausalExplanation();
             }, 1000);
         }
 
-        function promptCausalLink() {
+        function promptCausalExplanation() {
             let vibe = "";
-            if (appState.fourA === "Attitude") vibe = "Shifting mindsets is powerful. Let's establish the causal connection.";
-            if (appState.fourA === "Ability") vibe = "Building skills is hard work. Let's ensure we are truly equipping them.";
-            if (appState.fourA === "Access") vibe = "Removing barriers creates real friction. Let's map your operational linkage.";
-            if (appState.fourA === "Action") vibe = "Generating sustained momentum is tough. Let's define the exact trigger.";
+            if (appState.impactCategory === "Changing Mindsets") vibe = "A mindset shift is powerful, but hard to capture.";
+            else if (appState.impactCategory === "Building Skills") vibe = "Building skills takes effort, but lasts a lifetime.";
+            else if (appState.impactCategory === "Improving Access") vibe = "Removing friction makes a huge difference in the ecosystem.";
+            else vibe = "Sustaining momentum is the hardest part, but it's what matters most.";
 
-            const interactionId = 'causal-link-' + Date.now();
-            const statement = `If I do [<i>${appState.activity}</i>], then our beneficiaries experience [<i>${appState.fourA}</i>] because...`;
+            const interactionId = 'causal-explanation-' + Date.now();
+            const statement = `Briefly explain: Why does doing [<i>${appState.activity}</i>] lead directly to [<i>${appState.impactCategory}</i>]?`;
 
             document.getElementById('chatWindow').insertAdjacentHTML('beforeend', `
             <div id="${interactionId}" class="bubble ai" style="width: 100%;">
-                ${vibe}<br><br><b>Complete the Causal Link:</b><br>${statement}
+                ${vibe}<br><br><b>Connect the dots for your report:</b><br>${statement}
                 <div class="text-input-container" style="flex-direction: column; gap: 12px; max-width: 100%;">
-                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Because it gives them direct hands-on practice..."></textarea>
-                    <button onclick="submitCausalLink('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Confirm Link</button>
+                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Because giving them direct hands-on practice builds their independence..."></textarea>
+                    <button onclick="submitExplanation('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Lock Impact Data</button>
                 </div>
             </div>`);
             scrollToBottom();
-            updateProgress(3);
+            updateProgress(2);
         }
 
-        function submitCausalLink(containerId) {
+        function submitExplanation(containerId) {
             const val = document.getElementById('causalInput').value.trim();
             if(!val) return;
             
-            appState.causalLink = val;
+            appState.causalExplanation = val;
             
-            document.getElementById(containerId).innerHTML = `<b>My Causal Link:</b><br>If I do [<i>${appState.activity}</i>], they experience [<i>${appState.fourA}</i>] because ${appState.causalLink}.<span class="timestamp">${getTime()}</span>`;
-            document.getElementById(containerId).className = "bubble user";
-            
-            const typingId = addTypingIndicator();
-            
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-                generateZoneQuestions();
-            }, 800);
-        }
-
-        function generateZoneQuestions() {
-            let questionPool = [];
-
-            if (appState.fourA === "Attitude") {
-                questionPool = [
-                    "Does this activity align with a specific Program Performance Indicator (PPI) for mindset shifts in the SEF?",
-                    "How does this move the needle for the 4ST goal of 'Empowered Individuals'?",
-                    "Are we genuinely measuring changes in Attitude, or just tracking attendance sheets?",
-                    "If we stopped this activity tomorrow, would their attitude revert back to baseline immediately?",
-                    "Does this approach respect their agency, or are we just telling them what to think?"
-                ];
-            } else if (appState.fourA === "Ability") {
-                questionPool = [
-                    "Is this activity truly equipping them with long-term Ability, or just showing them how to do it once?",
-                    "How exactly does this skill mapping contribute to the 4ST goal of 'Impactful Entities'?",
-                    "Are we building independent Ability, or accidentally creating long-term dependence on our charity?",
-                    "What specific SEF indicator proves that this Ability has been successfully transferred?",
-                    "Are we confident that this is the most critical Ability they lack right now?"
-                ];
-            } else if (appState.fourA === "Access") {
-                questionPool = [
-                    "Is this activity dismantling systemic barriers, or just helping individuals navigate a broken system?",
-                    "Can we track this 'Access' directly towards the 4ST 'Collaborative Ecosystem' objective?",
-                    "Are the people we are granting access to the ones who need it the absolute most, or just the easiest to reach?",
-                    "Does the SEF framework capture the specific friction you are removing today?",
-                    "Are we the right charity to provide this Access, or should we be referring them elsewhere?"
-                ];
-            } else {
-                questionPool = [
-                    "Action requires sustained momentum. How do we track their Activity via SEF after our intervention ends?",
-                    "Does this behavioral action directly contribute to a 'Future-Directed Sector'?",
-                    "What specific Program Performance Indicator (PPI) proves this action was taken independently?",
-                    "Is the action we are driving truly meaningful to their lives, or just convenient for our quarterly reports?",
-                    "Are we accidentally creating barriers that prevent them from taking Action on their own?"
-                ];
-            }
-
-            // Randomly select 3 questions
-            const shuffled = [...questionPool].sort(() => 0.5 - Math.random());
-            const questions = shuffled.slice(0, 3);
-
-            const chatWindow = document.getElementById('chatWindow');
-            const interactionId = 'question-interaction-' + Date.now();
-            
-            chatWindow.insertAdjacentHTML('beforeend', `
-            <div id="${interactionId}" class="bubble ai" style="max-width: 90%;">
-                Based on your Causal Link, here are three hard NCSS alignment questions. Pick one to address:
-                <div class="action-buttons">
-                    <button class="question-btn" onclick="selectQuestion(0, '${interactionId}')">
-                        <span class="num">1.</span>
-                        <span>${questions[0]}</span>
-                    </button>
-                    <button class="question-btn" onclick="selectQuestion(1, '${interactionId}')">
-                        <span class="num">2.</span>
-                        <span>${questions[1]}</span>
-                    </button>
-                    <button class="question-btn" onclick="selectQuestion(2, '${interactionId}')">
-                        <span class="num">3.</span>
-                        <span>${questions[2]}</span>
-                    </button>
-                </div>
-            </div>`);
-            
-            window.currentQuestions = questions;
-            scrollToBottom();
-        }
-
-        function selectQuestion(idx, containerId) {
-            appState.selectedQuestion = window.currentQuestions[idx];
-            
-            document.getElementById(containerId).innerHTML = `<b>My Hard Question:</b><br>${appState.selectedQuestion}<span class="timestamp">${getTime()}</span>`;
-            document.getElementById(containerId).className = "bubble user";
-
-            const typingId = addTypingIndicator();
-            
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-                promptStopAction();
-            }, 800);
-        }
-
-        function promptStopAction() {
-            const chatWindow = document.getElementById('chatWindow');
-            const interactionId = 'action-step-' + Date.now();
-            
-            chatWindow.insertAdjacentHTML('beforeend', `
-            <div id="${interactionId}" class="bubble ai" style="width:100%;">
-                What is the <b>One Wayfinding Action</b> you must take to strengthen this TOC alignment?
-                
-                <div class="text-input-container" style="flex-direction: column; gap: 12px;">
-                    <input type="text" id="actionInput" style="width:100%;" placeholder="e.g. Schedule a sync to revise our PPI tracker" onkeypress="if(event.key === 'Enter') submitAction('${interactionId}')">
-                    <button onclick="submitAction('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">
-                        Lock Action
-                    </button>
-                </div>
-            </div>`);
-            scrollToBottom();
-            updateProgress(4);
-            
-            setTimeout(() => {
-                document.getElementById('actionInput').focus();
-            }, 100);
-        }
-
-        function submitAction(containerId) {
-            const val = document.getElementById('actionInput').value.trim();
-            if(!val) return;
-            
-            appState.action = val;
-            
-            document.getElementById(containerId).innerHTML = `<b>My Action:</b><br>${appState.action}<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).innerHTML = `<b>My Explanation:</b><br>${appState.causalExplanation}.<span class="timestamp">${getTime()}</span>`;
             document.getElementById(containerId).className = "bubble user";
             
             const typingId = addTypingIndicator();
@@ -963,15 +825,7 @@
         function showFinalSummary() {
             document.getElementById('whatsappHeaderBtn').classList.remove('hidden');
 
-            // Find matching 4ST Goal roughly based on standard NCSS alignment structure for visual output
-            let stGoal = "";
-            if(appState.fourA === "Attitude") stGoal = "Empowered Individuals";
-            else if(appState.fourA === "Ability") stGoal = "Impactful Entities";
-            else if(appState.fourA === "Access") stGoal = "Collaborative Ecosystem";
-            else stGoal = "Future-Directed Sector";
-
-            // Trim leading spaces to prevent br tags
-            let summaryString = `> Refining my TOC: Today I focused on [${appState.activity}] to improve [${appState.fourA}]. This contributes to [${stGoal}]. Logic: [${appState.causalLink}]. One Wayfinding Action: [${appState.action}].`;
+            let summaryString = `> Impact Report: Today I focused on [${appState.activity}] to drive [${appState.impactCategory}]. Why this works: [${appState.causalExplanation}].`;
 
             let summaryHtml = `
 <div class='action-text-content' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #D2B48C;'>
@@ -979,18 +833,17 @@
 <div style="background: #F9F8F6; padding: 12px; border-left: 3px solid #8B7355; font-style: italic; color: #5E5A4B; font-size: 13px; margin-bottom: 8px;">
 ${summaryString}
 </div>
-<div style="font-size: 12px; color: #A09D94; font-family: monospace;">* Addresses SEF Question: ${appState.selectedQuestion}</div>
 </div>`;
             
-            // Add Message with skipBr = false? Wait, if we format it nicely, we can skip BR if we trim. Let's just pass it.
             addMessage(summaryHtml.trim(), 'ai');
+            updateProgress(3);
             
             const btnHtml = `
             <button onclick="generateWhatsAppReport()" class="primary-btn" style="background-color: #25D366; margin-top: 16px;">
-                <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Share Reporting Snippet
+                <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Share to WhatsApp
             </button>
             <button onclick="location.reload()" style="background: transparent; color: #8B7355; border: none; font-weight: 600; text-decoration: underline; cursor: pointer; margin-top: 16px; width: 100%; text-align: center;">
-                Start another check-in
+                Start fresh tracker
             </button>
             `;
             
@@ -1000,15 +853,7 @@ ${summaryString}
         }
 
         function generateWhatsAppReport() {
-            let stGoal = "";
-            if(appState.fourA === "Attitude") stGoal = "Empowered Individuals";
-            else if(appState.fourA === "Ability") stGoal = "Impactful Entities";
-            else if(appState.fourA === "Access") stGoal = "Collaborative Ecosystem";
-            else stGoal = "Future-Directed Sector";
-
-            const text = `> Refining my TOC: Today I focused on [${appState.activity}] to improve [${appState.fourA}]. This contributes to [${stGoal}]. Logic: [${appState.causalLink}]. One Wayfinding Action: [${appState.action}].\n\n_Powered by CharityOps TOC Validator_`;
-
-            // Use location.assign to bypass pop-up blockers in mobile in-app browsers
+            const text = `> Impact Report: Today I focused on [${appState.activity}] to drive [${appState.impactCategory}]. Why this works: [${appState.causalExplanation}].\n\n_Powered by CharityOps Impact Tracker_`;
             window.location.assign(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
         }
     </script>
