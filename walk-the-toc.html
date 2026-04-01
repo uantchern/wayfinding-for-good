@@ -533,7 +533,7 @@
                 <p class="tagline"><i class="fas fa-bolt"></i> A Really Useful Thing</p>
                 <h1>Walk the TOC</h1>
                 <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0 0 12px 0;">
-                    A "temperature check" to ensure your daily activities align with your Theory of Change (TOC). Let's filter out the busy work.
+                    Align your daily activities with the <b>NCSS Sector Evaluation Framework (SEF)</b> and the <b>4A Change Model</b>. Let's filter out the busy work.
                 </p>
             </div>
 
@@ -580,7 +580,7 @@
                     <i class="fas fa-arrow-left text-xl"></i>
                 </button>
 
-                <h2>TOC Temperature Check</h2>
+                <h2>TOC Validator</h2>
                 <button onclick="generateWhatsAppReport()" id="whatsappHeaderBtn"
                     class="text-[#25D366] hover:text-[#128C7E] transition-colors ml-auto mr-2 md:mr-4 hidden"
                     title="Share Pulse Check"
@@ -624,9 +624,9 @@
                     </div>
                     <h3
                         style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">
-                        Ready for a check-in</h3>
+                        Ready for Validation</h3>
                     <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">
-                        Fill in the problem you're dealing with and this morning's activity to start your temperature check.</p>
+                        Fill in the problem you're dealing with and this morning's activity to start aligning your TOC.</p>
                     <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: center;">
                         App Version: V2.0 | Last Updated: 02 April 2026, 02:44 AM (HKT)
                     </div>
@@ -740,13 +740,13 @@
     </div>
 
     <script>
-        // State variables
         let appState = {
             mission: '',
             activity: '',
-            temperature: 5,
+            fourA: '',
+            causalLink: '',
             selectedQuestion: '',
-            stopAction: ''
+            action: ''
         };
 
         function validateSetup() {
@@ -797,8 +797,8 @@
         function updateProgress(stepNum) {
             const icons = [
                 '<i class="fas fa-shoe-prints"></i>',
-                '<i class="fas fa-thermometer-half"></i>',
-                '<i class="fas fa-question"></i>',
+                '<i class="fas fa-cubes"></i>',
+                '<i class="fas fa-link"></i>',
                 '<i class="fas fa-crosshairs"></i>'
             ];
 
@@ -837,32 +837,25 @@
             chatWindow.innerHTML = ''; // clear slate
 
             // Add user's context
-            addMessage(`<b>Problem:</b> ${appState.mission} \n<b>Activity:</b> ${appState.activity}`, 'user');
+            addMessage(`<b>Scenario:</b> ${appState.mission} \n<b>Activity:</b> ${appState.activity}`, 'user');
 
-            // System prompt for slider
+            // System prompt for 4A Model
             const typingId = addTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator(typingId);
                 
-                const prompt = "Think about your main activity this morning. How much of what you did was actually impactful, versus just paperwork?\n\n<b>1</b> = 100% Paperwork\n<b>10</b> = 100% Impact Work (Solving the problem)";
+                const prompt = "To map to the **NCSS SEF**, which part of the **4A Change Model** does your activity primarily target?";
                 
-                const chatWindow = document.getElementById('chatWindow');
-                const bubbleId = 'slider-bubble-' + Date.now();
+                const bubbleId = 'fourA-bubble-' + Date.now();
                 
                 chatWindow.insertAdjacentHTML('beforeend', `
                 <div id="${bubbleId}" class="bubble ai w-full">
                     ${prompt.replace(/\n/g, '<br>')}
-                    
-                    <div class="slider-container mt-6">
-                        <input type="range" id="tempSlider" min="1" max="10" value="5" oninput="document.getElementById('sliderValDisplay').innerText = this.value">
-                        <div class="slider-labels">
-                            <span>1 (Paperwork)</span>
-                            <span id="sliderValDisplay" style="font-size: 16px; color: #1B2B28; font-family: Georgia, serif; font-weight: 700;">5</span>
-                            <span>10 (Impact)</span>
-                        </div>
-                        <div style="text-align: center; margin-top: 16px;">
-                            <button onclick="submitTemperature('${bubbleId}')" class="action-btn">Confirm Assessment</button>
-                        </div>
+                    <div class="action-buttons mt-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button onclick="submitFourA('Attitude', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Attitude</button>
+                        <button onclick="submitFourA('Ability', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Ability</button>
+                        <button onclick="submitFourA('Access', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Access</button>
+                        <button onclick="submitFourA('Action', '${bubbleId}')" class="question-btn" style="text-align: center; justify-content: center; padding: 12px;">Action</button>
                     </div>
                 </div>`);
                 scrollToBottom();
@@ -870,101 +863,95 @@
             }, 800);
         }
 
-        function submitTemperature(bubbleId) {
-            const slider = document.getElementById('tempSlider');
-            appState.temperature = parseInt(slider.value, 10);
+        function submitFourA(selectedA, bubbleId) {
+            appState.fourA = selectedA;
             
             // Lock the bubble
             const bubble = document.getElementById(bubbleId);
-            bubble.innerHTML = `I rated my activity a <b>${appState.temperature} / 10</b> on the impact scale.<span class="timestamp">${getTime()}</span>`;
+            bubble.innerHTML = `I am targeting **${appState.fourA}**.<span class="timestamp">${getTime()}</span>`;
             bubble.className = "bubble user";
 
             const typingId = addTypingIndicator();
             
             setTimeout(() => {
                 removeTypingIndicator(typingId);
-                generateZoneQuestions();
+                promptCausalLink();
             }, 1000);
         }
 
-        function generateZoneQuestions() {
+        function promptCausalLink() {
             let vibe = "";
+            if (appState.fourA === "Attitude") vibe = "Shifting mindsets is powerful. Let's establish the causal connection.";
+            if (appState.fourA === "Ability") vibe = "Building skills is hard work. Let's ensure we are truly equipping them.";
+            if (appState.fourA === "Access") vibe = "Removing barriers creates real friction. Let's map your operational linkage.";
+            if (appState.fourA === "Action") vibe = "Generating sustained momentum is tough. Let's define the exact trigger.";
+
+            const interactionId = 'causal-link-' + Date.now();
+            const statement = `If I do [<i>${appState.activity}</i>], then our beneficiaries experience [<i>${appState.fourA}</i>] because...`;
+
+            document.getElementById('chatWindow').insertAdjacentHTML('beforeend', `
+            <div id="${interactionId}" class="bubble ai" style="width: 100%;">
+                ${vibe}<br><br><b>Complete the Causal Link:</b><br>${statement}
+                <div class="text-input-container" style="flex-direction: column; gap: 12px; max-width: 100%;">
+                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Because it gives them direct hands-on practice..."></textarea>
+                    <button onclick="submitCausalLink('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Confirm Link</button>
+                </div>
+            </div>`);
+            scrollToBottom();
+            updateProgress(3);
+        }
+
+        function submitCausalLink(containerId) {
+            const val = document.getElementById('causalInput').value.trim();
+            if(!val) return;
+            
+            appState.causalLink = val;
+            
+            document.getElementById(containerId).innerHTML = `<b>My Causal Link:</b><br>If I do [<i>${appState.activity}</i>], they experience [<i>${appState.fourA}</i>] because ${appState.causalLink}.<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).className = "bubble user";
+            
+            const typingId = addTypingIndicator();
+            
+            setTimeout(() => {
+                removeTypingIndicator(typingId);
+                generateZoneQuestions();
+            }, 800);
+        }
+
+        function generateZoneQuestions() {
             let questionPool = [];
 
-            if (appState.temperature <= 3) {
-                // Zone A: Paperwork
-                vibe = "Ahh, stuck in the paperwork and daily grind today? It happens to the best of us. But let's be real—busy doesn't always mean effective. Let's do a quick temperature check:";
+            if (appState.fourA === "Attitude") {
                 questionPool = [
-                    "If we stopped doing this 'busy work' completely tomorrow, would our beneficiaries actually notice, or just the auditors?",
-                    "Is this activity solving the root cause of our community's problem, or are we just treating the symptoms day after day?",
-                    "If we were forced to cut our time spent on this by 50%, what is the very first thing we would throw out?",
-                    "Are we doing this because it actually helps, or just because 'we have always done it this way'?",
-                    "If a new staff came in today, how long would it take them to realise this task is just saikang?",
-                    "Is this task genuinely driven by our mission, or by our fear of a bad audit?",
-                    "Who is actually reading the output of all this effort? If nobody, why are we still generating it?",
-                    "Are we confusing being 'very busy' with actually 'moving the needle'?",
-                    "If you had to pay for this activity out of your own pocket, would you still authorise it?",
-                    "Does this paperwork exist to serve the community, or just to serve the bureaucracy?",
-                    "If we deleted this task from our SOPs forever, would the charity collapse?",
-                    "Could this entire block of work have been replaced with a simple 5-minute conversation?",
-                    "Are we just rearranging deck chairs on the Titanic by doing this?",
-                    "How much of this is just covering our own backsides (CYA) rather than helping the vulnerable?",
-                    "If our founders saw us spending hours on this, would they say 'well done' or 'what are you doing'?",
-                    "Is this activity a distraction we are using so we don't have to face the harder, real problems?",
-                    "If this was a corporate startup, would the boss have fired us for wasting time on this?",
-                    "Does this task make us feel tired but unfulfilled at the end of the day?",
-                    "We complain about lack of manpower, but how many man-hours are we burning on this exact thing?",
-                    "If an intern asked you 'why are we doing this', what is the honest, no-BS answer?"
+                    "Does this activity align with a specific Program Performance Indicator (PPI) for mindset shifts in the SEF?",
+                    "How does this move the needle for the 4ST goal of 'Empowered Individuals'?",
+                    "Are we genuinely measuring changes in Attitude, or just tracking attendance sheets?",
+                    "If we stopped this activity tomorrow, would their attitude revert back to baseline immediately?",
+                    "Does this approach respect their agency, or are we just telling them what to think?"
                 ];
-            } else if (appState.temperature <= 7) {
-                // Zone B: Limbo
-                vibe = "Okay, quite balanced. Making some impact, but maybe carrying a bit too much baggage. Let's see how we can tip the scales back to the real work:";
+            } else if (appState.fourA === "Ability") {
                 questionPool = [
-                    "If solving the problem is the true destination, is everyone involved in this activity looking at the same map, or are some just following the crowd?",
-                    "What is the *one* bureaucratic process in this activity we can 'kill' right now that would free up 20% more time for actual human connection?",
-                    "Are we confusing 'effort spent' with 'impact created'? Can we achieve this exact same outcome with half the sweat?",
-                    "This feels like a 5/10. What minor tweak could turn this into an 8/10 for impact?",
-                    "Which part of this activity is just legacy baggage we are dragging along needlessly?",
-                    "Are the beneficiaries actually asking for this, or did we just assume they want it?",
-                    "If we only had half the budget for this activity, what fluff would we immediately cut out?",
-                    "Is this task creating a band-aid solution that we will just have to rip off again next year?",
-                    "We are moving forward, but are we driving with the handbrake on? What's the handbrake?",
-                    "Is the amount of reporting we do for this activity completely disproportionate to the actual work done?",
-                    "Could someone else in the sector do this much better, and should we just partner with them instead?",
-                    "Are we trying to please too many stakeholders at once with this? Who should be our primary focus?",
-                    "If we stripped this down to its bare, raw essentials, what would it look like?",
-                    "Is this activity actually scalable, or will it break if we double the number of beneficiaries?",
-                    "We say this is for the community, but how much friction are we accidentally creating for them?",
-                    "Are we just hitting our KPIs, or are we actually changing lives here?",
-                    "What happens if we stop doing the bottom 20% of this task? Will the sky fall down?",
-                    "Are our staff energized after doing this, or just mildly drained?",
-                    "Is the technology or software we are using for this helping us, or getting in our way?",
-                    "Does this feel like 'good enough', and is 'good enough' acceptable for our sector?"
+                    "Is this activity truly equipping them with long-term Ability, or just showing them how to do it once?",
+                    "How exactly does this skill mapping contribute to the 4ST goal of 'Impactful Entities'?",
+                    "Are we building independent Ability, or accidentally creating long-term dependence on our charity?",
+                    "What specific SEF indicator proves that this Ability has been successfully transferred?",
+                    "Are we confident that this is the most critical Ability they lack right now?"
+                ];
+            } else if (appState.fourA === "Access") {
+                questionPool = [
+                    "Is this activity dismantling systemic barriers, or just helping individuals navigate a broken system?",
+                    "Can we track this 'Access' directly towards the 4ST 'Collaborative Ecosystem' objective?",
+                    "Are the people we are granting access to the ones who need it the absolute most, or just the easiest to reach?",
+                    "Does the SEF framework capture the specific friction you are removing today?",
+                    "Are we the right charity to provide this Access, or should we be referring them elsewhere?"
                 ];
             } else {
-                // Zone C: North Star
-                vibe = "Solid work! This is what 'Walking the TOC' looks like in real life. But even on a good path, we must ensure we don't trip. Let's stress-test this:";
                 questionPool = [
-                    "If this is our highest impact activity, why aren't we doing it 100% of the time? What is the invisible bottleneck holding us back from scaling this?",
-                    "Are the positive outcomes from this activity sustainable, or are they entirely dependent on one 'super-staff' burning out behind the scenes?",
-                    "How do we ensure that by next year, this 'impact work' doesn't slowly degrade into 'busy work' due to new red tape?",
-                    "This is great work. Who else in the ecosystem needs to learn how we did this?",
-                    "We are hitting the mark here. How do we fiercely protect this time from being eaten up by admin?",
-                    "Are we capturing the magic of this activity in a way that outlasts any single employee?",
-                    "If a major funder offered us $100k tomorrow to expand this, would our current structure survive the growth?",
-                    "Are the beneficiaries walking away from this feeling empowered, or just serviced?",
-                    "This is moving the needle. Have we truly identified what makes it work so well, or was it just luck?",
-                    "How do we stop other distracting projects from cannibalising the resources going into this winner?",
-                    "Is this impact coming at the cost of our team's mental health or work-life balance?",
-                    "Could this be the one thing our charity becomes known for nationwide? If so, what's next?",
-                    "We nailed it. But is the problem we are solving evolving faster than our solution?",
-                    "Are we celebrating this win enough with the team, or just immediately moving to the next fire?",
-                    "If we had to handover this high-impact activity to a partner charity, what are the undocumented secrets we'd have to tell them?",
-                    "The impact is real. But is it genuinely ending the cycle, or just providing the best temporary relief?",
-                    "How do we make this 10/10 activity easier to execute so it feels like a 5/10 effort?",
-                    "Are the people we are helping actually the ones who need it the absolute most?",
-                    "We are on the right track. Can we be brave enough to say 'no' to three other things to protect this?",
-                    "Does our Board fully understand *why* this worked so well, beyond just seeing the good numbers?"
+                    "Action requires sustained momentum. How do we track their Activity via SEF after our intervention ends?",
+                    "Does this behavioral action directly contribute to a 'Future-Directed Sector'?",
+                    "What specific Program Performance Indicator (PPI) proves this action was taken independently?",
+                    "Is the action we are driving truly meaningful to their lives, or just convenient for our quarterly reports?",
+                    "Are we accidentally creating barriers that prevent them from taking Action on their own?"
                 ];
             }
 
@@ -977,7 +964,7 @@
             
             chatWindow.insertAdjacentHTML('beforeend', `
             <div id="${interactionId}" class="bubble ai" style="max-width: 90%;">
-                ${vibe}
+                Based on your Causal Link, here are three hard NCSS alignment questions. Pick one to address:
                 <div class="action-buttons">
                     <button class="question-btn" onclick="selectQuestion(0, '${interactionId}')">
                         <span class="num">1.</span>
@@ -994,10 +981,8 @@
                 </div>
             </div>`);
             
-            // Store questions temporarily to retrieve on selection
             window.currentQuestions = questions;
             scrollToBottom();
-            updateProgress(3);
         }
 
         function selectQuestion(idx, containerId) {
@@ -1016,16 +1001,16 @@
 
         function promptStopAction() {
             const chatWindow = document.getElementById('chatWindow');
-            const interactionId = 'stop-action-' + Date.now();
+            const interactionId = 'action-step-' + Date.now();
             
             chatWindow.insertAdjacentHTML('beforeend', `
-            <div id="${interactionId}" class="bubble ai">
-                To get back on the path to solving <i>"${appState.mission}"</i>, what is the <b>ONE activity</b> we should stop doing right now?
+            <div id="${interactionId}" class="bubble ai" style="width:100%;">
+                What is the <b>One Wayfinding Action</b> you must take to strengthen this TOC alignment?
                 
-                <div class="text-input-container">
-                    <input type="text" id="stopInput" placeholder="e.g., checking emails before 10 AM, making useless reports..." onkeypress="if(event.key === 'Enter') submitStopAction('${interactionId}')">
-                    <button onclick="submitStopAction('${interactionId}')" class="primary-btn" style="width: auto; padding: 12px 20px;">
-                        <i class="fas fa-arrow-right"></i>
+                <div class="text-input-container" style="flex-direction: column; gap: 12px;">
+                    <input type="text" id="actionInput" style="width:100%;" placeholder="e.g. Schedule a sync to revise our PPI tracker" onkeypress="if(event.key === 'Enter') submitAction('${interactionId}')">
+                    <button onclick="submitAction('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">
+                        Lock Action
                     </button>
                 </div>
             </div>`);
@@ -1033,17 +1018,17 @@
             updateProgress(4);
             
             setTimeout(() => {
-                document.getElementById('stopInput').focus();
+                document.getElementById('actionInput').focus();
             }, 100);
         }
 
-        function submitStopAction(containerId) {
-            const val = document.getElementById('stopInput').value.trim();
+        function submitAction(containerId) {
+            const val = document.getElementById('actionInput').value.trim();
             if(!val) return;
             
-            appState.stopAction = val;
+            appState.action = val;
             
-            document.getElementById(containerId).innerHTML = `<b>We should stop:</b><br>${appState.stopAction}<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).innerHTML = `<b>My Action:</b><br>${appState.action}<span class="timestamp">${getTime()}</span>`;
             document.getElementById(containerId).className = "bubble user";
             
             const typingId = addTypingIndicator();
@@ -1057,23 +1042,31 @@
         function showFinalSummary() {
             document.getElementById('whatsappHeaderBtn').classList.remove('hidden');
 
-            const summaryHtml = `
-            <b>🚨 TOC Pulse Check 🚨</b><br><br>
-            <b>*The Problem:*</b> ${appState.mission}<br>
-            <b>*My Morning:*</b> ${appState.activity}<br><br>
-            <b>*My Temperature Check:*</b> ${appState.temperature}/10<br>
-            <i style="opacity: 0.8; font-size: 13px;">(1 = Paperwork, 10 = Impact Work)</i><br><br>
-            <b>*The Hard Question I'm Asking Myself:*</b><br>
-            ${appState.selectedQuestion}<br><br>
-            <b>*Wayfinding Action:*</b><br>
-            To get back on the path, the one thing we need to stop doing right now is: <b>${appState.stopAction}</b>.
-            `;
+            // Find matching 4ST Goal roughly based on standard NCSS alignment structure for visual output
+            let stGoal = "";
+            if(appState.fourA === "Attitude") stGoal = "Empowered Individuals";
+            else if(appState.fourA === "Ability") stGoal = "Impactful Entities";
+            else if(appState.fourA === "Access") stGoal = "Collaborative Ecosystem";
+            else stGoal = "Future-Directed Sector";
+
+            // Trim leading spaces to prevent br tags
+            let summaryString = `> Refining my TOC: Today I focused on [${appState.activity}] to improve [${appState.fourA}]. This contributes to [${stGoal}]. Logic: [${appState.causalLink}]. One Wayfinding Action: [${appState.action}].`;
+
+            let summaryHtml = `
+<div class='action-text-content' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #D2B48C;'>
+<div style="color: #4A463B; font-weight: bold; font-size: 14px; margin-bottom: 8px;">Reporting-Ready Impact Snippet</div>
+<div style="background: #F9F8F6; padding: 12px; border-left: 3px solid #8B7355; font-style: italic; color: #5E5A4B; font-size: 13px; margin-bottom: 8px;">
+${summaryString}
+</div>
+<div style="font-size: 12px; color: #A09D94; font-family: monospace;">* Addresses SEF Question: ${appState.selectedQuestion}</div>
+</div>`;
             
-            addMessage(summaryHtml, 'ai');
+            // Add Message with skipBr = false? Wait, if we format it nicely, we can skip BR if we trim. Let's just pass it.
+            addMessage(summaryHtml.trim(), 'ai');
             
             const btnHtml = `
             <button onclick="generateWhatsAppReport()" class="primary-btn" style="background-color: #25D366; margin-top: 16px;">
-                <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Share to WhatsApp
+                <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Share Reporting Snippet
             </button>
             <button onclick="location.reload()" style="background: transparent; color: #8B7355; border: none; font-weight: 600; text-decoration: underline; cursor: pointer; margin-top: 16px; width: 100%; text-align: center;">
                 Start another check-in
@@ -1081,14 +1074,20 @@
             `;
             
             const chatWindow = document.getElementById('chatWindow');
-            chatWindow.insertAdjacentHTML('beforeend', `<div style="display: flex; flex-direction: column; max-width: 85%; align-self: flex-start;">${btnHtml}</div>`);
+            chatWindow.insertAdjacentHTML('beforeend', `<div style="display: flex; flex-direction: column; width: 100%; max-width: 400px; align-self: flex-start;">${btnHtml}</div>`);
             scrollToBottom();
         }
 
         function generateWhatsAppReport() {
-            const text = `🚨 *TOC Pulse Check* 🚨\n\n*The Problem:* ${appState.mission}\n*My Morning:* ${appState.activity}\n\n*My Temperature Check:* ${appState.temperature}/10\n_(1 = Paperwork, 10 = Impact Work)_\n\n*The Hard Question I'm Asking Myself:*\n${appState.selectedQuestion}\n\n*Wayfinding Action:*\nTo get back on the path, the one thing we need to stop doing right now is: ${appState.stopAction}.\n\n_Powered by CharityOps RUT_`;
+            let stGoal = "";
+            if(appState.fourA === "Attitude") stGoal = "Empowered Individuals";
+            else if(appState.fourA === "Ability") stGoal = "Impactful Entities";
+            else if(appState.fourA === "Access") stGoal = "Collaborative Ecosystem";
+            else stGoal = "Future-Directed Sector";
 
-            // Use location.assign to bypass pop-up blockers in mobile in-app browsers (e.g. LinkedIn)
+            const text = `> Refining my TOC: Today I focused on [${appState.activity}] to improve [${appState.fourA}]. This contributes to [${stGoal}]. Logic: [${appState.causalLink}]. One Wayfinding Action: [${appState.action}].\n\n_Powered by CharityOps TOC Validator_`;
+
+            // Use location.assign to bypass pop-up blockers in mobile in-app browsers
             window.location.assign(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
         }
     </script>
