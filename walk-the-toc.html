@@ -633,17 +633,12 @@
                 </div>
                 <div class="step-connector" id="connector-1"></div>
                 <div class="step" id="step-2">
-                    <div class="step-icon"><i class="fas fa-cube"></i></div>
-                    <span>4A</span>
+                    <div class="step-icon"><i class="fas fa-hammer"></i></div>
+                    <span>Operations</span>
                 </div>
                 <div class="step-connector" id="connector-2"></div>
                 <div class="step" id="step-3">
-                    <div class="step-icon"><i class="fas fa-compass"></i></div>
-                    <span>4ST</span>
-                </div>
-                <div class="step-connector" id="connector-3"></div>
-                <div class="step" id="step-4">
-                    <div class="step-icon"><i class="fas fa-file-signature"></i></div>
+                    <div class="step-icon"><i class="fas fa-file-export"></i></div>
                     <span>Report</span>
                 </div>
             </div>
@@ -651,38 +646,31 @@
             <div class="chat-window" id="chatWindow">
                 <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%;">
                     <div style="max-width: 480px; margin: 0 auto;">
-                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Align your workflow with NCSS requirements with zero manual data entry until the very end.</p>
+                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Track your daily activities and generate clean impact reporting data in 3 simple steps.</p>
                         
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">1</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">TOC Validation</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">What to Change (TOC)</strong>
                             </div>
                         </div>
 
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">2</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">4A Strategy</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Day-to-Day Operations</strong>
                             </div>
                         </div>
 
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">3</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">4ST Framework</strong>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 16px;">
-                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">4</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Impact Reporting</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Measure & Share</strong>
                             </div>
                         </div>
 
                         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
-                            App Version: V4.0 | NCSS Compliance Mode Active
+                            App Version: V5.0 | Core Operations Tracker
                         </div>
                     </div>
                 </div>
@@ -695,8 +683,7 @@
     <script>
         let appState = {
             tocStage: '',
-            fourA: '',
-            fourST: '',
+            activity: '',
             causalExplanation: ''
         };
 
@@ -750,7 +737,7 @@
         }
 
         function updateProgress(stepNum) {
-            for (let i = 1; i <= 4; i++) {
+            for (let i = 1; i <= 3; i++) {
                 const step = document.getElementById(`step-${i}`);
                 if (step) {
                     if (i <= stepNum) {
@@ -785,54 +772,18 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
                 
-                let prompt = "";
-                let btnAttitude = "Attitude";
-                let btnAbility = "Ability";
-                let btnAccess = "Access";
-                let btnAction = "Action";
-
-                if (appState.tocStage === "Input") {
-                    prompt = "Resources and investments are crucial at the Input stage. Which **4A Capacity** are these resources primarily funding or supporting?";
-                    btnAttitude = "Supporting Attitude";
-                    btnAbility = "Funding Ability";
-                    btnAccess = "Building Access";
-                    btnAction = "Enabling Action";
-                } else if (appState.tocStage === "Activity") {
-                    prompt = "Activities drive change. Which of the **4A Models** does this specific daily action execute?";
-                    btnAttitude = "Shaping Attitude";
-                    btnAbility = "Teaching Ability";
-                    btnAccess = "Improving Access";
-                    btnAction = "Directing Action";
-                } else if (appState.tocStage === "Output") {
-                    prompt = "Outputs are your direct deliverables. What **4A result** did these deliverables produce today?";
-                    btnAttitude = "Attitude Shift";
-                    btnAbility = "Ability Equipped";
-                    btnAccess = "Access Enabled";
-                    btnAction = "Action Triggered";
-                } else if (appState.tocStage === "Outcome") {
-                    prompt = "Outcomes reflect real change. Which of the **4A Indicators** best describes the behavioral shift in your beneficiaries?";
-                    btnAttitude = "Sustained Attitude";
-                    btnAbility = "Demonstrated Ability";
-                    btnAccess = "Utilized Access";
-                    btnAction = "Consistent Action";
-                } else {
-                    prompt = "Impact is systemic. Which of the **4A Pillars** represents the long-term societal value you are building?";
-                    btnAttitude = "Generational Attitude";
-                    btnAbility = "System-wide Ability";
-                    btnAccess = "Universal Access";
-                    btnAction = "Self-sustaining Action";
-                }
-                
-                const bubbleId = 'fourA-bubble-' + Date.now();
+                const prompt = `Great. To drive change at the ${appState.tocStage} level, what strategy or day-to-day operation did you execute today?`;
+                const bubbleId = 'activity-bubble-' + Date.now();
                 
                 chatWindow.insertAdjacentHTML('beforeend', `
                 <div id="${bubbleId}" class="bubble ai w-full">
-                    ${prompt.replace(/\n/g, '<br>')}
-                    <div class="action-buttons mt-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <button onclick="submitFourA('${btnAttitude}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAttitude}</button>
-                        <button onclick="submitFourA('${btnAbility}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAbility}</button>
-                        <button onclick="submitFourA('${btnAccess}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAccess}</button>
-                        <button onclick="submitFourA('${btnAction}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAction}</button>
+                    ${prompt}
+                    <div class="action-buttons mt-4" style="display: flex; flex-direction: column; gap: 8px;">
+                        <button onclick="submitActivity('Direct Beneficiary Outreach', '${bubbleId}')" class="question-btn text-left p-3">Direct Beneficiary Outreach</button>
+                        <button onclick="submitActivity('Process & Paperwork Streamlining', '${bubbleId}')" class="question-btn text-left p-3">Process & Paperwork Streamlining</button>
+                        <button onclick="submitActivity('Partner & Donor Engagement', '${bubbleId}')" class="question-btn text-left p-3">Partner & Donor Engagement</button>
+                        <button onclick="submitActivity('Training & Capacity Building', '${bubbleId}')" class="question-btn text-left p-3">Training & Capacity Building</button>
+                        <button onclick="submitActivity('Firefighting & Ad-hoc Operations', '${bubbleId}')" class="question-btn text-left p-3">Firefighting & Ad-hoc Operations</button>
                     </div>
                 </div>`);
                 scrollToBottom();
@@ -840,63 +791,11 @@
             }, 800);
         }
 
-        function submitFourA(selectedA, bubbleId) {
-            appState.fourA = selectedA;
+        function submitActivity(selectedActivity, bubbleId) {
+            appState.activity = selectedActivity;
             
             const bubble = document.getElementById(bubbleId);
-            bubble.innerHTML = `This targets **${appState.fourA}**.<span class="timestamp">${getTime()}</span>`;
-            bubble.className = "bubble user";
-
-            const typingId = addTypingIndicator();
-            
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-                promptFourST();
-            }, 1000);
-        }
-
-        function promptFourST() {
-            let prompt = "";
-            let btnEmpowered = "Empowered Individuals";
-            let btnEntities = "Impactful Entities";
-            let btnEcosystem = "Collaborative Ecosystem";
-            let btnSector = "Future-Directed Sector";
-
-            if (appState.tocStage === "Input" || appState.tocStage === "Activity") {
-                prompt = `Got it. This involves **${appState.fourA}**. Since this is an internal 'upstream' effort, which **4ST Strategic Thrust** does it strengthen?`;
-                btnEntities = "Impactful Entities (Internal Org)";
-                btnEmpowered = "Empowered Individuals (Our Staff)";
-                btnEcosystem = "Collaborative Ecosystem (Partnerships)";
-                btnSector = "Future-Directed Sector (Innovation/R&D)";
-            } else {
-                prompt = `Got it. This achieved **${appState.fourA}**. Since this is an external 'downstream' result, which **4ST Strategic Thrust** does this impact?`;
-                btnEmpowered = "Empowered Individuals (Beneficiaries)";
-                btnEcosystem = "Collaborative Ecosystem (Community)";
-                btnEntities = "Impactful Entities (Demonstrating Value)";
-                btnSector = "Future-Directed Sector (Sector Leadership)";
-            }
-
-            const bubbleId = 'fourST-bubble-' + Date.now();
-            
-            document.getElementById('chatWindow').insertAdjacentHTML('beforeend', `
-            <div id="${bubbleId}" class="bubble ai w-full">
-                ${prompt}
-                <div class="action-buttons mt-4" style="display: flex; flex-direction: column; gap: 8px;">
-                    <button onclick="submitFourST('${btnEmpowered}', '${bubbleId}')" class="question-btn text-left p-3">${btnEmpowered}</button>
-                    <button onclick="submitFourST('${btnEntities}', '${bubbleId}')" class="question-btn text-left p-3">${btnEntities}</button>
-                    <button onclick="submitFourST('${btnEcosystem}', '${bubbleId}')" class="question-btn text-left p-3">${btnEcosystem}</button>
-                    <button onclick="submitFourST('${btnSector}', '${bubbleId}')" class="question-btn text-left p-3">${btnSector}</button>
-                </div>
-            </div>`);
-            scrollToBottom();
-            updateProgress(3);
-        }
-
-        function submitFourST(selectedST, bubbleId) {
-            appState.fourST = selectedST;
-            
-            const bubble = document.getElementById(bubbleId);
-            bubble.innerHTML = `It aligns with **${appState.fourST}**.<span class="timestamp">${getTime()}</span>`;
+            bubble.innerHTML = `I executed **${appState.activity}**.<span class="timestamp">${getTime()}</span>`;
             bubble.className = "bubble user";
 
             const typingId = addTypingIndicator();
@@ -912,14 +811,14 @@
 
             document.getElementById('chatWindow').insertAdjacentHTML('beforeend', `
             <div id="${interactionId}" class="bubble ai" style="width: 100%;">
-                Excellent. All compliance checkboxes met. Before generating the final impact report, please enter any brief comments or qualitative notes here.
+                Awesome. Now, how do we measure if this change has been impactful? Share a brief qualitative note or metric below.
                 <div class="text-input-container" style="flex-direction: column; gap: 12px; max-width: 100%; margin-top: 12px;">
-                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Activity carried out successfully, users observed to be highly engaged..."></textarea>
-                    <button onclick="submitExplanation('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Generate Impact Report</button>
+                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Cleared 10-day backlog, beneficiaries gave explicit positive feedback..."></textarea>
+                    <button onclick="submitExplanation('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Measure & Share Impact</button>
                 </div>
             </div>`);
             scrollToBottom();
-            updateProgress(4);
+            updateProgress(3);
         }
 
         function submitExplanation(containerId) {
@@ -928,7 +827,7 @@
             
             appState.causalExplanation = val;
             
-            document.getElementById(containerId).innerHTML = `<b>My Notes:</b><br>${appState.causalExplanation}.<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).innerHTML = `<b>Measurement Notes:</b><br>${appState.causalExplanation}.<span class="timestamp">${getTime()}</span>`;
             document.getElementById(containerId).className = "bubble user";
             
             const typingId = addTypingIndicator();
@@ -942,7 +841,7 @@
         function showFinalSummary() {
             document.getElementById('whatsappHeaderBtn').classList.remove('hidden');
 
-            let summaryString = `> NCSS SEF Compliance Report \n> \n> **TOC Focus:** [${appState.tocStage}]\n> **4A Strategy:** [${appState.fourA}]\n> **4ST Target:** [${appState.fourST}] \n> \n> **Qualitative Remarks:**\n> ${appState.causalExplanation}`;
+            let summaryString = `> Operations Impact Report \n> \n> **TOC Focus:** ${appState.tocStage}\n> **Operation Segment:** ${appState.activity}\n> \n> **Measurement / Impact Notes:**\n> ${appState.causalExplanation}`;
 
             let summaryHtml = `
 <div class='action-text-content' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #D2B48C;'>
@@ -969,7 +868,7 @@ ${summaryString.replace(/\n> /g, '<br>')}
         }
 
         function generateWhatsAppReport() {
-            const text = `> NCSS SEF Compliance Report \n> \n> *TOC Focus:* [${appState.tocStage}]\n> *4A Strategy:* [${appState.fourA}]\n> *4ST Target:* [${appState.fourST}] \n> \n> *Qualitative Remarks:*\n> ${appState.causalExplanation}\n\n_Powered by CharityOps TOC Validator_`;
+            const text = `> *Operations Impact Report* \n> \n> *TOC Focus:* ${appState.tocStage}\n> *Operation:* ${appState.activity}\n> \n> *Impact Measurement:*\n> ${appState.causalExplanation}\n\n_Powered by CharityOps Core_`;
             window.location.assign(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
         }
     </script>
