@@ -785,7 +785,43 @@
             setTimeout(() => {
                 removeTypingIndicator(typingId);
                 
-                const prompt = "Perfect. To comply with the NCSS framework, which of the **4A Change Models** does this primarily target?";
+                let prompt = "";
+                let btnAttitude = "Attitude";
+                let btnAbility = "Ability";
+                let btnAccess = "Access";
+                let btnAction = "Action";
+
+                if (appState.tocStage === "Input") {
+                    prompt = "Resources and investments are crucial at the Input stage. Which **4A Capacity** are these resources primarily funding or supporting?";
+                    btnAttitude = "Supporting Attitude";
+                    btnAbility = "Funding Ability";
+                    btnAccess = "Building Access";
+                    btnAction = "Enabling Action";
+                } else if (appState.tocStage === "Activity") {
+                    prompt = "Activities drive change. Which of the **4A Models** does this specific daily action execute?";
+                    btnAttitude = "Shaping Attitude";
+                    btnAbility = "Teaching Ability";
+                    btnAccess = "Improving Access";
+                    btnAction = "Directing Action";
+                } else if (appState.tocStage === "Output") {
+                    prompt = "Outputs are your direct deliverables. What **4A result** did these deliverables produce today?";
+                    btnAttitude = "Attitude Shift";
+                    btnAbility = "Ability Equipped";
+                    btnAccess = "Access Enabled";
+                    btnAction = "Action Triggered";
+                } else if (appState.tocStage === "Outcome") {
+                    prompt = "Outcomes reflect real change. Which of the **4A Indicators** best describes the behavioral shift in your beneficiaries?";
+                    btnAttitude = "Sustained Attitude";
+                    btnAbility = "Demonstrated Ability";
+                    btnAccess = "Utilized Access";
+                    btnAction = "Consistent Action";
+                } else {
+                    prompt = "Impact is systemic. Which of the **4A Pillars** represents the long-term societal value you are building?";
+                    btnAttitude = "Generational Attitude";
+                    btnAbility = "System-wide Ability";
+                    btnAccess = "Universal Access";
+                    btnAction = "Self-sustaining Action";
+                }
                 
                 const bubbleId = 'fourA-bubble-' + Date.now();
                 
@@ -793,10 +829,10 @@
                 <div id="${bubbleId}" class="bubble ai w-full">
                     ${prompt.replace(/\n/g, '<br>')}
                     <div class="action-buttons mt-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <button onclick="submitFourA('Attitude', '${bubbleId}')" class="question-btn text-center justify-center p-3">Attitude</button>
-                        <button onclick="submitFourA('Ability', '${bubbleId}')" class="question-btn text-center justify-center p-3">Ability</button>
-                        <button onclick="submitFourA('Access', '${bubbleId}')" class="question-btn text-center justify-center p-3">Access</button>
-                        <button onclick="submitFourA('Action', '${bubbleId}')" class="question-btn text-center justify-center p-3">Action</button>
+                        <button onclick="submitFourA('${btnAttitude}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAttitude}</button>
+                        <button onclick="submitFourA('${btnAbility}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAbility}</button>
+                        <button onclick="submitFourA('${btnAccess}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAccess}</button>
+                        <button onclick="submitFourA('${btnAction}', '${bubbleId}')" class="question-btn text-center justify-center p-3" style="font-size: 13px;">${btnAction}</button>
                     </div>
                 </div>`);
                 scrollToBottom();
@@ -820,17 +856,36 @@
         }
 
         function promptFourST() {
-            const prompt = "Got it. How does this outcome align with the broader **4ST Framework** objectives?";
+            let prompt = "";
+            let btnEmpowered = "Empowered Individuals";
+            let btnEntities = "Impactful Entities";
+            let btnEcosystem = "Collaborative Ecosystem";
+            let btnSector = "Future-Directed Sector";
+
+            if (appState.tocStage === "Input" || appState.tocStage === "Activity") {
+                prompt = `Got it. This involves **${appState.fourA}**. Since this is an internal 'upstream' effort, which **4ST Strategic Thrust** does it strengthen?`;
+                btnEntities = "Impactful Entities (Internal Org)";
+                btnEmpowered = "Empowered Individuals (Our Staff)";
+                btnEcosystem = "Collaborative Ecosystem (Partnerships)";
+                btnSector = "Future-Directed Sector (Innovation/R&D)";
+            } else {
+                prompt = `Got it. This achieved **${appState.fourA}**. Since this is an external 'downstream' result, which **4ST Strategic Thrust** does this impact?`;
+                btnEmpowered = "Empowered Individuals (Beneficiaries)";
+                btnEcosystem = "Collaborative Ecosystem (Community)";
+                btnEntities = "Impactful Entities (Demonstrating Value)";
+                btnSector = "Future-Directed Sector (Sector Leadership)";
+            }
+
             const bubbleId = 'fourST-bubble-' + Date.now();
             
             document.getElementById('chatWindow').insertAdjacentHTML('beforeend', `
             <div id="${bubbleId}" class="bubble ai w-full">
                 ${prompt}
                 <div class="action-buttons mt-4" style="display: flex; flex-direction: column; gap: 8px;">
-                    <button onclick="submitFourST('Empowered Individuals', '${bubbleId}')" class="question-btn text-left p-3">Empowered Individuals</button>
-                    <button onclick="submitFourST('Impactful Entities', '${bubbleId}')" class="question-btn text-left p-3">Impactful Entities</button>
-                    <button onclick="submitFourST('Collaborative Ecosystem', '${bubbleId}')" class="question-btn text-left p-3">Collaborative Ecosystem</button>
-                    <button onclick="submitFourST('Future-Directed Sector', '${bubbleId}')" class="question-btn text-left p-3">Future-Directed Sector</button>
+                    <button onclick="submitFourST('${btnEmpowered}', '${bubbleId}')" class="question-btn text-left p-3">${btnEmpowered}</button>
+                    <button onclick="submitFourST('${btnEntities}', '${bubbleId}')" class="question-btn text-left p-3">${btnEntities}</button>
+                    <button onclick="submitFourST('${btnEcosystem}', '${bubbleId}')" class="question-btn text-left p-3">${btnEcosystem}</button>
+                    <button onclick="submitFourST('${btnSector}', '${bubbleId}')" class="question-btn text-left p-3">${btnSector}</button>
                 </div>
             </div>`);
             scrollToBottom();
