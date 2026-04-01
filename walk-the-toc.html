@@ -507,6 +507,49 @@
             margin-bottom: 20px;
         }
 
+        @keyframes sequentialBlueGlow {
+            0%, 100% { box-shadow: none; border-color: #EAE5D8; }
+            50% { box-shadow: 0 0 16px rgba(0, 123, 255, 0.7); border-color: #007BFF; }
+        }
+        .glow-trigger-blue-0 { animation: sequentialBlueGlow 2.5s infinite 0s; }
+        .glow-trigger-blue-1 { animation: sequentialBlueGlow 2.5s infinite 0.5s; }
+        .glow-trigger-blue-2 { animation: sequentialBlueGlow 2.5s infinite 1.0s; }
+        .glow-trigger-blue-3 { animation: sequentialBlueGlow 2.5s infinite 1.5s; }
+
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .pill {
+            background-color: #FDFBF7;
+            border: 2px solid #EAE5D8;
+            border-radius: 24px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #8B7355;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pill:hover {
+            border-color: #D2B48C;
+            background-color: #F2EFE9;
+        }
+
+        .pill.selected {
+            background-color: #007BFF;
+            color: #fff;
+            border-color: #007BFF;
+            animation: none;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
         .step-connector.completed {
             background-color: #8B7355;
             opacity: 0.8;
@@ -537,35 +580,19 @@
                 </p>
             </div>
 
-            <div class="input-group">
-                <div>
-                    <label for="missionInput">1. What challenge are you tackling today?</label>
-                    <select class="preset-select" onchange="if(this.value){ document.getElementById('missionInput').value = this.value; validateSetup(); this.value=''; }">
-                        <option value="">-- Choose a common problem or type your own below --</option>
-                        <option value="Funders keep asking what exactly we do, but very hard to show real results.">Hard to show real results to funders</option>
-                        <option value="Our team is entirely bogged down by admin and compliance paperwork.">Team drowning in admin/paperwork</option>
-                        <option value="We keep running the same old programmes but few people are joining anymore.">Nobody joining our old programmes</option>
-                        <option value="We want to try new things but everyone is too busy fighting fires every day.">Always fighting fires, no time to innovate</option>
-                        <option value="Donors only want to fund sexy new projects, not our core operations.">Donors only want to fund new projects</option>
-                    </select>
-                    <textarea id="missionInput" rows="2" placeholder="e.g., We need to reduce youth isolation in our community because..." oninput="validateSetup()"></textarea>
-                </div>
-                <div>
-                    <label for="activityInput">2. What activity did you do this morning to address it?</label>
-                    <select class="preset-select" onchange="if(this.value){ document.getElementById('activityInput').value = this.value; validateSetup(); this.value=''; }">
-                        <option value="">-- Choose a common activity or type your own below --</option>
-                        <option value="Filled up multiple compliance spreadsheets and rushed regulatory reports.">Rushing out reports and spreadsheets</option>
-                        <option value="Stuck in back-to-back internal meetings that could have been an email.">Back-to-back internal meetings</option>
-                        <option value="Directly served and interacted with our core beneficiaries on the ground.">On the ground with beneficiaries</option>
-                        <option value="Firefighting sudden operational issues and covering for absent staff.">Firefighting sudden issues</option>
-                        <option value="Writing a grant proposal trying to fit our work into a funder's criteria.">Writing proposals to please funders</option>
-                    </select>
-                    <textarea id="activityInput" rows="2" placeholder="e.g., Filled up 4 compliance spreadsheets" oninput="validateSetup()"></textarea>
-                </div>
+            <div style="margin-bottom: 16px; display: flex; align-items: center; justify-content: center; text-align: center;">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.5;">1. Where do you want to make a change?</span>
+            </div>
+            
+            <div class="category-pills" id="categoryPills" style="margin-bottom: 32px;">
+                <button class="pill glow-trigger-blue-0" onclick="selectCategory('Changing Mindsets', this)">CHANGING MINDSETS</button>
+                <button class="pill glow-trigger-blue-1" onclick="selectCategory('Building Skills', this)">BUILDING SKILLS</button>
+                <button class="pill glow-trigger-blue-2" onclick="selectCategory('Improving Access', this)">IMPROVING ACCESS</button>
+                <button class="pill glow-trigger-blue-3" onclick="selectCategory('Taking Positive Action', this)">TAKING POSITIVE ACTION</button>
             </div>
 
             <button id="startBtn" onclick="startRUT()" class="primary-btn" disabled>
-                <i class="fas fa-hand-sparkles"></i> Let's Track IT
+                <i class="fas fa-hand-sparkles"></i> Step 2: Measure
             </button>
             <p style="font-size: 12px; color: #8B7355; text-align: center; margin-top: 16px;">
                 <i class="fas fa-lock"></i> 100% private. Runs in your browser.
@@ -650,16 +677,20 @@
 
     <script>
         let appState = {
-            mission: '',
-            activity: '',
             impactCategory: '',
+            activity: '',
             causalExplanation: ''
         };
 
-        function validateSetup() {
-            const mission = document.getElementById('missionInput').value.trim();
-            const activity = document.getElementById('activityInput').value.trim();
-            document.getElementById('startBtn').disabled = !(mission.length > 5 && activity.length > 5);
+        function selectCategory(cat, btnElement) {
+            appState.impactCategory = cat;
+            
+            // Highlight active button and disable pulse glow
+            const pills = document.querySelectorAll('.pill');
+            pills.forEach(pill => pill.classList.remove('selected'));
+            btnElement.classList.add('selected');
+            
+            document.getElementById('startBtn').disabled = false;
         }
 
         function getTime() {
@@ -729,9 +760,6 @@
         }
 
         function startRUT() {
-            appState.mission = document.getElementById('missionInput').value.trim();
-            appState.activity = document.getElementById('activityInput').value.trim();
-            
             document.getElementById('setupDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
             
@@ -741,14 +769,14 @@
             chatWindow.innerHTML = ''; // clear slate
 
             // Add user's context
-            addMessage(`<b>Scenario:</b> ${appState.mission} \n<b>Activity:</b> ${appState.activity}`, 'user');
+            addMessage(`<b>Action Area:</b> I want to drive impact by **${appState.impactCategory}**.`, 'user');
 
             // System prompt for Impact Category
             const typingId = addTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator(typingId);
                 
-                const prompt = "Great. Now let's measure the real impact of this activity. Which of these best describes the change you aim to see on the ground?";
+                const prompt = "Great. Now let's measure what happened. Which activity did you do today to address this?";
                 
                 const bubbleId = 'category-bubble-' + Date.now();
                 
@@ -756,10 +784,11 @@
                 <div id="${bubbleId}" class="bubble ai w-full">
                     ${prompt.replace(/\n/g, '<br>')}
                     <div class="action-buttons mt-4" style="display: flex; flex-direction: column; gap: 8px;">
-                        <button onclick="submitCategory('Changing Mindsets', '${bubbleId}')" class="question-btn text-left p-3">Changing Mindsets (e.g. they feel more heard or capable)</button>
-                        <button onclick="submitCategory('Building Skills', '${bubbleId}')" class="question-btn text-left p-3">Building Skills (e.g. they learn how to do something new)</button>
-                        <button onclick="submitCategory('Improving Access', '${bubbleId}')" class="question-btn text-left p-3">Improving Access (e.g. we removed a barrier to services)</button>
-                        <button onclick="submitCategory('Taking Positive Action', '${bubbleId}')" class="question-btn text-left p-3">Taking Positive Action (e.g. they took a concrete positive step)</button>
+                        <button onclick="submitActivity('Ran a workshop or session', '${bubbleId}')" class="question-btn text-left p-3">Ran a workshop / session</button>
+                        <button onclick="submitActivity('Streamlined a process or paperwork', '${bubbleId}')" class="question-btn text-left p-3">Streamlined a process / paperwork</button>
+                        <button onclick="submitActivity('Met with partners or donors', '${bubbleId}')" class="question-btn text-left p-3">Met with partners / donors</button>
+                        <button onclick="submitActivity('Met directly with beneficiaries', '${bubbleId}')" class="question-btn text-left p-3">Met directly with beneficiaries</button>
+                        <button onclick="submitActivity('Firefighting operational issues', '${bubbleId}')" class="question-btn text-left p-3">Firefighting operational issues</button>
                     </div>
                 </div>`);
                 scrollToBottom();
@@ -767,12 +796,12 @@
             }, 800);
         }
 
-        function submitCategory(selectedCategory, bubbleId) {
-            appState.impactCategory = selectedCategory;
+        function submitActivity(selectedActivity, bubbleId) {
+            appState.activity = selectedActivity;
             
             // Lock the bubble
             const bubble = document.getElementById(bubbleId);
-            bubble.innerHTML = `I am aiming for **${appState.impactCategory}**.<span class="timestamp">${getTime()}</span>`;
+            bubble.innerHTML = `I **${appState.activity}**.<span class="timestamp">${getTime()}</span>`;
             bubble.className = "bubble user";
 
             const typingId = addTypingIndicator();
@@ -784,25 +813,18 @@
         }
 
         function promptCausalExplanation() {
-            let vibe = "";
-            if (appState.impactCategory === "Changing Mindsets") vibe = "A mindset shift is powerful, but hard to capture.";
-            else if (appState.impactCategory === "Building Skills") vibe = "Building skills takes effort, but lasts a lifetime.";
-            else if (appState.impactCategory === "Improving Access") vibe = "Removing friction makes a huge difference in the ecosystem.";
-            else vibe = "Sustaining momentum is the hardest part, but it's what matters most.";
-
             const interactionId = 'causal-explanation-' + Date.now();
-            const statement = `Briefly explain: Why does doing [<i>${appState.activity}</i>] lead directly to [<i>${appState.impactCategory}</i>]?`;
 
             document.getElementById('chatWindow').insertAdjacentHTML('beforeend', `
             <div id="${interactionId}" class="bubble ai" style="width: 100%;">
-                ${vibe}<br><br><b>Connect the dots for your report:</b><br>${statement}
-                <div class="text-input-container" style="flex-direction: column; gap: 12px; max-width: 100%;">
-                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Because giving them direct hands-on practice builds their independence..."></textarea>
-                    <button onclick="submitExplanation('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Lock Impact Data</button>
+                Awesome. Any quick comments to add on <b>why</b> this was effective (or ineffective) before we commit this to the impact report?
+                <div class="text-input-container" style="flex-direction: column; gap: 12px; max-width: 100%; margin-top: 12px;">
+                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Beneficiaries asked great questions; the new process saved us 2 hours..."></textarea>
+                    <button onclick="submitExplanation('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Finalise Report</button>
                 </div>
             </div>`);
             scrollToBottom();
-            updateProgress(2);
+            updateProgress(3);
         }
 
         function submitExplanation(containerId) {
@@ -811,7 +833,7 @@
             
             appState.causalExplanation = val;
             
-            document.getElementById(containerId).innerHTML = `<b>My Explanation:</b><br>${appState.causalExplanation}.<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).innerHTML = `<b>My Comments:</b><br>${appState.causalExplanation}.<span class="timestamp">${getTime()}</span>`;
             document.getElementById(containerId).className = "bubble user";
             
             const typingId = addTypingIndicator();
@@ -825,18 +847,17 @@
         function showFinalSummary() {
             document.getElementById('whatsappHeaderBtn').classList.remove('hidden');
 
-            let summaryString = `> Impact Report: Today I focused on [${appState.activity}] to drive [${appState.impactCategory}]. Why this works: [${appState.causalExplanation}].`;
+            let summaryString = `> Impact Report: Today our primary goal was **${appState.impactCategory}**. To achieve this, I **${appState.activity}**. \n> \n> Comments: ${appState.causalExplanation}`;
 
             let summaryHtml = `
 <div class='action-text-content' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #D2B48C;'>
-<div style="color: #4A463B; font-weight: bold; font-size: 14px; margin-bottom: 8px;">Reporting-Ready Impact Snippet</div>
+<div style="color: #4A463B; font-weight: bold; font-size: 14px; margin-bottom: 8px;">Completed Report Entry</div>
 <div style="background: #F9F8F6; padding: 12px; border-left: 3px solid #8B7355; font-style: italic; color: #5E5A4B; font-size: 13px; margin-bottom: 8px;">
-${summaryString}
+${summaryString.replace(/\n> /g, '<br>')}
 </div>
 </div>`;
             
             addMessage(summaryHtml.trim(), 'ai');
-            updateProgress(3);
             
             const btnHtml = `
             <button onclick="generateWhatsAppReport()" class="primary-btn" style="background-color: #25D366; margin-top: 16px;">
@@ -853,7 +874,7 @@ ${summaryString}
         }
 
         function generateWhatsAppReport() {
-            const text = `> Impact Report: Today I focused on [${appState.activity}] to drive [${appState.impactCategory}]. Why this works: [${appState.causalExplanation}].\n\n_Powered by CharityOps Impact Tracker_`;
+            const text = `> Impact Report: Today our primary goal was *${appState.impactCategory}*. To achieve this, I *${appState.activity}*.\n> \n> Comments: ${appState.causalExplanation}\n\n_Powered by CharityOps Impact Tracker_`;
             window.location.assign(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
         }
     </script>
