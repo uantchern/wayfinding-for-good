@@ -581,19 +581,14 @@
             </div>
 
             <div style="margin-bottom: 16px; display: flex; align-items: center; justify-content: center; text-align: center;">
-                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.5;">1. Select Theory of Change (TOC) Stage</span>
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.5;">1. Who Did You Impact Today?</span>
             </div>
             
-            <div class="category-pills" id="categoryPills" style="margin-bottom: 32px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                <button class="pill glow-trigger-blue-0" style="width: 100%; max-width: 220px;" onclick="selectCategory('Input', this)">INPUT</button>
-                <i class="fas fa-arrow-down text-[#D2B48C] text-xs"></i>
-                <button class="pill glow-trigger-blue-1" style="width: 100%; max-width: 220px;" onclick="selectCategory('Activity', this)">ACTIVITY</button>
-                <i class="fas fa-arrow-down text-[#D2B48C] text-xs"></i>
-                <button class="pill glow-trigger-blue-2" style="width: 100%; max-width: 220px;" onclick="selectCategory('Output', this)">OUTPUT</button>
-                <i class="fas fa-arrow-down text-[#D2B48C] text-xs"></i>
-                <button class="pill glow-trigger-blue-3" style="width: 100%; max-width: 220px;" onclick="selectCategory('Outcome', this)">OUTCOME</button>
-                <i class="fas fa-arrow-down text-[#D2B48C] text-xs"></i>
-                <button class="pill glow-trigger-blue-0" style="width: 100%; max-width: 220px;" onclick="selectCategory('Impact', this)">IMPACT</button>
+            <div class="category-pills" id="categoryPills" style="margin-bottom: 32px; display: flex; flex-direction: column; gap: 8px; align-items: center;">
+                <button class="pill glow-trigger-blue-0" style="width: 100%; max-width: 250px;" onclick="selectCategory('Beneficiaries', this)">Beneficiaries</button>
+                <button class="pill glow-trigger-blue-1" style="width: 100%; max-width: 250px;" onclick="selectCategory('Our Own Team', this)">Our Own Team</button>
+                <button class="pill glow-trigger-blue-2" style="width: 100%; max-width: 250px;" onclick="selectCategory('Partners & Donors', this)">Partners & Donors</button>
+                <button class="pill glow-trigger-blue-3" style="width: 100%; max-width: 250px;" onclick="selectCategory('The Broader Sector', this)">The Broader Sector</button>
             </div>
 
             <button id="startBtn" onclick="startRUT()" class="primary-btn" disabled>
@@ -628,49 +623,49 @@
 
             <div class="progress-bar-container" id="progressBar">
                 <div class="step active" id="step-1">
-                    <div class="step-icon"><i class="fas fa-sitemap"></i></div>
-                    <span>TOC</span>
+                    <div class="step-icon"><i class="fas fa-users"></i></div>
+                    <span>Who</span>
                 </div>
                 <div class="step-connector" id="connector-1"></div>
                 <div class="step" id="step-2">
-                    <div class="step-icon"><i class="fas fa-hammer"></i></div>
-                    <span>Operations</span>
+                    <div class="step-icon"><i class="fas fa-bolt"></i></div>
+                    <span>What</span>
                 </div>
                 <div class="step-connector" id="connector-2"></div>
                 <div class="step" id="step-3">
                     <div class="step-icon"><i class="fas fa-file-export"></i></div>
-                    <span>Report</span>
+                    <span>Notes</span>
                 </div>
             </div>
 
             <div class="chat-window" id="chatWindow">
                 <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%;">
                     <div style="max-width: 480px; margin: 0 auto;">
-                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Track your daily activities and generate clean impact reporting data in 3 simple steps.</p>
+                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Track your daily activities in plain English. Our engine automatically translates it into NCSS compliance data.</p>
                         
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">1</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">What to Change (TOC)</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Who you helped</strong>
                             </div>
                         </div>
 
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">2</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Day-to-Day Operations</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">What you accomplished</strong>
                             </div>
                         </div>
 
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">3</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Measure & Share</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Notes & Engine Translation</strong>
                             </div>
                         </div>
 
                         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
-                            App Version: V5.0 | Core Operations Tracker
+                            App Version: V6.0 | Stealth Translator Engine Active
                         </div>
                     </div>
                 </div>
@@ -682,13 +677,20 @@
 
     <script>
         let appState = {
-            tocStage: '',
-            activity: '',
+            who: '',
+            what: '',
             causalExplanation: ''
         };
 
+        // The Magic Engine that translates plain English to NCSS constraints
+        let internalEngine = {
+            tocStage: '',
+            fourA: '',
+            fourST: ''
+        };
+
         function selectCategory(cat, btnElement) {
-            appState.tocStage = cat;
+            appState.who = cat;
             
             const pills = document.querySelectorAll('.pill');
             pills.forEach(pill => pill.classList.remove('selected'));
@@ -766,24 +768,54 @@
 
             chatWindow.innerHTML = ''; // clear slate
 
-            addMessage(`<b>TOC Stage:</b> I am focusing on the **${appState.tocStage}** stage of the TOC.`, 'user');
+            addMessage(`<b>Who:</b> Today, I primarily impacted **${appState.who}**.`, 'user');
+
+            // 1. Map to 4ST
+            if (appState.who === 'Beneficiaries') internalEngine.fourST = 'Empowered Individuals';
+            else if (appState.who === 'Our Own Team') internalEngine.fourST = 'Impactful Entities';
+            else if (appState.who === 'Partners & Donors') internalEngine.fourST = 'Collaborative Ecosystem';
+            else internalEngine.fourST = 'Future-Directed Sector';
 
             const typingId = addTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator(typingId);
                 
-                const prompt = `Great. To drive change at the ${appState.tocStage} level, what strategy or day-to-day operation did you execute today?`;
+                // 2. Generate Contextual Choices (maps to TOC & 4A)
+                let b1, b2, b3, b4;
+
+                if (appState.who === 'Beneficiaries') {
+                    b1 = { text: "Provided basic needs or access", toc: "Output", fa: "Access" };
+                    b2 = { text: "Taught them a new skill", toc: "Outcome", fa: "Ability" };
+                    b3 = { text: "Counselled or changed mindsets", toc: "Outcome", fa: "Attitude" };
+                    b4 = { text: "Intervened in a crisis", toc: "Activity", fa: "Action" };
+                } else if (appState.who === 'Our Own Team') {
+                    b1 = { text: "Provided tools or systems", toc: "Input", fa: "Access" };
+                    b2 = { text: "Ran internal training", toc: "Activity", fa: "Ability" };
+                    b3 = { text: "Boosted morale or culture", toc: "Activity", fa: "Attitude" };
+                    b4 = { text: "Streamlined processes", toc: "Output", fa: "Action" };
+                } else if (appState.who === 'Partners & Donors') {
+                    b1 = { text: "Shared data or resources", toc: "Input", fa: "Access" };
+                    b2 = { text: "Joint capacity building", toc: "Activity", fa: "Ability" };
+                    b3 = { text: "Pitching or advocacy", toc: "Input", fa: "Attitude" };
+                    b4 = { text: "Signed MoU or agreement", toc: "Output", fa: "Action" };
+                } else {
+                    b1 = { text: "Shared knowledge/whitepaper", toc: "Output", fa: "Access" };
+                    b2 = { text: "Contributed to sector policy", toc: "Impact", fa: "Ability" };
+                    b3 = { text: "Public awareness campaign", toc: "Outcome", fa: "Attitude" };
+                    b4 = { text: "Launched sector-wide initiative", toc: "Impact", fa: "Action" };
+                }
+
+                const prompt = `Understood. What was the main action or outcome you achieved with ${appState.who}?`;
                 const bubbleId = 'activity-bubble-' + Date.now();
                 
                 chatWindow.insertAdjacentHTML('beforeend', `
                 <div id="${bubbleId}" class="bubble ai w-full">
                     ${prompt}
                     <div class="action-buttons mt-4" style="display: flex; flex-direction: column; gap: 8px;">
-                        <button onclick="submitActivity('Direct Beneficiary Outreach', '${bubbleId}')" class="question-btn text-left p-3">Direct Beneficiary Outreach</button>
-                        <button onclick="submitActivity('Process & Paperwork Streamlining', '${bubbleId}')" class="question-btn text-left p-3">Process & Paperwork Streamlining</button>
-                        <button onclick="submitActivity('Partner & Donor Engagement', '${bubbleId}')" class="question-btn text-left p-3">Partner & Donor Engagement</button>
-                        <button onclick="submitActivity('Training & Capacity Building', '${bubbleId}')" class="question-btn text-left p-3">Training & Capacity Building</button>
-                        <button onclick="submitActivity('Firefighting & Ad-hoc Operations', '${bubbleId}')" class="question-btn text-left p-3">Firefighting & Ad-hoc Operations</button>
+                        <button onclick="submitActivity('${b1.text}', '${b1.toc}', '${b1.fa}', '${bubbleId}')" class="question-btn text-left p-3">${b1.text}</button>
+                        <button onclick="submitActivity('${b2.text}', '${b2.toc}', '${b2.fa}', '${bubbleId}')" class="question-btn text-left p-3">${b2.text}</button>
+                        <button onclick="submitActivity('${b3.text}', '${b3.toc}', '${b3.fa}', '${bubbleId}')" class="question-btn text-left p-3">${b3.text}</button>
+                        <button onclick="submitActivity('${b4.text}', '${b4.toc}', '${b4.fa}', '${bubbleId}')" class="question-btn text-left p-3">${b4.text}</button>
                     </div>
                 </div>`);
                 scrollToBottom();
@@ -791,11 +823,13 @@
             }, 800);
         }
 
-        function submitActivity(selectedActivity, bubbleId) {
-            appState.activity = selectedActivity;
+        function submitActivity(actionText, mappedTOC, mapped4A, bubbleId) {
+            appState.what = actionText;
+            internalEngine.tocStage = mappedTOC;
+            internalEngine.fourA = mapped4A;
             
             const bubble = document.getElementById(bubbleId);
-            bubble.innerHTML = `I executed **${appState.activity}**.<span class="timestamp">${getTime()}</span>`;
+            bubble.innerHTML = `I accomplished: **${appState.what}**.<span class="timestamp">${getTime()}</span>`;
             bubble.className = "bubble user";
 
             const typingId = addTypingIndicator();
@@ -811,10 +845,10 @@
 
             document.getElementById('chatWindow').insertAdjacentHTML('beforeend', `
             <div id="${interactionId}" class="bubble ai" style="width: 100%;">
-                Awesome. Now, how do we measure if this change has been impactful? Share a brief qualitative note or metric below.
+                Awesome. Just one final step. Share a brief qualitative note or observation to wrap up the report.
                 <div class="text-input-container" style="flex-direction: column; gap: 12px; max-width: 100%; margin-top: 12px;">
-                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Cleared 10-day backlog, beneficiaries gave explicit positive feedback..."></textarea>
-                    <button onclick="submitExplanation('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Measure & Share Impact</button>
+                    <textarea id="causalInput" rows="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #D2B48C; font-size: 14px; outline: none; resize: vertical;" placeholder="e.g. Cleared backlogs rapidly, morale is distinctly up..."></textarea>
+                    <button onclick="submitExplanation('${interactionId}')" class="primary-btn" style="width: 100%; padding: 12px;">Translate & Share</button>
                 </div>
             </div>`);
             scrollToBottom();
@@ -827,7 +861,7 @@
             
             appState.causalExplanation = val;
             
-            document.getElementById(containerId).innerHTML = `<b>Measurement Notes:</b><br>${appState.causalExplanation}.<span class="timestamp">${getTime()}</span>`;
+            document.getElementById(containerId).innerHTML = `<b>Notes:</b><br>${appState.causalExplanation}.<span class="timestamp">${getTime()}</span>`;
             document.getElementById(containerId).className = "bubble user";
             
             const typingId = addTypingIndicator();
@@ -841,13 +875,17 @@
         function showFinalSummary() {
             document.getElementById('whatsappHeaderBtn').classList.remove('hidden');
 
-            let summaryString = `> Operations Impact Report \n> \n> **TOC Focus:** ${appState.tocStage}\n> **Operation Segment:** ${appState.activity}\n> \n> **Measurement / Impact Notes:**\n> ${appState.causalExplanation}`;
+            let complianceString = `> ✅ *NCSS SEF TRANSLATION*\n> **TOC Focus:** [${internalEngine.tocStage}]\n> **4A Strategy:** [${internalEngine.fourA}]\n> **4ST Target:** [${internalEngine.fourST}]`;
+            let rawString = `> 📋 *RAW OPERATION LOG*\n> **Target:** ${appState.who}\n> **Action:** ${appState.what}\n> **Notes:** ${appState.causalExplanation}`;
 
             let summaryHtml = `
 <div class='action-text-content' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #D2B48C;'>
-<div style="color: #4A463B; font-weight: bold; font-size: 14px; margin-bottom: 8px;">Completed Report Entry</div>
-<div style="background: #F9F8F6; padding: 12px; border-left: 3px solid #8B7355; font-style: italic; color: #5E5A4B; font-size: 13px; margin-bottom: 8px;">
-${summaryString.replace(/\n> /g, '<br>')}
+<div style="color: #4A463B; font-weight: bold; font-size: 14px; margin-bottom: 8px;">Compliance Engine Output</div>
+<div style="background: #F9F8F6; padding: 12px; border-left: 3px solid #8B7355; font-style: italic; color: #5E5A4B; font-size: 13px; margin-bottom: 12px;">
+${complianceString.replace(/\n> /g, '<br>')}
+</div>
+<div style="background: #ffffff; padding: 12px; border-left: 3px solid #D2B48C; color: #5E5A4B; font-size: 13px; margin-bottom: 8px;">
+${rawString.replace(/\n> /g, '<br>')}
 </div>
 </div>`;
             
@@ -868,7 +906,7 @@ ${summaryString.replace(/\n> /g, '<br>')}
         }
 
         function generateWhatsAppReport() {
-            const text = `> *Operations Impact Report* \n> \n> *TOC Focus:* ${appState.tocStage}\n> *Operation:* ${appState.activity}\n> \n> *Impact Measurement:*\n> ${appState.causalExplanation}\n\n_Powered by CharityOps Core_`;
+            const text = `> ✅ *NCSS SEF TRANSLATION*\n> *TOC Focus:* [${internalEngine.tocStage}]\n> *4A Strategy:* [${internalEngine.fourA}]\n> *4ST Target:* [${internalEngine.fourST}]\n> \n> 📋 *RAW OPERATION LOG*\n> *Target:* ${appState.who}\n> *Action:* ${appState.what}\n> *Notes:* ${appState.causalExplanation}\n\n_Powered by CharityOps Translator_`;
             window.location.assign(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
         }
     </script>
