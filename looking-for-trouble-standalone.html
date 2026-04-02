@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looking for Trouble | CharityOps</title>
+    <meta name="theme-color" content="#F2EFE9" />
+    
+    <!-- Open Graph for Social Sharing (Massive Banner Setup) -->
+    <meta property="og:title" content="Looking for Trouble | CharityOps" />
+    <meta property="og:description" content="A diagnostic learning tool to spot operational near-misses and document constraints in small charities." />
+    <!-- LinkedIn requires specifically a ~1.91:1 ratio image that is at least 1200px wide to trigger the massive banner ad style -->
+    <meta property="og:image" content="https://lft-rut.vercel.app/lft-banner.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://lft-rut.vercel.app/" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Twitter large card fallback -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Looking for Trouble | CharityOps" />
+    <meta name="twitter:description" content="A diagnostic learning tool to spot operational near-misses and document constraints in small charities." />
+    <meta name="twitter:image" content="https://lft-rut.vercel.app/lft-banner.png" />
+    
+    <link rel="icon" type="image/png" href="https://lft-rut.vercel.app/lft-social.png" />
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            gap: 40px;
+        }
+
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1024px;
+            height: 90vh;
+            max-height: 850px;
+            min-height: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        /* Setup / Instructions Pane */
+        .setup-pane {
+            background-color: rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(210, 180, 140, 0.3);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .setup-pane h1 {
+            font-size: 28px;
+            color: #1B2B28;
+            font-weight: 900;
+            margin-bottom: 8px;
+            font-family: Georgia, serif;
+            line-height: 1.2;
+        }
+
+        .setup-pane p.tagline {
+            color: #8B7355;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #8B7355;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .preset-select {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            border: 1px solid #D2B48C;
+            border-radius: 12px;
+            background-color: #FDFBF7;
+            color: #1B2B28;
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B7355' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+        }
+
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+
+        .pill {
+            background-color: transparent;
+            border: 2px solid #EAE5D8;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #8B7355;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .pill.active {
+            background-color: #8B7355;
+            color: #FDFBF7;
+            border-color: #8B7355;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            transform: scale(0.95);
+        }
+
+        .pill:hover:not(.active) {
+            border-color: #D2B48C;
+            background-color: #FDFBF7;
+        }
+
+        .preset-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            border: 1px solid #D2B48C;
+            border-radius: 12px;
+            background-color: #FDFBF7;
+            color: #1B2B28;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .preset-input::placeholder {
+            color: #A09D94;
+        }
+
+        .preset-select:focus, .preset-input:focus {
+            outline: none;
+            border-color: #8B7355;
+            box-shadow: 0 0 0 4px rgba(210, 180, 140, 0.3);
+            background-color: #ffffff;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #D2B48C;
+            font-size: 15px;
+            color: #1B2B28;
+            background-color: white;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            min-height: 80px;
+        }
+        
+        .input-group textarea:focus {
+            border-color: #8B7355;
+            box-shadow: 0 0 0 4px rgba(210, 180, 140, 0.3);
+        }
+
+        .primary-btn {
+            background-color: #1B2B28;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(27, 43, 40, 0.2);
+        }
+
+        .primary-btn:hover { background-color: #8B7355; transform: translateY(-2px); }
+        .primary-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Chat / Assessment Interface */
+        .chat-pane {
+            background-color: rgba(255, 255, 255, 0.5);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-pane:not(.started) .chat-header { display: none; }
+
+        .chat-header {
+            background-color: #1B2B28;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            color: white;
+            gap: 12px;
+        }
+
+        .chat-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+            flex-grow: 1;
+            font-family: Georgia, serif;
+        }
+
+        .chat-window {
+            background-color: transparent;
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            font-size: 16px;
+            line-height: 1.5;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes infoPulse {
+            0% { background-color: rgba(255, 255, 255, 0); box-shadow: 0 0 0px rgba(255,255,255,0); }
+            50% { background-color: rgba(255, 255, 255, 0.12); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+            100% { background-color: rgba(255, 255, 255, 0); box-shadow: 0 0 0px rgba(255,255,255,0); }
+        }
+
+        .pulse-bg {
+            animation: infoPulse 2.5s infinite ease-in-out;
+            padding: 10px;
+            margin: -10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .bubble.ai {
+            background-color: #ffffff;
+            color: #1B2B28;
+            align-self: flex-start;
+            border-top-left-radius: 4px;
+            border: 1px solid #EAE5D8;
+            width: 100%;
+        }
+
+
+        .bubble.user {
+            background-color: #8B7355;
+            color: #ffffff;
+            align-self: flex-end;
+            border-top-right-radius: 4px;
+        }
+
+        .timestamp {
+            display: block;
+            font-size: 11px;
+            opacity: 0.6;
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        /* Action Screen Overlay */
+        .action-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #FDFBF7;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .action-screen.visible {
+            transform: translateX(0);
+        }
+
+        .action-textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 380px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #D2B48C;
+            background-color: white;
+            color: #1B2B28;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+            margin: 0 auto 24px auto;
+            display: block;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-family: inherit;
+        }
+
+        .action-textarea:focus {
+            outline: none;
+            border-color: #8B7355;
+            box-shadow: 0 0 0 2px rgba(139, 115, 85, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            align-self: flex-start;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .question-btn {
+            background-color: #ffffff;
+            color: #1B2B28;
+            border: 1px solid #D2B48C;
+            border-radius: 12px;
+            padding: 16px;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(27, 43, 40, 0.05);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .question-btn:hover { border-color: #8B7355; background-color: #F9F8F6; transform: translateY(-2px); }
+
+        .question-btn.selected {
+            background-color: #1B2B28;
+            color: #ffffff;
+            border-color: #1B2B28;
+        }
+        
+        .action-btn {
+            background-color: #1B2B28;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            align-self: center;
+            margin-top: 10px;
+        }
+        .action-btn:hover { background-color: #8B7355; }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            opacity: 0.6;
+            text-align: center;
+            color: #5E5A4B;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 850px) {
+            .app-container { flex-direction: column; height: 100dvh; max-height: none; margin: 0; padding: 0; border: none; border-radius: 0; }
+            body { padding: 0; background: #ffffff; }
+            .setup-pane { width: 100%; padding: 24px; flex: 1; border-radius: 0; border: none; box-shadow: none; }
+            .chat-pane { display: none; border-radius: 0; box-shadow: none; border: none; border-top: 1px solid #EAE5D8; }
+            .chat-pane.started { display: flex; height: 100%; }
+            .setup-pane.started { display: none; }
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 24px 0 24px;
+            background-color: transparent;
+            display: none;
+        }
+
+        .chat-pane.started .progress-bar-container { display: flex; }
+
+        .mobile-only { display: none; }
+        @media (max-width: 850px) {
+            .mobile-only { display: block; }
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: #D2B48C;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step.active { color: #8B7355; opacity: 1; }
+        .step.completed { color: #5E5A4B; opacity: 1; }
+        .step.completed .step-icon { background-color: #8B7355; }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-icon { box-shadow: 0 0 0 4px rgba(210, 180, 140, 0.3); }
+
+        .step span {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step-connector {
+            flex-grow: 1;
+            height: 2px;
+            background-color: #D2B48C;
+            opacity: 0.3;
+            margin: 0 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-connector.completed { background-color: #8B7355; opacity: 0.8; }
+
+        @keyframes sequentialGlow {
+            0%, 100% { box-shadow: none; border-color: #EAE5D8; }
+            50% { box-shadow: 0 0 16px rgba(220, 53, 69, 0.7); border-color: #DC3545; }
+        }
+        .glow-trigger-0 { animation: sequentialGlow 2.5s infinite 0s; }
+        .glow-trigger-1 { animation: sequentialGlow 2.5s infinite 0.5s; }
+        .glow-trigger-2 { animation: sequentialGlow 2.5s infinite 1.0s; }
+        .glow-trigger-3 { animation: sequentialGlow 2.5s infinite 1.5s; }
+        .glow-trigger-4 { animation: sequentialGlow 2.5s infinite 2.0s; }
+
+        @keyframes pulseRedGlow {
+            0%, 100% { box-shadow: 0 0 6px rgba(220, 53, 69, 0.4); border-color: rgba(220, 53, 69, 0.5); }
+            50% { box-shadow: 0 0 16px rgba(220, 53, 69, 0.85); border-color: #DC3545; }
+        }
+        .urgent-pulse-glow {
+            animation: pulseRedGlow 2.5s infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Setup Pane -->
+        <div class="setup-pane" id="setupDrawer">
+            <a href="https://www.charityops.org" target="_blank" rel="noopener noreferrer" class="font-serif text-3xl leading-none cursor-pointer select-none group"
+                style="font-family: Georgia, serif; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; text-decoration: none;">
+                <div>
+                    <span class="relative inline-block" style="position: relative; display: inline-block;">
+                        <span class="italic relative z-10" style="color: #103020; font-weight: 500; padding-right: 0.25rem; position: relative; z-index: 10; font-style: italic;">Charity</span>
+                        <span style="position: absolute; left:-0.2em; right:0; bottom:12%; height:2px; background:#B08968; z-index:0;"></span>
+                    </span><span class="relative z-10 tracking-tight" style="color: #B08968; position: relative; z-index: 10; font-weight: 400; letter-spacing: -0.025em; margin-left: -0.05em;">Ops</span>
+                </div>
+            </a>
+
+            <div style="margin-bottom: 24px;">
+                <p class="tagline">A Really Useful Thing for Charities</p>
+                <h1>Looking for Trouble</h1>
+            </div>
+
+            <div class="input-group" style="display: none;">
+                <div>
+                    <label>Key Focus Area</label>
+                    <select class="preset-select" id="areaInput" onchange="updateOperations()">
+                        <option value="" disabled selected>Select your focus area...</option>
+                        <option value="1. Fund Raising & Donor Management">1. Fund Raising & Donor Management</option>
+                        <option value="2. Governance, Audit & Regulators">2. Governance, Audit & Regulators</option>
+                        <option value="3. Board Matters & Impact">3. Board Matters & Impact</option>
+                        <option value="4. Beneficiaries & Programmes">4. Beneficiaries & Programmes</option>
+                        <option value="5. Staff & Volunteers">5. Staff & Volunteers</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Daily Operation</label>
+                    <textarea class="preset-input" id="resourceInput" placeholder="Select a recurring operational reality from the generated options below..." readonly rows="3" style="resize: none; font-size: 15px; padding: 14px; min-height: 90px; border-radius: 12px; width: 100%; box-sizing: border-box; cursor: not-allowed; opacity: 0.9; background-color: #FDFBF7;"></textarea>
+                    <div id="operationSuggestions" class="mt-3 flex flex-col gap-2"></div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. WHERE ARE YOU FIREFIGHTING</span>
+            </div>
+            <div class="category-pills" id="categoryPills">
+                <button class="pill glow-trigger-0" onclick="selectCategory('funding', this)">FUND RAISING</button>
+                <button class="pill glow-trigger-1" onclick="selectCategory('governance', this)">GOVERNANCE</button>
+                <button class="pill glow-trigger-2" onclick="selectCategory('board', this)">BOARD MATTERS</button>
+                <button class="pill glow-trigger-3" onclick="selectCategory('programmes', this)">PROGRAMMES</button>
+                <button class="pill glow-trigger-4" onclick="selectCategory('staff', this)">STAFF</button>
+            </div>
+
+            <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. IDENTIFY FIREFIGHTING SCENARIOS</span>
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. SELECT A SCENARIO</span>
+            </div>
+            <div id="wallOfPainContainer" class="flex flex-col gap-1 mb-6" style="max-height: 480px; overflow-y: auto; padding-right: 8px;">
+                <!-- Javascript will inject randomized symptom tiles here -->
+            </div>
+
+            <div id="mobileUserGuide" class="mobile-only" style="padding: 12px 0; background: transparent; box-sizing: border-box; width: 100%;">
+                 <div style="max-width: 480px; margin: 0 auto; border: 2px dashed #EAE5D8; padding: 20px; border-radius: 12px; background: #FFFBF7;">
+                     <p style="font-size: 13px; color: #5E5A4B; margin-bottom: 20px; line-height: 1.5;">Small charities have the edge on agility, but lean budgets mean 'firefighting' is a daily reality. <strong>Looking for Trouble</strong> helps you turn these moments into data, helping you learn from the heat and build a more resilient organization.</p>
+                     
+                     <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                         <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">1</div>
+                         <div style="display: flex; align-items: center;">
+                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">WHERE ARE YOU FIREFIGHTING</strong>
+                         </div>
+                     </div>
+
+                     <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                         <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">2</div>
+                         <div style="display: flex; align-items: center;">
+                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">IDENTIFY FIREFIGHTING SCENARIOS</strong>
+                         </div>
+                     </div>
+
+                     <div style="display: flex; gap: 12px;">
+                         <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">3</div>
+                         <div style="display: flex; align-items: center;">
+                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">RECOMMEND IMPROVEMENTS</strong>
+                         </div>
+                     </div>
+                     <div style="margin-top: 24px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 10px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
+                         App Version: V2.0 <br>Last Updated: 02 April 2026, 02:26 AM (HKT)
+                     </div>
+                 </div>
+            </div>
+            
+            <!-- Auto-Advance removes need for submit buttons -->
+        </div>
+
+        <!-- Chat Pane -->
+        <div class="chat-pane" id="chatContainer">
+            <div class="chat-header">
+                <button onclick="goBackToSetup()" class="md:hidden text-white hover:text-[#D2B48C] mr-2"
+                    style="background:transparent; border:none; cursor:pointer;" title="Back">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+
+                <div class="flex-grow"></div>
+                <button onclick="location.reload()" class="text-white hover:text-[#D2B48C] transition-colors"
+                    title="Restart"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fas fa-redo text-lg"></i> Reset
+                </button>
+            </div>
+
+            <div class="chat-window" id="chatWindow">
+                <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%;">
+                    <div style="max-width: 480px; margin: 0 auto;">
+                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Small charities have the edge on agility, but lean budgets mean 'firefighting' is a daily reality. <strong>Looking for Trouble</strong> helps you strike the balance. Acting as an operational smoke detector, it turns your firefighting experiences into data, helping you learn from the heat and build a more resilient organization.</p>
+                        
+                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">1</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">WHERE ARE YOU FIREFIGHTING</strong>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">2</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">IDENTIFY FIREFIGHTING SCENARIOS</strong>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px;">
+                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">3</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">RECOMMEND IMPROVEMENTS</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
+                            App Version: V2.0 | Last Updated: 02 April 2026, 02:26 AM (HKT)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Screen Overlay -->
+        <div id="actionPlanScreen" class="action-screen">
+            <div class="chat-header">
+                <button onclick="closeActionPlan()" class="text-[#D2B48C] hover:text-white transition-colors mr-3" style="background:none;border:none;cursor:pointer;font-size:20px;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Review Action Plan</h2>
+            </div>
+            <div style="flex:1; overflow-y:auto; padding:32px 24px; text-align:center;">
+                <p style="font-size:18px; font-weight:bold; color:#1B2B28; margin-bottom:8px; font-family: Georgia, serif;">Customize your plan</p>
+                <p style="font-size:14px; color:#5E5A4B; margin-bottom:24px;">The generated plan is fully editable. Review it before sending to your team's WhatsApp.</p>
+                
+                <textarea id="actionPlanTextarea" class="action-textarea"></textarea>
+                
+                <button onclick="sendActionPlanWA()" class="primary-btn" style="background-color: #25D366; max-width: 500px; margin: 0 auto; padding: 16px;">
+                    <i class="fab fa-whatsapp" style="font-size:20px;"></i> WhatsApp to a dedicated WA Group Chat for followup by AI.
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Removed user guide button -->
+
+
+
+    <script>
+        let appState = {
+            area: '',
+            resource: '',
+            selectedQuestion: '',
+            areaLabel: '',
+            act1: '',
+            act2: '',
+            act3: ''
+        };
+
+        
+        const operationsData = {
+            funding: [
+                {
+                    scenario: "Missing Grant Deadline: Scrambling to finish a complex foundation grant application moments before the portal closes because the small team was pulled in different directions.",
+                    fire: "Submit whatever is completed right now. Email the grant officer politely to ask if a short extension is possible due to unforeseen ground operations.",
+                    opp: "Make a strict internal rule: All grant applications must be designated as 'complete' internally days before the actual funder's deadline."
+                },
+                {
+                    scenario: "Donor Ghosting: A major donor who promised a large sum suddenly stops replying to emails right before the disbursement date.",
+                    fire: "Stop sending formal emails. Have the Executive Director send a short, polite WhatsApp message to check if they are okay, as personal touches cut through email noise.",
+                    opp: "Never budget promised funds until the money is physically in the bank account. Always keep a backup pipeline of smaller donors to cover unexpected shortfalls."
+                },
+                {
+                    scenario: "Event Ticket Shortfall: Realising near the execution date of the annual charity gala that only a small fraction of the tables have been sold.",
+                    fire: "Immediately call your closest board members and core supporters. Ask them directly to buy tables or sponsor beneficiaries to attend.",
+                    opp: "Shift away from massive, expensive physical galas. Plan smaller, regular engagement events that do not require high upfront venue deposits."
+                }
+            ],
+            governance: [
+                {
+                    scenario: "Audit Document Panic: The external auditor is coming soon and the team cannot find physical receipts for multiple transport claims.",
+                    fire: "Be honest with the auditor immediately about the missing batch. Do not waste executive time searching through boxes for small amounts.",
+                    opp: "Implement a strict policy: No receipt photo uploaded on the same day means no reimbursement. Stop accepting physical paper claims entirely."
+                },
+                {
+                    scenario: "Lost Passwords: Nobody knows the login for the charity portal because the only staff member with the password resigned abruptly.",
+                    fire: "Immediately contact the platform's support helpdesk to trigger an emergency administrator reset using the charity's official letterhead.",
+                    opp: "Set up a shared, secure password manager for the entire office. Ensure at least two senior leaders have full master access at all times."
+                },
+                {
+                    scenario: "Compliance Overload: Receiving a massive regulatory update from a government agency that nobody in the small charity has time to read.",
+                    fire: "Email a larger partner charity or seek pro-bono legal help to ask for a concise summary of what actually needs to change.",
+                    opp: "Assign one board member with a legal or compliance background to be the designated filter for all complex regulatory documents."
+                }
+            ],
+            board: [
+                {
+                    scenario: "Micromanagement Fatigue: A board member insists on intense operational updates that take the small staff hours to prepare.",
+                    fire: "Send a polite but firm message stating that the team is focused on urgent ground operations this week and will combine the updates into the monthly report.",
+                    opp: "Agree on a standard, concise dashboard with core metrics. The board only receives this dashboard periodically, with no extra custom reports."
+                },
+                {
+                    scenario: "Missing Quorum: Having to cancel an important board meeting because multiple members pull out at the last minute.",
+                    fire: "Use the booked time to update the members who did show up. Email the major decisions to the absent members for written approval.",
+                    opp: "Switch to shorter, focused online meetings for standard approvals, and only hold physical board meetings periodically for major strategic planning."
+                },
+                {
+                    scenario: "Approval Bottleneck: Ground operations are completely stalled because a small vendor invoice is waiting for multiple board signatures.",
+                    fire: "Call the vendor to explain the administrative delay and ask for a short extension to protect the charity's relationship with them.",
+                    opp: "Update the charity's financial policies to allow the Executive Director to approve routine expenses below a specific low threshold without requiring board signatures."
+                }
+            ],
+            programmes: [
+                {
+                    scenario: "Low Turnout: Booking an expensive venue for large crowds, but facing a massive no-show rate on the actual day of the event.",
+                    fire: "Pack the extra catered food into boxes and distribute it immediately to frontline staff or nearby partner organisations so nothing goes to waste.",
+                    opp: "For future events, always assume a significant drop-out rate for free programmes. Overbook the registration list to ensure the venue is fully utilised."
+                },
+                {
+                    scenario: "Volunteer Ghosting: A large number of registered volunteers do not turn up for the weekend food distribution drive, leaving staff overwhelmed.",
+                    fire: "Scale down the operations immediately. Prioritise the most vulnerable beneficiaries and inform the rest that there will be a delivery delay.",
+                    opp: "Stop relying purely on ad-hoc volunteers. Build a smaller core team of highly committed volunteers and treat them like actual staff members."
+                },
+                {
+                    scenario: "Unpredictable Weather: Moving large numbers of people at an outdoor event into an indoor hall due to sudden bad weather.",
+                    fire: "Make a fast executive decision to move everybody indoors immediately. Cancel any activities that require large physical space to prevent chaos.",
+                    opp: "Always secure a confirmed wet-weather backup venue for major events. If no backup is possible, make it a strict policy to postpone the event."
+                }
+            ],
+            staff: [
+                {
+                    scenario: "Chat Group Chaos: Important operational updates are getting lost in a web of multiple unorganised WhatsApp groups filled with casual emojis and side conversations.",
+                    fire: "Post an urgent, bolded message in the group stating clearly what needs to be done. Tell staff to reply to you directly in a private message.",
+                    opp: "Create two separate groups: One strictly for official announcements where only admins can post, and one for casual team chatting."
+                },
+                {
+                    scenario: "Single Point of Failure: The only staff member who knows how to run the payroll falls unexpectedly sick on payday.",
+                    fire: "Inform the team immediately that there will be a slight delay in salary disbursement due to a medical emergency, so they can manage their own bills.",
+                    opp: "Ensure cross-training. Every critical administrative task, especially payroll, must have documented steps and multiple people trained to do it."
+                },
+                {
+                    scenario: "Turnover Panic: A case worker resigns and attempts to hand over a massive stack of complex beneficiary files through a brief verbal conversation.",
+                    fire: "Accept that some details will be lost. Ask the departing worker to just list a shortlist of the most critical, high-risk cases that need immediate attention.",
+                    opp: "Stop relying on memory. Mandate that all case workers update a central, shared database regularly with brief bullet points per active case."
+                }
+            ]
+        };
+
+        let currentOpIndex = 0;
+
+        let currentOpKey = null;
+
+        function updateOperations(isLoadMore = false) {
+            const areaVal = document.getElementById('areaInput').value.trim();
+            const suggestionsDiv = document.getElementById('operationSuggestions');
+            const resourceInput = document.getElementById('resourceInput');
+            
+            // Normal DOM event passes Event obj, so check explicitly for true
+            if (isLoadMore !== true) {
+                currentOpIndex = 0;
+            }
+            
+            suggestionsDiv.innerHTML = '';
+            
+            const key = areaToKey[areaVal];
+            
+            if (key !== currentOpKey && isLoadMore !== true) {
+                currentOpKey = key;
+                if (operationsData[key]) {
+                    operationsData[key].sort(() => 0.5 - Math.random());
+                }
+            }
+            
+            if (resourceInput.value.trim() === '' && key && operationsData[key]) {
+                const opsArray = operationsData[key];
+                
+                if (currentOpIndex >= opsArray.length) {
+                    currentOpIndex = 0;
+                }
+                
+                const endIndex = Math.min(currentOpIndex + 3, opsArray.length);
+                const opsToShow = opsArray.slice(currentOpIndex, endIndex);
+                
+                opsToShow.forEach(op => {
+                    const btn = document.createElement('div');
+                    btn.className = 'text-left bg-[#F9F8F6] border border-[#EAE5D8] hover:border-[#D2B48C] hover:bg-[#FDFBF7] p-3 rounded-xl cursor-pointer text-[#5E5A4B] text-sm transition-colors duration-200 shadow-sm leading-relaxed';
+                    btn.innerText = op;
+                    btn.onclick = () => {
+                        resourceInput.value = op;
+                        suggestionsDiv.innerHTML = ''; 
+                        validateSetup();
+                        startRUT();
+                    };
+                    suggestionsDiv.appendChild(btn);
+                });
+                
+                if (opsArray.length > 3) {
+                    const moreBtn = document.createElement('div');
+                    moreBtn.className = 'text-center border-2 border-dashed border-[#D2B48C] hover:bg-[#FDFBF7] p-3 rounded-xl cursor-pointer text-[#D2B48C] hover:text-[#8B7355] text-sm font-bold tracking-widest transition-colors duration-200 shadow-sm flex items-center justify-center gap-2 italic mt-1';
+                    moreBtn.innerHTML = 'm o r e <span class="text-xl leading-none">...</span>';
+                    moreBtn.onclick = () => {
+                        currentOpIndex += 3;
+                        updateOperations(true);
+                    };
+                    suggestionsDiv.appendChild(moreBtn);
+                }
+            }
+            
+            validateSetup();
+        }
+
+        function validateSetup() {
+            const area = document.getElementById('areaInput').value;
+            const resource = document.getElementById('resourceInput').value;
+            document.getElementById('startBtn').disabled = !(area.trim() && resource.trim());
+        }
+
+        function getTime() {
+            return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function scrollToBottom() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.scrollTop = 0; // Fixed: Scroll to top of the new plan so headers are not hidden
+        }
+
+        function addMessage(text, sender, elementId = null, skipBr = false) {
+            const chatWindow = document.getElementById('chatWindow');
+            const formattedText = skipBr ? text : text.replace(/\n/g, '<br>');
+            const idAttr = elementId ? `id="${elementId}"` : '';
+            chatWindow.insertAdjacentHTML('beforeend', `
+            <div ${idAttr} class="bubble ${sender}">
+                ${formattedText}
+                <span class="timestamp">${getTime()}</span>
+            </div>`);
+            scrollToBottom();
+        }
+
+        function addTypingIndicator() {
+            const chatWindow = document.getElementById('chatWindow');
+            const id = 'typing-' + Date.now();
+            chatWindow.insertAdjacentHTML('beforeend', `<div id="${id}" class="bubble ai" style="color: #8B7355; font-style: italic;">typing...</div>`);
+            scrollToBottom();
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function goBackToSetup() {
+            document.getElementById('setupDrawer').classList.remove('started');
+            document.getElementById('chatContainer').classList.remove('started');
+        }
+
+        function updateProgress(stepNum) {
+            const icons = [
+                '<i class="fas fa-shoe-prints"></i>',
+                '<i class="fas fa-question"></i>',
+                '<i class="fas fa-crosshairs"></i>'
+            ];
+
+            for (let i = 1; i <= 3; i++) {
+                const step = document.getElementById(`step-${i}`);
+                if (!step) continue;
+                if (i < stepNum) {
+                    step.className = 'step completed';
+                    step.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+                } else if (i === stepNum) {
+                    step.className = 'step active';
+                    step.querySelector('.step-icon').innerHTML = icons[i - 1];
+                } else {
+                    step.className = 'step';
+                    step.querySelector('.step-icon').innerHTML = icons[i - 1];
+                }
+
+                if (i < 3) {
+                    const connector = document.getElementById(`connector-${i}`);
+                    if (i < stepNum) connector.className = 'step-connector completed';
+                    else connector.className = 'step-connector';
+                }
+            }
+        }
+
+        // Removed startRUT, presentQuestions, and selectSlider completely as we jump straight to dual-action columns.
+
+        
+        function reRollPlan() {
+            setTimeout(() => {
+                presentActionPlan();
+                scrollToBottom();
+            }, 500);
+        }
+
+
+        function shareSpecificPlan(btnElement) {
+            const textContent = btnElement.closest('.bubble').querySelector('.action-text-content');
+            if (textContent) {
+                appState.mergedPlan = textContent.innerText.trim();
+            }
+            openActionPlanEdit();
+        }
+
+        function presentActionPlan() {
+            document.querySelectorAll('#action-plan-bubble').forEach(el => el.remove());
+            document.querySelectorAll('#selected-scenario-bubble').forEach(el => el.remove());
+
+            const areaKey = appState.activeCategory;
+            const sIdx = appState.scenarioIdx !== undefined ? appState.scenarioIdx : 0;
+            const data = operationsData[areaKey][sIdx];
+
+            let content = `
+            <div class='action-text-content' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; box-shadow: inset 0 0 0 1px #EAE5D8;'>
+
+                <h3 style="font-family: Georgia, serif; font-size: 15px; font-weight: bold; color: #8B7355; margin-top: 0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #F2EFE9; padding-bottom: 8px;">3. Recommend Improvements</h3>
+
+                <!-- STRONGER PULSE & COMBINED AREA/SCENARIO -->
+                <div class="urgent-pulse-glow" style="margin-bottom: 12px; padding: 12px; border: 2px solid #DC3545; border-radius: 8px; background-color: #FFF5F5; box-shadow: 0 0 15px rgba(220, 53, 69, 0.4);">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+                        <span style="background: #DC3545; color: white; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em;">${appState.areaLabel}</span>
+                        <strong style="color: #DC3545; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">FIREFIGHTING SCENARIO</strong>
+                    </div>
+                    <div style="color: #4A463B; font-weight: bold; font-size: 14px;">${data.scenario}</div>
+                </div>
+
+                <!-- COMPACTED INTEGRATED ACTION PLAN -->
+                <div style="color: #4A463B; margin: 0 0 12px 0;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-weight: bold; flex-shrink: 0;">a)</span>
+                        <span>${data.fire}</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-bottom: 0;">
+                        <span style="font-weight: bold; flex-shrink: 0;">b)</span>
+                        <span>${data.opp}</span>
+                    </div>
+                </div>
+
+                <!-- COMPACTED WHATSAPP CAPTURE -->
+                <div style="margin-bottom: 12px;">
+                    <textarea id="userRedFlags" rows="3" placeholder="I also noticed that... (Document your own near misses, pain points, or realities for this scenario here)" style="width: 100%; padding: 10px; border: 1px solid #D2B48C; border-radius: 8px; outline: none; font-family: inherit; font-size: 13px; resize: vertical; box-sizing: border-box; background: #FDFBF7;"></textarea>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button onclick="shareViaWhatsApp()" class="w-full py-3 px-6 rounded-xl text-white font-bold tracking-widest text-sm transition-all duration-300 flex items-center justify-center gap-3 shadow-md hover:shadow-lg hover:-translate-y-0.5" style="background-color: #25D366; border: none; cursor: pointer;">
+                        <i class="fab fa-whatsapp text-lg"></i> SHARE VIA WHATSAPP
+                    </button>
+                    <div style="text-align: center; color: #8B7355; font-size: 11px; font-style: italic; line-height: 1.3;">
+                        Send recommendations to a WhatsApp Group setup by your charity to analyse trends and improve the next version of Looking for Trouble.
+                    </div>
+                </div>
+
+            </div>`;
+
+            // Remove indentation and newlines to prevent addMessage's <br> replacement from bloating the bubble
+            content = content.trim();
+
+            addMessage(content, 'ai', 'action-plan-bubble', true);
+            document.getElementById('action-plan-bubble').style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('action-plan-bubble').style.transition = 'opacity 0.4s ease-in';
+                document.getElementById('action-plan-bubble').style.opacity = 1;
+            }, 50);
+            
+            document.getElementById('whatsappHeaderBtn').classList.add('hidden');
+            scrollToBottom();
+        }
+
+        function shareViaWhatsApp() {
+            const areaKey = appState.activeCategory;
+            const sIdx = appState.scenarioIdx !== undefined ? appState.scenarioIdx : 0;
+            const data = operationsData[areaKey][sIdx];
+            
+            const userFlags = document.getElementById('userRedFlags') ? document.getElementById('userRedFlags').value.trim() : '';
+            
+            let message = `*🚨 Looking For Trouble Analysis*\n\n`;
+            message += `*Area:* ${appState.areaLabel}\n`;
+            message += `*Scenario:* ${data.scenario}\n\n`;
+            
+            message += `*🔥 Put out the fire:* \n${data.fire}\n\n`;
+            message += `*🚀 Improve the system:* \n${data.opp}\n\n`;
+
+
+            
+            if (userFlags) {
+                message += `\n*Additional Observations:*\n`;
+                message += `${userFlags}\n`;
+            }
+
+            message += `\n---\n_We are learning how to do things better even though constrained by limited resources—the paradox of being a small charity. Let's trend this!_`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+        }
+
+        function selectCategory(catKey, btn) {
+            document.querySelectorAll('.pill').forEach(el => {
+                el.classList.remove('active', 'glow-trigger-0', 'glow-trigger-1', 'glow-trigger-2', 'glow-trigger-3', 'glow-trigger-4');
+            });
+            if(btn) btn.classList.add('active');
+            
+            document.getElementById('stepTwoHeader').style.display = 'flex';
+            if (document.getElementById('mobileUserGuide')) {
+                document.getElementById('mobileUserGuide').style.display = 'none';
+            }
+            appState.activeCategory = catKey;
+            
+            drawWallOfPain();
+        }
+
+        function drawWallOfPain() {
+            const wall = document.getElementById('wallOfPainContainer');
+            wall.innerHTML = '';
+            
+            if (!appState.activeCategory) {
+                // Empty state before selection
+                wall.innerHTML = '';
+                return;
+            }
+
+            let allPains = [];
+            const catKey = appState.activeCategory;
+            
+            
+            if (operationsData[catKey]) {
+                operationsData[catKey].forEach((item, idx) => {
+                    allPains.push({ key: catKey, scenario: item.scenario, flags: item.flags, idx: idx });
+                });
+            }
+
+            
+            const selectedPains = allPains; // Display all scenarios
+            
+            const conciseAreaMap = {
+                'funding': 'FUND RAISING',
+                'governance': 'GOVERNANCE',
+                'board': 'BOARD MATTERS',
+                'programmes': 'PROGRAMMES',
+                'staff': 'STAFF'
+            };
+            
+            selectedPains.forEach(pain => {
+                const btn = document.createElement('div');
+                btn.className = 'text-left cursor-pointer transition-colors duration-200 leading-relaxed py-3 px-3 rounded-xl flex gap-3 items-start group hover:bg-[#F2EFE9]';
+                
+                const parts = pain.scenario.split(': ');
+                const formattedScenario = parts.length > 1 ? `<strong style="color: #1B2B28;">${parts[0]}:</strong> ${parts.slice(1).join(': ')}` : pain.scenario;
+                
+                btn.innerHTML = `<div style="font-size: 12px; color: #8B7355; margin-top: 4px;">●</div> <div style="flex-grow: 1;"><span class="group-hover:text-[#8B7355] transition-colors" style="color: #4A463B; font-size: 15px;">${formattedScenario}</span></div>`;
+                
+                btn.onclick = () => {
+                    Array.from(wall.children).forEach(child => child.classList.remove('bg-[#F2EFE9]'));
+                    btn.classList.add('bg-[#F2EFE9]');
+
+                    appState.areaLabel = conciseAreaMap[pain.key];
+                    appState.resource = pain.scenario;
+                    appState.scenarioIdx = pain.idx;
+                    
+                    document.getElementById('setupDrawer').classList.add('started');
+                    document.getElementById('chatContainer').classList.add('started');
+                    document.getElementById('emptyStatePlaceholder').style.display = 'none';
+
+                    // Use the unified logic in reRollPlan to prevent duplicating the fetch logic
+                    reRollPlan();
+                    updateProgress(3);
+                };
+                wall.appendChild(btn);
+            });
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            drawWallOfPain();
+        });
+    </script>
+    <!-- Final Page Overlay removed in favor of seamless chat-UI 3rd step -->
+    <!-- user guide completely removed -->
+</body>
+</html>
