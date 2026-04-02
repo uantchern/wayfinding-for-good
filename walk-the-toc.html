@@ -158,6 +158,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .mobile-only { display: none; }
+        @media (max-width: 850px) {
+            .mobile-only { display: block; }
+        }
+
         /* Responsiveness */
         @media (max-width: 850px) {
             .app-container { flex-direction: column; height: 100dvh; max-height: none; margin: 0; padding: 0; border: none; border-radius: 0; }
@@ -217,7 +222,7 @@
                 <!-- Javascript will inject 4A impact tiles here -->
             </div>
 
-             <div id="mobileUserGuide" style="padding: 12px 0; background: transparent; box-sizing: border-box; width: 100%; display: none;" class="md:hidden">
+             <div id="mobileUserGuide" style="padding: 12px 0; background: transparent; box-sizing: border-box; width: 100%;" class="mobile-only">
                  <div style="max-width: 480px; margin: 0 auto; border: 2px dashed #EAE5D8; padding: 20px; border-radius: 12px; background: #FFFBF7;">
                      <p style="font-size: 13px; color: #5E5A4B; margin-bottom: 20px; line-height: 1.5;">Looking for Impact is a fast-tracking tool designed to capture and share daily wins.</p>
                      
@@ -341,7 +346,7 @@
             
             document.getElementById('stepTwoHeader').style.display = 'flex';
             if (document.getElementById('mobileUserGuide')) {
-                document.getElementById('mobileUserGuide').style.display = 'block';
+                document.getElementById('mobileUserGuide').style.display = 'none';
             }
             appState.area = areaKey;
             
