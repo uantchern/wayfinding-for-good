@@ -1,364 +1,495 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Looking for Impact | CharityOps</title>
+    <meta name="theme-color" content="#F2EFE9" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #F4FBF7;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: #064E3B; /* tailwind emerald-900 */
-        }
-        
-        .card-container {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(6, 78, 59, 0.05);
-            border: 1px solid rgba(16, 185, 129, 0.1);
-        }
-
-        /* Interactive Buttons */
-        .area-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #E2E8F0;
-            border-radius: 12px;
-            background: white;
-            color: #475569;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-        }
-
-        .area-btn:hover {
-            border-color: #10B981;
-            background: #F0FDF4;
-        }
-
-        .area-btn.selected {
-            border-color: #059669;
-            background: #D1FAE5;
-            color: #064E3B;
-            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.1);
-        }
-
-        .impact-btn {
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            align-items: center;
+            justify-content: flex-start;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            gap: 40px;
+        }
+
+        .app-container {
+            display: flex;
             width: 100%;
-            padding: 16px;
-            border: 2px solid #E2E8F0;
-            border-radius: 12px;
-            background: white;
+            max-width: 1024px;
+            height: 90vh;
+            max-height: 850px;
+            min-height: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        /* Setup / Instructions Pane */
+        .setup-pane {
+            background-color: rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(210, 180, 140, 0.3);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .setup-pane h1 {
+            font-size: 28px;
+            color: #1B2B28;
+            font-weight: 900;
+            margin-bottom: 8px;
+            font-family: Georgia, serif;
+            line-height: 1.2;
+        }
+
+        .setup-pane p.tagline {
+            color: #8B7355;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+
+        .pill {
+            background-color: transparent;
+            border: 2px solid #EAE5D8;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #8B7355;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .impact-btn:hover {
-            border-color: #F59E0B;
-            background: #FFFBEB;
+        .pill.active {
+            background-color: #8B7355;
+            color: #FDFBF7;
+            border-color: #8B7355;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            transform: scale(0.95);
         }
 
-        .impact-btn.selected {
-            border-color: #D97706;
-            background: #FEF3C7;
-            box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.1);
+        .pill:hover:not(.active) {
+            border-color: #D2B48C;
+            background-color: #FDFBF7;
         }
 
-        .impact-title {
-            font-weight: 700;
-            color: #1E293B;
+        .symptom-tile {
+            background-color: #F9F8F6;
+            border: 1px solid #EAE5D8;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .symptom-tile:hover {
+            border-color: #8B7355;
+            background-color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Action Screen Overlay (Right Pane) */
+        .chat-pane {
+            background-color: rgba(255, 255, 255, 0.5);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-header {
+            background-color: #1B2B28;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: white;
+            gap: 12px;
+        }
+
+        .chat-window {
+            background-color: transparent;
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #FDFBF7;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .action-screen.visible {
+            transform: translateX(0);
+        }
+
+        .pain-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+            border: 1px solid #10B981; /* Success Green */
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .pain-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #10B981, #34D399, #10B981);
+            z-index: -1;
+            border-radius: 14px;
+            opacity: 0.15;
+        }
+
+        .action-textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 120px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #D2B48C;
+            background-color: white;
+            color: #1B2B28;
             font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+            margin: 0 auto 24px auto;
+            display: block;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-family: inherit;
+        }
+
+        .action-textarea:focus {
+            outline: none;
+            border-color: #10B981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        .impact-hint {
-            font-size: 13px;
-            color: #64748B;
-            font-weight: 500;
-        }
-
-        .impact-btn.selected .impact-title {
-            color: #92400E;
-        }
-        
-        .impact-btn.selected .impact-hint {
-            color: #B45309;
-        }
-
-        /* Inputs */
-        textarea {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #E2E8F0;
-            border-radius: 12px;
-            resize: vertical;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        textarea:focus {
-            border-color: #059669;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        /* Primary Action */
-        .share-btn {
-            width: 100%;
-            padding: 16px;
-            background: #25D366; /* WhatsApp Green */
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-        }
-
-        .share-btn:hover:not(:disabled) {
+        .whatsapp-btn:hover:not(:disabled) { 
+            background-color: #128C7E; 
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
-            background: #128C7E;
+            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4); 
         }
 
-        .share-btn:disabled {
+        .whatsapp-btn:disabled {
             background: #94A3B8;
             box-shadow: none;
             cursor: not-allowed;
             opacity: 0.6;
-            transform: none;
         }
 
-        /* Hide elements by default */
-        .hidden-step {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        @keyframes pulseGreenGlow {
+            0%, 100% { box-shadow: 0 0 6px rgba(16, 185, 129, 0.4); border-color: rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 16px rgba(16, 185, 129, 0.6); border-color: #10B981; }
         }
-        
-        .visible-step {
-            display: block;
-            opacity: 1;
+        .urgent-pulse-glow {
+            animation: pulseGreenGlow 2.5s infinite;
+        }
+
+        @keyframes sequentialGlow {
+            0%, 100% { box-shadow: none; border-color: #EAE5D8; }
+            50% { box-shadow: 0 0 16px rgba(16, 185, 129, 0.4); border-color: #10B981; }
+        }
+        .glow-trigger-0 { animation: sequentialGlow 2.5s infinite 0s; }
+        .glow-trigger-1 { animation: sequentialGlow 2.5s infinite 0.5s; }
+        .glow-trigger-2 { animation: sequentialGlow 2.5s infinite 1.0s; }
+        .glow-trigger-3 { animation: sequentialGlow 2.5s infinite 1.5s; }
+        .glow-trigger-4 { animation: sequentialGlow 2.5s infinite 2.0s; }
+
+        /* Responsiveness */
+        @media (max-width: 850px) {
+            .app-container { flex-direction: column; height: 100dvh; max-height: none; margin: 0; padding: 0; border: none; border-radius: 0; }
+            body { padding: 0; background: #ffffff; }
+            .setup-pane { width: 100%; padding: 24px; flex: 1; border-radius: 0; border: none; box-shadow: none; overflow-y:visible;}
+            .chat-pane { display: none; }
         }
     </style>
 </head>
 
-<body class="p-4 md:p-8 flex flex-col items-center">
-
-    <!-- Header -->
-    <div class="max-w-2xl w-full text-center mt-4 mb-8">
-        <h1 class="text-3xl md:text-4xl font-black text-[#064E3B] tracking-tight mb-2 font-serif">Looking for Impact</h1>
-        <p class="text-[#047857] font-medium text-sm md:text-base">Quick-log your daily wins and share them with the sector.</p>
-        <button onclick="location.reload()" class="mt-4 text-xs font-bold uppercase tracking-wider text-emerald-600 hover:text-emerald-800 flex items-center justify-center gap-1 mx-auto">
-            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reset Tracker
-        </button>
-    </div>
-
-    <!-- Main App Container -->
-    <div class="max-w-2xl w-full card-container p-6 md:p-8 mb-12">
-        
-        <!-- STEP 1: CHOOSE AREA -->
-        <div class="mb-10" id="step-1">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">1</div>
-                <h2 class="text-lg font-bold text-slate-800">Choose the operational area</h2>
+<body>
+    <div class="app-container">
+        <!-- Overlay right pane -->
+        <div class="chat-pane" id="chatPane">
+            <div class="chat-header">
+                <button onclick="location.reload()" class="text-white hover:text-[#D2B48C] transition-colors"
+                    title="Restart"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fas fa-redo text-lg"></i> Reset
+                </button>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <button type="button" class="area-btn" onclick="selectArea('FUND RAISING', this)">
-                    <i data-lucide="heart" class="text-rose-500 w-5 h-5"></i> FUND RAISING
-                </button>
-                <button type="button" class="area-btn" onclick="selectArea('GOVERNANCE', this)">
-                    <i data-lucide="shield-check" class="text-blue-500 w-5 h-5"></i> GOVERNANCE
-                </button>
-                <button type="button" class="area-btn" onclick="selectArea('BOARD MATTERS', this)">
-                    <i data-lucide="briefcase" class="text-slate-500 w-5 h-5"></i> BOARD MATTERS
-                </button>
-                <button type="button" class="area-btn" onclick="selectArea('PROGRAMMES', this)">
-                    <i data-lucide="layout" class="text-emerald-500 w-5 h-5"></i> PROGRAMMES
-                </button>
-                <button type="button" class="area-btn" onclick="selectArea('STAFF', this)">
-                    <i data-lucide="users" class="text-amber-500 w-5 h-5"></i> STAFF
-                </button>
+            <div class="chat-window">
+                 <div class="empty-state" style="opacity: 0.6; text-align: center; color: #5E5A4B;">
+                     <h3 class="font-serif text-2xl mb-4 text-[#1B2B28]">Awaiting Impact</h3>
+                     <p>Select an operational area on the left<br>to document your daily wins.</p>
+                 </div>
             </div>
         </div>
 
-        <!-- STEP 2: SPOT IMPACT (Hidden until Step 1) -->
-        <div class="hidden-step mb-10" id="step-2">
-            <hr class="border-emerald-50 mb-8">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold">2</div>
-                <h2 class="text-lg font-bold text-slate-800">Identify the 4A impact type</h2>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <button type="button" class="impact-btn" onclick="selectImpact('Attitude (Mindset)', this)">
-                    <span class="impact-title">Attitude</span>
-                    <span class="impact-hint" id="hint-attitude">Changing mindsets</span>
-                </button>
-                <button type="button" class="impact-btn" onclick="selectImpact('Ability (Skills)', this)">
-                    <span class="impact-title">Ability</span>
-                    <span class="impact-hint" id="hint-ability">Building skills</span>
-                </button>
-                <button type="button" class="impact-btn" onclick="selectImpact('Access (Barriers)', this)">
-                    <span class="impact-title">Access</span>
-                    <span class="impact-hint" id="hint-access">Removing barriers</span>
-                </button>
-                <button type="button" class="impact-btn" onclick="selectImpact('Action (Behavior)', this)">
-                    <span class="impact-title">Action</span>
-                    <span class="impact-hint" id="hint-action">Changing behavior</span>
+        <div class="action-screen" id="actionScreen">
+            <div style="width: 100%; max-width: 500px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                <span style="font-size: 14px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em; font-family: Georgia, serif;">3. RECORD IMPACT CONTEXT</span>
+                <button onclick="closeActionScreen()" class="text-[#8B7355] hover:text-[#1B2B28]" style="background:none; border:none; cursor:pointer;">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-        </div>
 
-        <!-- STEP 3: CONTEXT & SHARE (Hidden until Step 2) -->
-        <div class="hidden-step" id="step-3">
-            <hr class="border-emerald-50 mb-8">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold">3</div>
-                <h2 class="text-lg font-bold text-slate-800">Add context and share</h2>
+            <div class="pain-card urgent-pulse-glow" id="activePainCard">
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+                    <span id="cardArea" style="background: #1B2B28; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;"></span>
+                    <span id="cardType" style="color: #10B981; font-weight: 800; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;"></span>
+                </div>
+                <p id="cardSentence" style="font-size: 16px; color: #1B2B28; font-weight: 500; line-height: 1.5;"></p>
             </div>
-            
-            <textarea id="userNotes" rows="3" placeholder="What exactly happened? Why does it matter?" class="mb-6"></textarea>
-            
-            <button onclick="generateWhatsApp()" id="shareBtn" class="share-btn" disabled>
-                <i data-lucide="send" class="w-5 h-5"></i> Send to WhatsApp
+
+            <textarea id="actionInput" class="action-textarea" oninput="checkCompletion()" placeholder="I also noticed that... [Document your context, brief notes, or realities for this impact here]"></textarea>
+
+            <button id="whatsappBtn" class="whatsapp-btn" onclick="generateWhatsApp()" disabled>
+                <i class="fab fa-whatsapp text-xl"></i> DEPLOY TO WHATSAPP
             </button>
+            
+            <p style="text-align: center; font-size: 10px; color: #A09D94; font-style: italic; margin-top: 16px; max-width: 400px;">
+                Send your operational wins to a WhatsApp Group setup by your charity to align trends across the team.
+            </p>
         </div>
 
+        <!-- Setup Pane (Left side) -->
+        <div class="setup-pane" id="setupDrawer">
+            <a href="https://www.charityops.org" target="_blank" rel="noopener noreferrer" class="font-serif text-3xl leading-none cursor-pointer select-none group"
+                style="font-family: Georgia, serif; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; text-decoration: none;">
+                <div>
+                    <span class="relative inline-block" style="position: relative; display: inline-block;">
+                        <span class="italic relative z-10" style="color: #103020; font-weight: 500; padding-right: 0.25rem; position: relative; z-index: 10; font-style: italic;">Charity</span>
+                        <span style="position: absolute; left:-0.2em; right:0; bottom:12%; height:2px; background:#10B981; z-index:0;"></span>
+                    </span><span class="relative z-10 tracking-tight" style="color: #10B981; position: relative; z-index: 10; font-weight: 400; letter-spacing: -0.025em; margin-left: -0.05em;">Ops</span>
+                </div>
+            </a>
+
+            <div style="margin-bottom: 24px;">
+                <p class="tagline">A Really Useful Thing for Charities</p>
+                <h1>Looking for Impact</h1>
+            </div>
+
+            <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. SELECT WHERE YOU CREATED IMPACT</span>
+            </div>
+            <div class="category-pills" id="categoryPills">
+                <button class="pill glow-trigger-0" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
+                <button class="pill glow-trigger-1" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
+                <button class="pill glow-trigger-2" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
+                <button class="pill glow-trigger-3" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
+                <button class="pill glow-trigger-4" onclick="selectArea('STAFF', this)">STAFF</button>
+            </div>
+
+            <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. IDENTIFY THE TYPE OF IMPACT</span>
+            </div>
+            
+            <div id="impactTilesContainer" class="flex flex-col gap-1 mb-6" style="max-height: 480px; overflow-y: auto; padding-right: 8px;">
+                <!-- Javascript will inject 4A impact tiles here based on selection -->
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        // Application State
-        const state = {
-            area: null,
-            impactType: null,
-            ncssAlignment: null
+        // Data Mapping (20 Scenarios with Full Sentences)
+        const impactDB = {
+            "FUND RAISING": [
+                { type: "Attitude (Mindset)", title: "Donor Mindset Shift", desc: "We successfully changed a donor's mindset and perspective on our core cause.", align: "Collaborative Ecosystem" },
+                { type: "Ability (Skills)", title: "Team Upskilling", desc: "Our fundraising team learned and successfully adopted a new digital tool or technique.", align: "Collaborative Ecosystem" },
+                { type: "Access (Barriers)", title: "New Giving Channel", desc: "We opened a brand new giving channel to reach a wider pool of potential donors.", align: "Collaborative Ecosystem" },
+                { type: "Action (Behavior)", title: "Sustained Giving", desc: "We successfully converted a one-time donor into a long-term recurring supporter.", align: "Collaborative Ecosystem" }
+            ],
+            "GOVERNANCE": [
+                { type: "Attitude (Mindset)", title: "Culture of Compliance", desc: "Our staff now actively value and support internal audit and compliance measures.", align: "Impactful Entities" },
+                { type: "Ability (Skills)", title: "Governance Training", desc: "We conducted comprehensive training on Conflict of Interest and strict Audit processes.", align: "Impactful Entities" },
+                { type: "Access (Barriers)", title: "Digital Workflows", desc: "We implemented simpler, more efficient digital workflows for daily governance tasks.", align: "Impactful Entities" },
+                { type: "Action (Behavior)", title: "Clean Audit", desc: "We achieved a zero-finding completion on our recent external audit review.", align: "Impactful Entities" }
+            ],
+            "BOARD MATTERS": [
+                { type: "Attitude (Mindset)", title: "Ground Level Exposure", desc: "The Board of Directors gained direct, meaningful exposure to our ground-level realities.", align: "Impactful Entities" },
+                { type: "Ability (Skills)", title: "Strategic Upskilling", desc: "Our Board members actively upskilled their capabilities, such as learning about AI tooling.", align: "Impactful Entities" },
+                { type: "Access (Barriers)", title: "Enhanced Transparency", desc: "We facilitated better and more transparent communication channels between staff and the Board.", align: "Impactful Entities" },
+                { type: "Action (Behavior)", title: "Roadmap Approval", desc: "The Board successfully reviewed and approved our comprehensive 3-year strategic roadmap.", align: "Impactful Entities" }
+            ],
+            "PROGRAMMES": [
+                { type: "Attitude (Mindset)", title: "Renewed Hope", desc: "A beneficiary expressed feeling a renewed sense of long-term hope and optimism.", align: "Empowered Individuals" },
+                { type: "Ability (Skills)", title: "Skill Acquisition", desc: "A beneficiary successfully learned and independently demonstrated a new, valuable skill.", align: "Empowered Individuals" },
+                { type: "Access (Barriers)", title: "Barrier Removal", desc: "We successfully removed a key logistical barrier that was preventing access to our programs.", align: "Empowered Individuals" },
+                { type: "Action (Behavior)", title: "Giving Back", desc: "A former beneficiary took proactive action and became an active volunteer with us.", align: "Empowered Individuals" }
+            ],
+            "STAFF": [
+                { type: "Attitude (Mindset)", title: "Improved Morale", desc: "We proactively improved overall team morale and workplace satisfaction this month.", align: "Empowered Individuals" },
+                { type: "Ability (Skills)", title: "Professional Development", desc: "Our staff members actively attended and completed a professional training milestone.", align: "Empowered Individuals" },
+                { type: "Access (Barriers)", title: "Knowledge Centralization", desc: "We successfully created and centralized a comprehensive staff knowledge and SOP bank.", align: "Empowered Individuals" },
+                { type: "Action (Behavior)", title: "Process Innovation", desc: "We successfully piloted a much faster and more efficient client intake process.", align: "Empowered Individuals" }
+            ]
         };
 
-        // Data Mapping (20 Scenarios)
-        const impactMap = {
-            "FUND RAISING": {
-                attitude: "Changed a donor's mindset",
-                ability: "Team learned new tool",
-                access: "Opened new giving channel",
-                action: "Converted 1-time to recurring",
-                st: "Collaborative Ecosystem"
-            },
-            "GOVERNANCE": {
-                attitude: "Staff value compliance",
-                ability: "Trained on COI/Audit",
-                access: "Simpler digital workflows",
-                action: "Zero-finding audit completion",
-                st: "Impactful Entities"
-            },
-            "BOARD MATTERS": {
-                attitude: "Board saw ground reality",
-                ability: "Board upskilled (e.g. AI)",
-                access: "Better Staff-Board comms",
-                action: "Approved 3-year Roadmap",
-                st: "Impactful Entities"
-            },
-            "PROGRAMMES": {
-                attitude: "Beneficiary felt hope",
-                ability: "Beneficiary learned skill",
-                access: "Removed logistics barrier",
-                action: "Beneficiary became volunteer",
-                st: "Empowered Individuals"
-            },
-            "STAFF": {
-                attitude: "Improved team morale",
-                ability: "Staff attended training",
-                access: "Centralized knowledge bank",
-                action: "Piloted faster intake process",
-                st: "Empowered Individuals"
-            }
-        };
+        let currentActiveArea = "";
+        let currentActiveImpact = null;
 
-        function selectArea(areaName, btnElement) {
-            state.area = areaName;
-            state.ncssAlignment = impactMap[areaName].st;
+        function selectArea(area, btnElement) {
+            currentActiveArea = area;
             
-            // UI Toggle for Area
-            document.querySelectorAll('.area-btn').forEach(btn => btn.classList.remove('selected'));
-            btnElement.classList.add('selected');
+            // Stop animations and set active state
+            const allPills = document.querySelectorAll('.category-pills .pill');
+            allPills.forEach(p => {
+                p.classList.remove('active');
+                p.style.animation = 'none';
+            });
+            btnElement.classList.add('active');
 
-            // Populate text hints dynamically in Step 2
-            document.getElementById('hint-attitude').innerText = impactMap[areaName].attitude;
-            document.getElementById('hint-ability').innerText = impactMap[areaName].ability;
-            document.getElementById('hint-access').innerText = impactMap[areaName].access;
-            document.getElementById('hint-action').innerText = impactMap[areaName].action;
-
-            // Reset step 2 UI if user goes back
-            document.querySelectorAll('.impact-btn').forEach(btn => btn.classList.remove('selected'));
-            state.impactType = null;
-            document.getElementById('shareBtn').disabled = true;
-
-            // Show Step 2
-            const step2 = document.getElementById('step-2');
-            step2.classList.remove('hidden-step');
-            step2.classList.add('visible-step');
+            // Construct Step 2 UI
+            document.getElementById('stepTwoHeader').style.display = 'flex';
             
-            // Scroll to Step 2 smoothly
-            setTimeout(() => {
-                step2.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 50);
+            const container = document.getElementById('impactTilesContainer');
+            container.innerHTML = '';
+            
+            const scenarios = impactDB[area];
+            
+            scenarios.forEach((scenario, index) => {
+                const node = document.createElement('div');
+                node.className = 'symptom-tile';
+                node.style.animation = `fadeIn 0.3s ease-out ${index * 0.1}s both`;
+                
+                // Safe JSON serialization
+                const scenarioString = encodeURIComponent(JSON.stringify(scenario));
+
+                node.innerHTML = `
+                    <div style="font-size: 13px; color: #1B2B28; font-weight: 700; margin-bottom: 4px;">
+                        <span style="color: #10B981; font-weight: 800; font-size: 10px; text-transform: uppercase;">${scenario.type}</span><br>
+                        ${scenario.title}
+                    </div>
+                    <div style="font-size: 12px; color: #5E5A4B; line-height: 1.4;">
+                        ${scenario.desc}
+                    </div>
+                `;
+                
+                node.onclick = () => openActionScreen(scenario);
+                container.appendChild(node);
+            });
         }
 
-        function selectImpact(impactType, btnElement) {
-            state.impactType = impactType;
+        function openActionScreen(scenarioObj) {
+            currentActiveImpact = scenarioObj;
+            
+            document.getElementById('cardArea').innerText = currentActiveArea;
+            document.getElementById('cardType').innerText = scenarioObj.type;
+            document.getElementById('cardSentence').innerText = `${scenarioObj.title}: ${scenarioObj.desc}`;
+            
+            document.getElementById('actionInput').value = '';
+            checkCompletion();
+            
+            document.getElementById('actionScreen').classList.add('visible');
 
-            // UI Toggle for Impact
-            document.querySelectorAll('.impact-btn').forEach(btn => btn.classList.remove('selected'));
-            btnElement.classList.add('selected');
-
-            // Show Step 3
-            const step3 = document.getElementById('step-3');
-            step3.classList.remove('hidden-step');
-            step3.classList.add('visible-step');
-
-            // Enable share button
-            document.getElementById('shareBtn').disabled = false;
-
-            // Pre-fill notes if empty
-            const notesField = document.getElementById('userNotes');
-            if (notesField.value === "") {
-                const hint = btnElement.querySelector('.impact-hint').innerText;
-                notesField.placeholder = `e.g. ${hint} because we...`;
+            // Force mobile overlay styling
+            if (window.innerWidth <= 850) {
+                document.getElementById('actionScreen').style.backgroundColor = '#F2EFE9';
             }
+        }
 
-            // Scroll to Step 3 smoothly
-            setTimeout(() => {
-                step3.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 50);
+        function closeActionScreen() {
+            document.getElementById('actionScreen').classList.remove('visible');
+            currentActiveImpact = null;
+        }
+
+        function checkCompletion() {
+            const input = document.getElementById('actionInput').value.trim();
+            const btn = document.getElementById('whatsappBtn');
+            if (input.length > 5) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
         }
 
         function generateWhatsApp() {
-            const notes = document.getElementById('userNotes').value.trim();
-            if (!state.area || !state.impactType) return;
+            if (!currentActiveImpact || !currentActiveArea) return;
+            const inputNotes = document.getElementById('actionInput').value.trim();
 
-            const text = `> *🌟 Daily Impact Pulse*\n> *Area:* ${state.area}\n> *Type:* ${state.impactType}\n> *Insight:* ${notes ? notes : "Checked in via tracker."}\n> *Alignment:* This supports the NCSS 4ST goal of ${state.ncssAlignment}.`;
+            const text = `> *🌟 Daily Impact Pulse*\n> *Area:* ${currentActiveArea}\n> *Type:* ${currentActiveImpact.type}\n> *Impact:* ${currentActiveImpact.desc}\n>\n> *Context/Notes:*\n> ${inputNotes}\n>\n> *Alignment:* This supports the NCSS 4ST goal of ${currentActiveImpact.align}.\n\n_Powered by CharityOps_`;
             
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-            window.location.assign(whatsappUrl);
+            window.location.assign(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
         }
     </script>
 </body>
+
 </html>
