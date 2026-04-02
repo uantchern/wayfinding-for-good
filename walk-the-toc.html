@@ -181,6 +181,16 @@
             animation: pulseGreenGlow 2.5s infinite;
         }
 
+        @keyframes sequentialBlueGlow {
+            0%, 100% { box-shadow: none; border-color: #EAE5D8; }
+            50% { box-shadow: 0 0 16px rgba(59, 130, 246, 0.6); border-color: #3B82F6; }
+        }
+        .glow-trigger-0 { animation: sequentialBlueGlow 2.5s infinite 0s; }
+        .glow-trigger-1 { animation: sequentialBlueGlow 2.5s infinite 0.5s; }
+        .glow-trigger-2 { animation: sequentialBlueGlow 2.5s infinite 1.0s; }
+        .glow-trigger-3 { animation: sequentialBlueGlow 2.5s infinite 1.5s; }
+        .glow-trigger-4 { animation: sequentialBlueGlow 2.5s infinite 2.0s; }
+
     </style>
 </head>
 
@@ -208,11 +218,11 @@
                 <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. Select where you created impact</span>
             </div>
             <div class="category-pills" id="categoryPills">
-                <button class="pill" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
-                <button class="pill" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
-                <button class="pill" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
-                <button class="pill" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
-                <button class="pill" onclick="selectArea('STAFF', this)">STAFF</button>
+                <button class="pill glow-trigger-0" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
+                <button class="pill glow-trigger-1" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
+                <button class="pill glow-trigger-2" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
+                <button class="pill glow-trigger-3" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
+                <button class="pill glow-trigger-4" onclick="selectArea('STAFF', this)">STAFF</button>
             </div>
 
             <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
@@ -341,7 +351,9 @@
         };
 
         function selectArea(areaKey, btn) {
-            document.querySelectorAll('.pill').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.pill').forEach(el => {
+                el.classList.remove('active', 'glow-trigger-0', 'glow-trigger-1', 'glow-trigger-2', 'glow-trigger-3', 'glow-trigger-4');
+            });
             if(btn) btn.classList.add('active');
             
             document.getElementById('stepTwoHeader').style.display = 'flex';
