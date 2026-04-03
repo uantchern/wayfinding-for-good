@@ -404,6 +404,12 @@
                 </button>
 
                 <div style="flex-grow: 1;"></div>
+                <div id="masteryProgress" style="font-size: 13px; color: #D2B48C; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-right: 12px; font-family: monospace;">
+                    <i class="fas fa-chart-line"></i> Mastery: <span id="masteryText">0 / 0</span>
+                </div>
+                <button onclick="resetMastery()" class="text-white hover:text-[#ef4444] transition-colors" title="Wipe History" style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                    <i class="fas fa-trash-alt text-lg"></i>
+                </button>
                 <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors"
                     title="Restart Assessment"
                     style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
@@ -586,6 +592,22 @@
             }
         };
 
+        let progressData = JSON.parse(localStorage.getItem('charityops_mastery_v1')) || { scenarios: [], codes: [] };
+        let totalUniqueCodes = 0;
+
+        function updateMasteryUI() {
+            let el = document.getElementById('masteryText');
+            if(el) el.innerText = `${progressData.codes.length} / ${totalUniqueCodes}`;
+        }
+
+        function resetMastery() {
+            if(confirm("Are you sure you want to completely wipe your completed GEC progress history?")) {
+                progressData = { scenarios: [], codes: [] };
+                localStorage.setItem('charityops_mastery_v1', JSON.stringify(progressData));
+                location.reload();
+            }
+        }
+
         let chatHistory = [];
         let currentScenarioObj = null;
         let currentArea = null;
@@ -601,8 +623,12 @@
         let mappedScenarios = { 'PROGRAMMES': [], 'BOARD MATTERS': [], 'GOVERNANCE': [], 'STAFF': [], 'FUND RAISING': [] };
 
         document.addEventListener('DOMContentLoaded', () => {
+            let allCodes = new Set();
             Object.keys(scenarios).forEach(key => {
                 scenarios[key].pool.forEach(item => {
+                    let m = item.gec.match(/CODE ID ([\d\.]+)[a-z]?/);
+                    if(m) allCodes.add(m[1]);
+
                     let assigned = false;
                     for(let area of ['STAFF', 'PROGRAMMES', 'FUND RAISING', 'BOARD MATTERS', 'GOVERNANCE']) {
                         if(assigned) break;
@@ -617,6 +643,8 @@
                     if(!assigned) mappedScenarios['GOVERNANCE'].push(item); // Fallback
                 });
             });
+            totalUniqueCodes = allCodes.size;
+            updateMasteryUI();
         });
 
         function selectArea(area, btnElement) {
@@ -640,8 +668,12 @@
                 
                 let snippet = item.scenario.replace(/{charityType}/g, 'charity').substring(0, 110) + '...';
                 
-                btn.innerHTML = `<div style="font-size: 12px; color: #D2B48C; margin-top: 4px;">●</div> 
-                                 <div style="flex-grow: 1;">
+                let isCompleted = progressData.scenarios.includes(item.scenario);
+                let stateIcon = isCompleted ? `<i class="fas fa-check-circle" style="color: #4CAF50; font-size: 14px; margin-top: 2px;"></i>` : `<div style="font-size: 12px; color: #D2B48C; margin-top: 4px;">●</div>`;
+                let opac = isCompleted ? `opacity: 0.6;` : ``;
+
+                btn.innerHTML = `${stateIcon} 
+                                 <div style="flex-grow: 1; ${opac}">
                                     <span style="color: #1B2B28; font-size: 13px; font-weight: 500; line-height: 1.4;">${snippet}</span>
                                  </div>`;
                 
@@ -716,6 +748,26 @@
             });
             btnNode.style.opacity = '1';
             btnNode.style.transform = 'scale(1)';
+
+            if (!progressData.scenarios.includes(currentScenarioObj.scenario)) {
+                progressData.scenarios.push(currentScenarioObj.scenario);
+                let m = currentScenarioObj.gec.match(/CODE ID ([\d\.]+)[a-z]?/);
+                let codeId = m ? m[1] : null;
+                if (codeId && !progressData.codes.includes(codeId)) {
+                    progressData.codes.push(codeId);
+                }
+                localStorage.setItem('charityops_mastery_v1', JSON.stringify(progressData));
+                updateMasteryUI();
+
+                // Instantly update the checkmark in the left pane
+                let snippetPrefix = currentScenarioObj.scenario.replace(/{charityType}/g, 'charity').substring(0, 50);
+                document.querySelectorAll('#impactTilesContainer > div').forEach(node => {
+                    if (node.innerText.includes(snippetPrefix)) {
+                        node.firstElementChild.outerHTML = `<i class="fas fa-check-circle" style="color: #4CAF50; font-size: 14px; margin-top: 2px;"></i>`;
+                        node.children[1].style.opacity = '0.6';
+                    }
+                });
+            }
 
             const chatWindow = document.getElementById('chatWindow');
             document.querySelectorAll('.share-bubble').forEach(b => b.remove());
