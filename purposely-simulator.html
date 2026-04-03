@@ -347,56 +347,41 @@
 
     <div class="app-container">
         <!-- Setup Pane -->
-        <div class="setup-pane" id="debugDrawer">
-            <div class="font-serif text-3xl leading-none cursor-default select-none group"
-                style="font-family: Georgia, serif; margin-bottom: 1.5rem;">
-                <span class="relative inline-block" style="position: relative; display: inline-block;">
-                    <span class="italic relative z-10"
-                        style="color: #103020; font-weight: 500; padding-right: 0.25rem; position: relative; z-index: 10; font-style: italic;">Charity</span>
-                    <span
-                        style="position: absolute; left:-0.2em; right:0; bottom:12%; height:2px; background:#B08968; z-index:0; transform-origin:left; transition: transform 0.7s ease-out;"></span>
-                </span><span class="relative z-10 tracking-tight"
-                    style="color: #B08968; position: relative; z-index: 10; font-weight: 400; letter-spacing: -0.025em; margin-left: -0.05em;">Ops</span>
-            </div>
-            <div style="margin-bottom: 32px;">
+        <div class="setup-pane" id="setupDrawer">
+            <a href="https://www.charityops.org" target="_blank" class="font-serif text-3xl leading-none cursor-pointer select-none group"
+                style="font-family: Georgia, serif; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; text-decoration: none;">
+                <div>
+                    <span class="relative inline-block" style="position: relative; display: inline-block;">
+                        <span class="italic relative z-10"
+                            style="color: #103020; font-weight: 500; padding-right: 0.25rem; position: relative; z-index: 10; font-style: italic;">Charity</span>
+                        <span
+                            style="position: absolute; left:-0.2em; right:0; bottom:12%; height:2px; background:#B08968; z-index:0; transform-origin:left; transition: transform 0.7s ease-out;"></span>
+                    </span><span class="relative z-10 tracking-tight"
+                        style="color: #B08968; position: relative; z-index: 10; font-weight: 400; letter-spacing: -0.025em; margin-left: -0.05em;">Ops</span>
+                </div>
+            </a>
+            <div style="margin-bottom: 24px;">
                 <p class="tagline"><i class="fas fa-gem"></i> A Really Useful Thing</p>
-                <h1>Charity Code of Governance Learning & Assessment Kit</h1>
-                <p style="font-size: 14px; color: #5E5A4B; line-height: 1.6; margin: 0 0 12px 0;">
-                    This kit uses realistic scenarios and best practices to help you learn and assess your charity's
-                    level of compliance.
-                </p>
+                <h1 style="margin-bottom:0;">Charity Code of Governance Learning & Assessment Kit</h1>
             </div>
 
-            <div id="progressDashboard"
-                style="margin-bottom: 24px; padding: 16px; background-color: rgba(255, 255, 255, 0.6); border: 1px solid rgba(210, 180, 140, 0.3); border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 43, 40, 0.04);">
-                <h3
-                    style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8B7355; font-weight: 700; margin: 0 0 12px 0;">
-                    <i class="fas fa-chart-pie"></i> GEC Guidelines
-                </h3>
-                <div
-                    style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; padding-bottom: 8px; border-bottom: 1px solid rgba(210, 180, 140, 0.3); margin-bottom: 8px;">
-                    <span style="font-weight: 700; color: #1B2B28; flex: 1.5;">PRINCIPLES</span>
-                    <span style="font-weight: 700; color: #1B2B28; flex: 1; text-align: center;">TIER 1</span>
-                    <span style="font-weight: 700; color: #1B2B28; flex: 1; text-align: center;">TIER 2</span>
-                </div>
-                <div id="progressGrid" style="display: flex; flex-direction: column; gap: 4px;">
-                    <!-- Filled by JS -->
-                </div>
-                <div
-                    style="margin-top: 8px; border-top: 1px solid rgba(210, 180, 140, 0.3); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 12px; font-weight: 700; color: #1B2B28; flex: 1.5;">TOTAL GEC</span>
-                    <span id="t1Progress"
-                        style="font-size: 14px; font-weight: 700; color: #8B7355; flex: 1; text-align: center;">0 /
-                        30</span>
-                    <span id="t2Progress"
-                        style="font-size: 14px; font-weight: 700; color: #8B7355; flex: 1; text-align: center;">0 /
-                        38</span>
-                </div>
+            <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. SELECT OPERATIONAL AREA</span>
+            </div>
+            <div class="category-pills" id="categoryPills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;">
+                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
+                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
+                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
+                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('STAFF', this)">STAFF</button>
+                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
             </div>
 
-            <button id="startBtn" onclick="startAssessment()" class="primary-btn">
-                <i class="fas fa-play"></i> Start
-            </button>
+            <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. SELECT SCENARIO</span>
+            </div>
+            <div id="impactTilesContainer" class="flex flex-col gap-2 mb-6" style="max-height: 480px; overflow-y: auto; padding-right: 8px;">
+                <!-- Javascript will inject here -->
+            </div>
         </div>
 
         <!-- Chat / Assessment Pane -->
@@ -619,527 +604,191 @@
         };
 
         let chatHistory = [];
-        let currentAssessmentData = null;
-        let usedScenarios = new Set();
-        let totalScenariosCount = 0;
-        let currentScenarioIndex = 0;
-        let sequentialScenarios = [];
-        let activeTier = 0;
-        let targetCodeCounts = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0 };
+        let currentScenarioObj = null;
+        let currentArea = null;
+
+        const areaMapping = {
+            'PROGRAMMES': ['1.'],
+            'BOARD MATTERS': ['2.'],
+            'GOVERNANCE': ['3.', '4.', '5.'],
+            'STAFF': ['2.8', '3.4', '4.4'],
+            'FUND RAISING': ['6.']
+        };
+
+        let mappedScenarios = { 'PROGRAMMES': [], 'BOARD MATTERS': [], 'GOVERNANCE': [], 'STAFF': [], 'FUND RAISING': [] };
 
         document.addEventListener('DOMContentLoaded', () => {
-            updateDashboard();
+            Object.keys(scenarios).forEach(key => {
+                scenarios[key].pool.forEach(item => {
+                    let assigned = false;
+                    for(let area of ['PROGRAMMES', 'BOARD MATTERS', 'STAFF', 'FUND RAISING', 'GOVERNANCE']) {
+                        if(assigned) break;
+                        for(let keyword of areaMapping[area]) {
+                            if(item.gec.includes(keyword)) {
+                                mappedScenarios[area].push(item);
+                                assigned = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!assigned) mappedScenarios['GOVERNANCE'].push(item); // Fallback
+                });
+            });
         });
+
+        function selectArea(area, btnElement) {
+            document.querySelectorAll('.pill').forEach(el => {
+                el.style.background = '#FDFBF7';
+                el.style.color = '#8B7355';
+            });
+            btnElement.style.background = '#1B2B28';
+            btnElement.style.color = '#ffffff';
+
+            currentArea = area;
+            document.getElementById('stepTwoHeader').style.display = 'flex';
+            
+            const container = document.getElementById('impactTilesContainer');
+            container.innerHTML = '';
+
+            mappedScenarios[area].forEach((item, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'text-left cursor-pointer transition-colors duration-200 leading-relaxed py-3 px-3 rounded-xl flex gap-3 items-start group hover:bg-[#F2EFE9] border border-transparent hover:border-[#D2B48C]';
+                
+                let snippet = item.scenario.substring(0, 90) + '...';
+                
+                btn.innerHTML = `<div style="font-size: 12px; color: #D2B48C; margin-top: 4px;">●</div> 
+                                 <div style="flex-grow: 1;">
+                                    <strong style="color: #1B2B28; font-size:13px; font-family: Georgia, serif;">${item.gec.split(':')[0]}</strong><br>
+                                    <span style="color: #5E5A4B; font-size: 12px;">${snippet}</span>
+                                 </div>`;
+                
+                btn.onclick = () => {
+                    Array.from(container.children).forEach(child => child.classList.remove('bg-[#F2EFE9]'));
+                    btn.classList.add('bg-[#F2EFE9]');
+                    currentScenarioObj = item;
+                    
+                    document.getElementById('setupDrawer').classList.add('started');
+                    document.getElementById('chatContainer').classList.add('started');
+                    document.getElementById('emptyStatePlaceholder').style.display = 'none';
+
+                    presentEvaluation();
+                };
+                container.appendChild(btn);
+            });
+        }
 
         function getTime() {
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
-        function scrollToBottom() {
-            const chatWindow = document.getElementById('chatWindow');
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-
-        function scrollToElement(id) {
-            const el = document.getElementById(id);
-            if (el) {
-                const chatWindow = document.getElementById('chatWindow');
-                chatWindow.scrollTo({
-                    top: el.offsetTop - 24,
-                    behavior: 'smooth'
-                });
-            } else {
-                scrollToBottom();
-            }
-        }
-
-        function addMessage(text, sender, elementId = null, fixedAnchorId = null) {
-            const chatWindow = document.getElementById('chatWindow');
-            const formattedText = text.replace(/\n/g, '<br>');
-            const idAttr = elementId ? `id="${elementId}"` : '';
-            chatWindow.insertAdjacentHTML('beforeend', `
-            <div ${idAttr} class="bubble ${sender}">
-                ${formattedText}
-                <span class="timestamp">${getTime()}</span>
-            </div>`);
-
-            if (fixedAnchorId) {
-                scrollToElement(fixedAnchorId);
-            } else {
-                scrollToBottom();
-            }
-        }
-
-        function addTypingIndicator(fixedAnchorId = null) {
-            const chatWindow = document.getElementById('chatWindow');
-            const id = 'typing-' + Date.now();
-            chatWindow.insertAdjacentHTML('beforeend', `<div id="${id}" class="bubble ai" style="color: #8B7355; font-style: italic;">typing...</div>`);
-
-            if (fixedAnchorId) {
-                scrollToElement(fixedAnchorId);
-            } else {
-                scrollToBottom();
-            }
-            return id;
-        }
-
-        function removeTypingIndicator(id) {
-            const el = document.getElementById(id);
-            if (el) el.remove();
-        }
-
-        function removeActionButtons() {
-            const btns = document.querySelectorAll('.action-buttons');
-            btns.forEach(b => b.remove());
-        }
-
-        function updateDashboard() {
-            const container = document.getElementById('progressDashboard');
-            if (!container) return;
-
-            let assessedCounts = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0 };
-            chatHistory.forEach(log => {
-                if (log.step === 'Scenario' && log.data && log.data.userResponse && log.data.id) {
-                    const match = log.data.id.match(/^(\d+)-/);
-                    if (match) {
-                        assessedCounts[match[1]]++;
-                    }
-                }
-            });
-
-            const dashArray = "39.88 211.32"; // 60 degrees - gap for radius 40
-            const angles = [-90, -30, 30, 90, 150, 210];
-            const px = [60, 96, 96, 60, 24, 24];
-            const py = [6, 27, 93, 114, 93, 27];
-
-            let totalTarget = 0;
-            let totalAssessed = 0;
-
-            let svgHtml = `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
-                <svg width="120" height="120" viewBox="0 0 120 120" style="overflow: visible;">
-                    <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(210,180,140,0.2)" stroke-width="12" />`;
-
-            for (let i = 1; i <= 6; i++) {
-                const key = i.toString();
-                const target = targetCodeCounts[key] || 0;
-                const assessed = Math.min(assessedCounts[key] || 0, target);
-                
-                totalTarget += target;
-                totalAssessed += assessed;
-
-                const isComplete = target > 0 && assessed >= target;
-                const strokeColor = isComplete ? '#25D366' : '#D2B48C';
-                const opacity = isComplete ? '1' : (assessed > 0 ? '0.6' : '0.1');
-
-                svgHtml += `
-                    <circle cx="60" cy="60" r="40" fill="none" stroke="${strokeColor}" stroke-width="12"
-                        stroke-dasharray="${dashArray}"
-                        transform="rotate(${angles[i-1]} 60 60)"
-                        style="transition: all 0.5s ease; opacity: ${opacity};" />
-                    <text x="${px[i-1]}" y="${py[i-1]}" font-size="10" font-family="Georgia, serif" font-weight="700"
-                        fill="${isComplete ? '#1B2B28' : '#8B7355'}" text-anchor="middle" dominant-baseline="middle">P${i}</text>
-                `;
-            }
-
-            svgHtml += `
-                    <circle cx="60" cy="60" r="18" fill="#ffffff" stroke="rgba(210,180,140,0.5)" stroke-width="1" />
-                    <path d="M60 46 L64 60 L60 74 L56 60 Z" fill="#D2B48C" />
-                    <circle cx="60" cy="60" r="3" fill="#1B2B28" />
-                </svg>
-                <div style="margin-top: 16px; font-size: 14px; font-weight: 700; color: #1B2B28; font-family: Georgia, serif;">
-                    COMPASS: ${totalAssessed} / ${totalTarget > 0 ? totalTarget : '--'}
-                </div>
-            </div>`;
-
-            container.innerHTML = `
-                <h3 style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #8B7355; font-weight: 700; margin: 0 0 16px 0;">
-                    <i class="fas fa-compass"></i> GEC Wayfinding Compass
-                </h3>
-                ${svgHtml}
-            `;
-        }
-
         function goBackToSummary() {
-            document.getElementById('debugDrawer').classList.remove('started');
+            document.getElementById('setupDrawer').classList.remove('started');
             document.getElementById('chatContainer').classList.remove('started');
-            const btn = document.getElementById('startBtn');
-            if (chatHistory.length > 0 && currentScenarioIndex < totalScenariosCount) {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                    btn.style.cursor = 'pointer';
-                    btn.innerHTML = '<i class="fas fa-play"></i> Resume Learning';
-                }
-            }
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        function startAssessment() {
-            const btn = document.getElementById('startBtn');
-
-            if (chatHistory.length > 0 && currentScenarioIndex < totalScenariosCount) {
-                document.getElementById('debugDrawer').classList.add('started');
-                document.getElementById('chatContainer').classList.add('started');
-                return;
-            }
-
-            if (btn) {
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-                btn.style.cursor = 'not-allowed';
-                btn.innerHTML = '<i class="fas fa-play"></i> Learning Active';
-            }
-
-            document.getElementById('debugDrawer').classList.add('started');
-            document.getElementById('chatContainer').classList.add('started');
-            usedScenarios.clear(); // Reset on start
-            currentScenarioIndex = 0;
-            chatHistory = [];
-            localStorage.removeItem('purposelyTranscript');
-            
-            askTierSelection();
-        }
-
-        function askTierSelection() {
-            const typingId = addTypingIndicator();
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-                const p = document.getElementById('emptyStatePlaceholder');
-                if (p) p.remove();
-                
-                const tierMsgId = 'tierSelect-' + Date.now();
-                addMessage(`Welcome to the Journey.\n\nPlease select your organization's Regulatory Tier to focus the wayfinding path:\n\n**Tier 1**: Small/Medium Non-IPC (30 Steps)\n**Tier 2**: Large Non-IPC or IPC (38 Steps)`, 'ai', tierMsgId);
-                
-                const chatWindow = document.getElementById('chatWindow');
-                chatWindow.insertAdjacentHTML('beforeend', `
-                <div class="action-buttons">
-                    <button class="action-btn" onclick="selectTier(1)">Tier 1 Path</button>
-                    <button class="action-btn" onclick="selectTier(2)">Tier 2 Path</button>
-                </div>`);
-                scrollToElement(tierMsgId);
-            }, 800);
-        }
-
-        function selectTier(tier) {
-            removeActionButtons();
-            activeTier = tier;
-            addMessage(`I am requesting the Tier ${tier} Assessment Path.`, 'user');
-            
-            sequentialScenarios = [];
-            targetCodeCounts = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0 };
-            
-            const tempCodeIdGroups = {};
-            const allAvailable = [];
-            
-            Object.keys(scenarios).sort((a, b) => parseInt(a) - parseInt(b)).forEach(key => {
-                const principleData = scenarios[key];
-                principleData.pool.forEach((scenario, index) => {
-                    const match = scenario.gec.match(/CODE ID (\d+\.\d+[a-z]?)/i);
-                    const codeIdKey = match ? match[1].toLowerCase() : `unknown-${key}-${index}`;
-                    if (!tempCodeIdGroups[codeIdKey]) {
-                        tempCodeIdGroups[codeIdKey] = [];
-                    }
-                    const item = {
-                        key: key,
-                        principleData: principleData,
-                        scenario: scenario,
-                        id: `${key}-${index}-${Math.floor(Math.random() * 10000)}`
-                    };
-                    tempCodeIdGroups[codeIdKey].push(item);
-                    allAvailable.push(item);
-                });
-            });
-
-            const selectedIds = new Set();
-            Object.keys(tempCodeIdGroups).forEach(codeId => {
-                const group = tempCodeIdGroups[codeId];
-                const randomChoice = group[Math.floor(Math.random() * group.length)];
-                sequentialScenarios.push(randomChoice);
-                selectedIds.add(randomChoice.id);
-            });
-
-            const targetLength = tier === 1 ? 30 : 38;
-            const remainingPool = allAvailable.filter(item => !selectedIds.has(item.id));
-            shuffleArray(remainingPool);
-            
-            while (sequentialScenarios.length < targetLength && remainingPool.length > 0) {
-                sequentialScenarios.push(remainingPool.pop());
-            }
-
-            // Sort sequentially by Principle and CODE ID
-            sequentialScenarios.sort((a, b) => {
-                if (a.key !== b.key) {
-                    return parseInt(a.key) - parseInt(b.key);
-                }
-                const matchA = a.scenario.gec.match(/CODE ID (\d+\.\d+[a-z]?)/i);
-                const matchB = b.scenario.gec.match(/CODE ID (\d+\.\d+[a-z]?)/i);
-                
-                if (!matchA || !matchB) return 0;
-                
-                const valA = parseFloat(matchA[1]);
-                const valB = parseFloat(matchB[1]);
-                
-                if (valA !== valB) {
-                    return valA - valB;
-                }
-                
-                const charA = matchA[1].replace(/[\d.]/g, '');
-                const charB = matchB[1].replace(/[\d.]/g, '');
-                return charA.localeCompare(charB);
-            });
-            sequentialScenarios.forEach(s => {
-                targetCodeCounts[s.key] = (targetCodeCounts[s.key] || 0) + 1;
-            });
-
-            totalScenariosCount = sequentialScenarios.length;
-            updateDashboard();
-
-            const typingId = addTypingIndicator();
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-                generateNextScenario();
-            }, 800);
-        }
-
-        function generateNextScenario() {
-            const p = document.getElementById('emptyStatePlaceholder');
-            if (p) p.remove();
-
-            removeActionButtons();
-
-            if (currentScenarioIndex >= totalScenariosCount || usedScenarios.size >= totalScenariosCount) {
-                const typingId = addTypingIndicator();
-                setTimeout(() => {
-                    removeTypingIndicator(typingId);
-                    addMessage("You have completed all available scenarios! Assessment concluded.", 'ai');
-                    endSession();
-                }, 800);
-                return;
-            }
-
-            const current = sequentialScenarios[currentScenarioIndex];
-            const principleData = current.principleData;
-            const randomScenario = current.scenario;
-            const scenarioId = current.id;
-
-            usedScenarios.add(scenarioId);
-            currentScenarioIndex++;
-
-            const injectedscenario = randomScenario.scenario.replace(/{charityType}/g, "charity");
-
-            currentAssessmentData = {
-                id: scenarioId,
-                principleTitle: principleData.title,
-                scenarioText: injectedscenario,
-                gecText: randomScenario.gec,
-                bestPractice: randomScenario.bestPractice || "Maintain proactive governance practices."
-            };
-
-            const typingId = addTypingIndicator();
-
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-
-                const principleId = 'principle-' + Date.now();
-                const principleMsg = `<div class="blink-text" style="font-size: 1.1em; margin-bottom: 4px;"> [${principleData.title}]</div>`;
-                addMessage(principleMsg, 'ai', principleId);
-
-                const typingSeq = addTypingIndicator(principleId);
-                setTimeout(() => {
-                    removeTypingIndicator(typingSeq);
-                    const safeGuidanceText = currentAssessmentData.bestPractice.replace(/"/g, '&quot;').replace(/'/g, "\\'");
-                    const scenarioMsg = `*a) Relevant GEC Principle:*\n${randomScenario.gec} <i class="fas fa-info-circle" style="color: #D2B48C; cursor: pointer; margin-left: 6px;" onclick="showWispModal('${safeGuidanceText}')"></i>\n\n*b) Scenario:*\n${injectedscenario}\n\n*c) Best Practices:*\n${currentAssessmentData.bestPractice}`;
-                    addMessage(scenarioMsg, 'ai', null, principleId);
-                    chatHistory.push({ step: 'Scenario', sender: 'AI', text: scenarioMsg, data: currentAssessmentData });
-
-                    const typing2 = addTypingIndicator(principleId);
-                    setTimeout(() => {
-                        removeTypingIndicator(typing2);
-                        addMessage("d) Has your charity put this principle into action to deal with the scenario?", 'ai', null, principleId);
-
-                        // Inject buttons
-                        const chatWindow = document.getElementById('chatWindow');
-                        chatWindow.insertAdjacentHTML('beforeend', `
-                        <div class="action-buttons">
-                            <button class="action-btn" onclick="handleAssessmentResponse('Yes')">Yes</button>
-                            <button class="action-btn" style="background-color: #d32f2f;" onclick="handleAssessmentResponse('No')">No</button>
-                            <button class="action-btn" style="background-color: #f57c00;" onclick="handleAssessmentResponse('Partial')">Partial</button>
-                        </div>`);
-                        scrollToElement(principleId);
-                    }, 800);
-                }, 800);
-
-            }, 800);
-        }
-
-        function handleAssessmentResponse(response) {
-            removeActionButtons();
-
-            addMessage(`*My Assessment:* ${response}`, 'user');
-
-            // Update the last history item with the response
-            if (currentAssessmentData) {
-                currentAssessmentData.userResponse = response;
-            }
-
-            updateDashboard();
-
-            const typingId = addTypingIndicator();
-
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-
-                if (currentScenarioIndex >= totalScenariosCount || usedScenarios.size >= totalScenariosCount) {
-                    addMessage("You have completed assessing ALL THE GUIDELINES! Assessment concluded. You can safely end the session now.", 'ai');
-                    endSession();
-                } else {
-                    generateNextScenario();
-                }
-            }, 800);
-        }
-
-        function autoExportTranscript() {
-            if (chatHistory.length === 0) return;
-
-            let md = "Hi! I just used a Really Useful Thing (RUT) from CharityOps.org: Charity Code of Governance Learning Kit.\n\n";
-
-            // Count totals
-            let yesCount = 0;
-            let noCount = 0;
-            let partialCount = 0;
-
-            const assessmentLogs = chatHistory.filter(log => log.step === 'Scenario');
-
-            assessmentLogs.forEach((log, index) => {
-                const data = log.data;
-                md += `*Assessment ${index + 1}: ${data.principleTitle}*\n`;
-                md += `*a) Relevant GEC Principle:* ${data.gecText}\n`;
-                md += `*b) Scenario:* ${data.scenarioText}\n`;
-                md += `*c) Best Practice:* ${data.bestPractice}\n`;
-
-                let pts = data.userResponse === 'Yes' ? 2 : (data.userResponse === 'Partial' ? 1 : 0);
-                md += `*d) My Assessment:* ${data.userResponse || "No answer recorded"} (${pts} pts)\n\n`;
-
-                if (data.userResponse === 'Yes') yesCount++;
-                if (data.userResponse === 'No') noCount++;
-                if (data.userResponse === 'Partial') partialCount++;
-            });
-
-            let totalPoints = (yesCount * 2) + (partialCount * 1);
-            let maxPoints = assessmentLogs.length * 2;
-            let scorePct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
-
-            md += `*GEC Scoring Matrix Summary:*\n`;
-            md += `Yes (2 pts): ${yesCount}\nPartial (1 pt): ${partialCount}\nNo (0 pts): ${noCount}\n`;
-            md += `*Total Points: ${totalPoints} / ${maxPoints}*\n`;
-            md += `*Overall Alignment Score: ${scorePct}%*\n\n`;
-            md += `_For good governance, all IPCs and large non-IPC charities under Tier 2 should minimally attain 80% of the GEC score._\n`;
-
-            localStorage.setItem('purposelyTranscript', md);
-        }
-
-        function endSession() {
-            const typingId = addTypingIndicator();
-
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-
-                let yesCount = 0;
-                let noCount = 0;
-                let partialCount = 0;
-                const assessmentLogs = chatHistory.filter(log => log.step === 'Scenario');
-                assessmentLogs.forEach((log) => {
-                    if (log.data && log.data.userResponse === 'Yes') yesCount++;
-                    if (log.data && log.data.userResponse === 'No') noCount++;
-                    if (log.data && log.data.userResponse === 'Partial') partialCount++;
-                });
-                
-                let totalPoints = (yesCount * 2) + (partialCount * 1);
-                let maxPoints = assessmentLogs.length * 2;
-                let scorePct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
-
-                let summaryMsg = `*Assessment Summary:*\nTotal Scenarios Assessed: ${assessmentLogs.length}\n\n• Yes (Fully Aligned): ${yesCount}\n• Partial (Needs Polish): ${partialCount}\n• No (Action Required): ${noCount}\n\n*Overall GEC Score: ${scorePct}%*\n\nYour session has concluded. You can share your full assessment details via WhatsApp.`;
-                
-                addMessage(summaryMsg, 'ai');
-
-                autoExportTranscript();
-
-                const chatWindow = document.getElementById('chatWindow');
-                chatWindow.innerHTML += `
-                    <div class="w-full flex flex-col gap-3 mt-4 mb-4">
-                    <button onclick="openWhatsApp()" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 shadow-lg transition-colors">
-                        <i class="fab fa-whatsapp text-xl"></i> Share Details via WhatsApp
-                    </button>
-                    <button onclick="resetAssessment()" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-4 rounded-lg">
-                        Back to Menu
-                    </button>
-                </div>`;
-                scrollToBottom();
-            }, 800);
-        }
-
-        function openWhatsApp() {
-            autoExportTranscript();
-
-            let introMsg = `_Hi I have a query/comment/clarification about the Charity Code of Governance_`;
-
-            if (chatHistory.length > 0 && currentScenarioIndex >= totalScenariosCount) {
-                let md = localStorage.getItem('purposelyTranscript') || '';
-                let match = md.match(/\*Overall Alignment Score: (\d+%)\*/);
-                let score = match ? match[1] : '';
-                introMsg = `_Hi! I just completed my Charity Governance Assessment and scored ${score}._`;
-            } else if (currentAssessmentData && currentAssessmentData.gecText) {
-                const match = currentAssessmentData.gecText.match(/CODE ID \d+\.\d+[a-z]?/i);
-                if (match) {
-                    introMsg = `_Hi I have a query/clarification specifically regarding ${match[0]}_`;
-                }
-            }
-
-            let encodedTranscript = encodeURIComponent(introMsg);
-            // Use location.assign to bypass pop-up blockers in mobile in-app browsers (e.g. LinkedIn)
-            window.location.assign('https://api.whatsapp.com/send?text=' + encodedTranscript);
         }
 
         function resetAssessment() {
-            const btn = document.getElementById('startBtn');
-            if (btn) {
-                btn.disabled = false;
-                btn.style.opacity = '1';
-                btn.style.cursor = 'pointer';
-                btn.innerHTML = '<i class="fas fa-play"></i> Start';
-            }
+            document.getElementById('chatWindow').innerHTML = `<div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%; opacity: 1;">
+                    <div style="max-width: 480px; margin: 0 auto; width: 100%;">
+                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Welcome to the CharityOps Evaluator. This kit skips the abstract theory and plunges you straight into real-world operational testing to objectively measure your organisation's governance maturity.</p>
+                        
+                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #D2B48C; color: #1B2B28; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; animation-duration: 3s;">1</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">LEARN</strong>
+                            </div>
+                        </div>
 
-            document.getElementById('debugDrawer').classList.remove('started');
-            document.getElementById('chatContainer').classList.remove('started');
-            chatHistory = [];
-            currentAssessmentData = null;
-            usedScenarios.clear();
-            currentScenarioIndex = 0;
-            updateDashboard();
-            document.getElementById('chatWindow').innerHTML = `
-                    <div class="empty-state" id="emptyStatePlaceholder" style="opacity: 0.7; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #F2EFE9; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: #8B7355; font-size: 32px;">
-                        <i class="fas fa-clipboard-check"></i>
+                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #B08968; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; animation-duration: 3s; animation-delay: 500ms;">2</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">ASSESS</strong>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 16px;">
+                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; transition: all 0.3s; animation-duration: 3s; animation-delay: 1000ms;">3</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #25D366; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">SHARE</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
+                            App Version: V2.5 | Last Updated: 03 April 2026
+                        </div>
                     </div>
-                    <h3 style="font-size: 1.25rem; font-family: Georgia, serif; color: #1B2B28; margin-bottom: 8px; font-weight: 600;">Ready to evaluate</h3>
-                    <p style="color: #5E5A4B; font-size: 0.875rem; max-width: 320px; line-height: 1.5; margin: 0 auto;">Review the instructions on the left and click Start to see your generated scenario here.</p>
                 </div>`;
+            currentScenarioObj = null;
+            document.querySelectorAll('.pill').forEach(el => { el.style.background = '#FDFBF7'; el.style.color = '#8B7355'; });
+            document.getElementById('impactTilesContainer').innerHTML = '';
+            document.getElementById('stepTwoHeader').style.display = 'none';
         }
 
-        function showWispModal(text) {
-            document.getElementById('wispModalContent').innerHTML = "<b>Example:</b><br>" + text;
-            document.getElementById('wispModalOverlay').classList.add('active');
+        function presentEvaluation() {
+            const chatWindow = document.getElementById('chatWindow');
+            document.querySelectorAll('.eval-bubble').forEach(b => b.remove());
+
+            const content = `
+            <div class='bubble eval-bubble ai' style='font-size: 14px; line-height: 1.5; color: #1B2B28; padding: 16px; margin-bottom: 20px; width: 100%; border: 1px solid #EAE5D8; background: white;'>
+                <strong style="color:#8B7355; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em;">1. Learn</strong><hr style="border-color: #EAE5D8; margin: 8px 0;">
+                <span style="font-weight:700;">*a) Relevant GEC Principle:*</span><br>
+                ${currentScenarioObj.gec}<br><br>
+                
+                <span style="font-weight:700;">*b) Scenario:*</span><br>
+                ${currentScenarioObj.scenario.replace(/{charityType}/g, 'charity')}<br><br>
+
+                <span style="font-weight:700;">*c) Best Practices:*</span><br>
+                ${currentScenarioObj.bestPractice}
+                <div class="timestamp">${getTime()}</div>
+            </div>
+
+            <div class='bubble eval-bubble ai' style='font-size: 14px; line-height: 1.5; color: #1B2B28; padding: 16px; margin-bottom: 20px; width: 100%; border: 1px solid #EAE5D8; background: white;'>
+                <strong style="color:#8B7355; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em;">2. Assess</strong><hr style="border-color: #EAE5D8; margin: 8px 0;">
+                d) Has your charity put this principle into action to deal with the scenario?
+                <div style="display:flex; gap:12px; margin-top:16px;">
+                    <button onclick="handleAssess('Yes', this)" class="assess-btn" style="flex:1; padding:8px; background:#1B2B28; color:white; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 13px;">Yes</button>
+                    <button onclick="handleAssess('No', this)" class="assess-btn" style="flex:1; padding:8px; background:#5E5A4B; color:white; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 13px;">No</button>
+                    <button onclick="handleAssess('Not Sure', this)" class="assess-btn" style="flex:1; padding:8px; background:#D2B48C; color:#1B2B28; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 13px;">Not Sure</button>
+                </div>
+            </div>
+            `;
+            chatWindow.insertAdjacentHTML('beforeend', content);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
-        function closeWispModal(event) {
-            document.getElementById('wispModalOverlay').classList.remove('active');
+        function handleAssess(compliance, btnNode) {
+            document.querySelectorAll('.assess-btn').forEach(btn => {btn.style.opacity = '0.4'; btn.style.transform = 'scale(0.95)'; });
+            btnNode.style.opacity = '1';
+            btnNode.style.transform = 'scale(1)';
+
+            const chatWindow = document.getElementById('chatWindow');
+            document.querySelectorAll('.share-bubble').forEach(b => b.remove());
+
+            const content = `
+            <div class='bubble share-bubble ai' style='font-size: 14px; line-height: 1.5; color: #1B2B28; padding: 16px; margin-bottom: 20px; width: 100%; border: 1px solid #EAE5D8; background: #FDEBD0;'>
+                <strong style="color:#25D366; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em;">3. Comment and Share</strong><hr style="border-color: #EAE5D8; margin: 8px 0;">
+                <textarea id="userComment" rows="3" placeholder="Document context, brief notes, or realities..." style="width: 100%; padding: 12px; border: 1px solid #D2B48C; border-radius: 8px; outline: none; font-family: inherit; font-size: 13px; resize: vertical; box-sizing: border-box; background: #ffffff; margin-bottom: 12px;"></textarea>
+                
+                <button onclick="shareViaWhatsApp('${compliance}')" style="width: 100%; padding: 12px; border-radius: 8px; background: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.2);">
+                    <i class="fab fa-whatsapp text-lg"></i> SHARE VIA WHATSAPP
+                </button>
+            </div>
+            `;
+            chatWindow.insertAdjacentHTML('beforeend', content);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function shareViaWhatsApp(complianceFlag) {
+            const commentEle = document.getElementById('userComment');
+            const comment = commentEle ? commentEle.value.trim() : '';
+            const text = `*Evaluating: ${currentScenarioObj.gec.split(':')[0]}*\n\n*Scenario:* ${currentScenarioObj.scenario.replace(/{charityType}/g, 'charity')}\n\n*Self-Assessment:* ${complianceFlag}\n*Comment:* ${comment ? comment : 'No comment'}`;
+            
+            const encodedText = encodeURIComponent(text);
+            const wurl = `https://wa.me/?text=${encodedText}`;
+            window.open(wurl, '_blank');
+        }
+
+        function openWhatsApp() {
+            window.open('https://wa.me/?text=Hi%2C%20I%20need%20clarification%20on%20CharityOps', '_blank');
         }
 
         // Drawer starts naturally visible in new layout

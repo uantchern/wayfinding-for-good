@@ -442,7 +442,8 @@
 
             document.getElementById('setupDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
-            document.getElementById('emptyStatePlaceholder').style.display = 'none';
+            const emptyState = document.getElementById('emptyStatePlaceholder');
+            if (emptyState) emptyState.style.display = 'none';
 
             const chatWindow = document.getElementById('chatWindow');
             chatWindow.innerHTML = `
