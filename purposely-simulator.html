@@ -748,15 +748,11 @@
         function shareViaWhatsApp(complianceFlag) {
             const commentEle = document.getElementById('userComment');
             const comment = commentEle ? commentEle.value.trim() : '';
-            const text = `*Evaluating: ${currentScenarioObj.gec.split(':')[0]}*\n\n*Scenario:* ${currentScenarioObj.scenario.replace(/{charityType}/g, 'charity')}\n\n*Self-Assessment:* ${complianceFlag}\n*Comment:* ${comment ? comment : 'No comment'}`;
+            const text = `*A) SCENARIO:*\n${currentScenarioObj.scenario.replace(/{charityType}/g, 'charity')}\n\n*B) ASSESS:*\nIs your charity formally prepared to deal with this scenario?\nAnswer: ${complianceFlag}\n\n*C) RELEVANT GEC PRINCIPLE:*\n${currentScenarioObj.gec}\n\n*D) BEST PRACTICES:*\n${currentScenarioObj.bestPractice}\n\n*COMMENT:*\n${comment ? comment : 'None'}`;
             
             const encodedText = encodeURIComponent(text);
             const wurl = `https://wa.me/?text=${encodedText}`;
             window.open(wurl, '_blank');
-        }
-
-        function openWhatsApp() {
-            window.open('https://wa.me/?text=Hi%2C%20I%20need%20clarification%20on%20CharityOps', '_blank');
         }
 
         // Drawer starts naturally visible in new layout
