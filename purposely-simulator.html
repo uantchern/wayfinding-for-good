@@ -254,6 +254,15 @@
                 opacity: 0;
             }
         }
+        
+        @keyframes amberGlow {
+            0% { box-shadow: 0 0 0px 0px rgba(210, 180, 140, 0); border-color: #D2B48C; transform: scale(1); }
+            50% { box-shadow: 0 0 15px 4px rgba(210, 180, 140, 0.8); border-color: #B08968; transform: scale(1.02); }
+            100% { box-shadow: 0 0 0px 0px rgba(210, 180, 140, 0); border-color: #D2B48C; transform: scale(1); }
+        }
+        .flash-amber {
+            animation: amberGlow 2s infinite ease-in-out;
+        }
 
         /* Responsiveness */
         @media (max-width: 850px) {
@@ -369,11 +378,11 @@
                 <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. SELECT OPERATIONAL AREA</span>
             </div>
             <div class="category-pills" id="categoryPills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;">
-                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
-                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
-                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
-                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('STAFF', this)">STAFF</button>
-                <button class="pill" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
+                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
+                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
+                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
+                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('STAFF', this)">STAFF</button>
+                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
             </div>
 
             <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
@@ -640,6 +649,7 @@
             document.querySelectorAll('.pill').forEach(el => {
                 el.style.background = '#FDFBF7';
                 el.style.color = '#8B7355';
+                el.classList.remove('flash-amber');
             });
             btnElement.style.background = '#1B2B28';
             btnElement.style.color = '#ffffff';
@@ -726,28 +736,20 @@
         function presentEvaluation() {
             const chatWindow = document.getElementById('chatWindow');
             document.querySelectorAll('.eval-bubble').forEach(b => b.remove());
+            document.querySelectorAll('.share-bubble').forEach(b => b.remove());
 
             const content = `
             <div class='bubble eval-bubble ai' style='font-size: 14px; line-height: 1.5; color: #1B2B28; padding: 16px; margin-bottom: 20px; width: 100%; border: 1px solid #EAE5D8; background: white;'>
-                <strong style="color:#8B7355; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em;">1. Learn</strong><hr style="border-color: #EAE5D8; margin: 8px 0;">
-                <span style="font-weight:700;">*a) Relevant GEC Principle:*</span><br>
-                ${currentScenarioObj.gec}<br><br>
-                
-                <span style="font-weight:700;">*b) Scenario:*</span><br>
+                <strong style="color:#8B7355; text-transform: uppercase; font-size: 13px; letter-spacing: 0.1em;">a) Scenario:</strong><br>
                 ${currentScenarioObj.scenario.replace(/{charityType}/g, 'charity')}<br><br>
-
-                <span style="font-weight:700;">*c) Best Practices:*</span><br>
-                ${currentScenarioObj.bestPractice}
-                <div class="timestamp">${getTime()}</div>
-            </div>
-
-            <div class='bubble eval-bubble ai' style='font-size: 14px; line-height: 1.5; color: #1B2B28; padding: 16px; margin-bottom: 20px; width: 100%; border: 1px solid #EAE5D8; background: white;'>
-                <strong style="color:#8B7355; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em;">2. Assess</strong><hr style="border-color: #EAE5D8; margin: 8px 0;">
-                d) Has your charity put this principle into action to deal with the scenario?
+                
+                <hr style="border-color: #EAE5D8; margin: 12px 0;">
+                <strong style="color:#8B7355; text-transform: uppercase; font-size: 13px; letter-spacing: 0.1em;">b) Assess</strong><br>
+                Is your charity formally prepared to deal with this scenario?
                 <div style="display:flex; gap:12px; margin-top:16px;">
-                    <button onclick="handleAssess('Yes', this)" class="assess-btn" style="flex:1; padding:8px; background:#1B2B28; color:white; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 13px;">Yes</button>
-                    <button onclick="handleAssess('No', this)" class="assess-btn" style="flex:1; padding:8px; background:#5E5A4B; color:white; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 13px;">No</button>
-                    <button onclick="handleAssess('Not Sure', this)" class="assess-btn" style="flex:1; padding:8px; background:#D2B48C; color:#1B2B28; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 13px;">Not Sure</button>
+                    <button onclick="handleAssess('Yes', this)" class="assess-btn" style="flex:1; padding:10px; background:#1B2B28; color:white; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 14px;">Yes</button>
+                    <button onclick="handleAssess('No', this)" class="assess-btn" style="flex:1; padding:10px; background:#ef4444; color:white; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 14px;">No</button>
+                    <button onclick="handleAssess('Not Sure', this)" class="assess-btn" style="flex:1; padding:10px; background:#D2B48C; color:#1B2B28; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 14px;">Not Sure</button>
                 </div>
             </div>
             `;
@@ -756,7 +758,11 @@
         }
 
         function handleAssess(compliance, btnNode) {
-            document.querySelectorAll('.assess-btn').forEach(btn => {btn.style.opacity = '0.4'; btn.style.transform = 'scale(0.95)'; });
+            document.querySelectorAll('.assess-btn').forEach(btn => {
+                btn.style.opacity = '0.4'; 
+                btn.style.transform = 'scale(0.95)'; 
+                btn.disabled = true;
+            });
             btnNode.style.opacity = '1';
             btnNode.style.transform = 'scale(1)';
 
@@ -764,6 +770,19 @@
             document.querySelectorAll('.share-bubble').forEach(b => b.remove());
 
             const content = `
+            <div class='bubble share-bubble ai' style='font-size: 14px; line-height: 1.5; color: #1B2B28; padding: 16px; margin-bottom: 20px; width: 100%; border: 1px solid #EAE5D8; background: white;'>
+                <strong style="color:#D2B48C; text-transform: uppercase; font-size: 13px; letter-spacing: 0.05em;">c) Relevant GEC Principle:</strong><br>
+                <div style="background: #FDFBF7; padding: 12px; border-radius: 8px; border-left: 3px solid #D2B48C; margin-top: 6px; margin-bottom: 16px;">
+                    ${currentScenarioObj.gec}
+                </div>
+                
+                <strong style="color:#7fb880; text-transform: uppercase; font-size: 13px; letter-spacing: 0.05em;">d) Best Practices:</strong><br>
+                <div style="background: #f0fdf4; padding: 12px; border-radius: 8px; border-left: 3px solid #22c55e; margin-top: 6px; color: #14532d; font-weight: 500;">
+                    ${currentScenarioObj.bestPractice}
+                </div>
+                <!-- <div class="timestamp">${getTime()}</div> -->
+            </div>
+
             <div class='bubble share-bubble ai' style='font-size: 14px; line-height: 1.5; color: #1B2B28; padding: 16px; margin-bottom: 20px; width: 100%; border: 1px solid #EAE5D8; background: #FDEBD0;'>
                 <strong style="color:#25D366; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em;">3. Comment and Share</strong><hr style="border-color: #EAE5D8; margin: 8px 0;">
                 <textarea id="userComment" rows="3" placeholder="Document context, brief notes, or realities..." style="width: 100%; padding: 12px; border: 1px solid #D2B48C; border-radius: 8px; outline: none; font-family: inherit; font-size: 13px; resize: vertical; box-sizing: border-box; background: #ffffff; margin-bottom: 12px;"></textarea>
