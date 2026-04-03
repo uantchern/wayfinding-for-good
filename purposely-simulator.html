@@ -260,9 +260,11 @@
             50% { box-shadow: 0 0 20px 6px rgba(255, 102, 0, 0.85); border-color: #ff6600; transform: scale(1.03); opacity: 1; }
             100% { box-shadow: 0 0 0px 0px rgba(255, 102, 0, 0); border-color: #D2B48C; transform: scale(1); }
         }
-        .flash-amber {
-            animation: amberGlow 1.5s infinite ease-in-out;
-        }
+        .flash-amber-0 { animation: amberGlow 1.5s infinite ease-in-out 0s; }
+        .flash-amber-1 { animation: amberGlow 1.5s infinite ease-in-out 0.3s; }
+        .flash-amber-2 { animation: amberGlow 1.5s infinite ease-in-out 0.6s; }
+        .flash-amber-3 { animation: amberGlow 1.5s infinite ease-in-out 0.9s; }
+        .flash-amber-4 { animation: amberGlow 1.5s infinite ease-in-out 1.2s; }
 
         /* Responsiveness */
         @media (max-width: 850px) {
@@ -371,18 +373,18 @@
             </a>
             <div style="margin-bottom: 24px;">
                 <p class="tagline"><i class="fas fa-gem"></i> A Really Useful Thing for charities</p>
-                <h1 style="margin-bottom:0;">Code of Governance Learning & Assessment Kit</h1>
+                <h1 style="margin-bottom:0;">Governance Learning & Assessment Kit</h1>
             </div>
 
             <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. SELECT OPERATIONAL AREA</span>
             </div>
             <div class="category-pills" id="categoryPills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;">
-                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
-                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
-                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
-                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('STAFF', this)">STAFF</button>
-                <button class="pill flash-amber" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
+                <button class="pill flash-amber-0" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
+                <button class="pill flash-amber-1" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
+                <button class="pill flash-amber-2" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
+                <button class="pill flash-amber-3" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('STAFF', this)">STAFF</button>
+                <button class="pill flash-amber-4" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
             </div>
 
             <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
@@ -401,13 +403,7 @@
                     <i class="fas fa-home text-xl"></i>
                 </button>
 
-                <h2>Learning Session</h2>
-                <button onclick="openWhatsApp()"
-                    class="text-[#25D366] hover:text-[#128C7E] transition-colors ml-auto mr-2 md:mr-4"
-                    title="Ask via WhatsApp"
-                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
-                    <i class="fab fa-whatsapp text-xl"></i> Ask
-                </button>
+                <div style="flex-grow: 1;"></div>
                 <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors"
                     title="Restart Assessment"
                     style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
@@ -626,7 +622,7 @@
             document.querySelectorAll('.pill').forEach(el => {
                 el.style.background = '#FDFBF7';
                 el.style.color = '#8B7355';
-                el.classList.remove('flash-amber');
+                el.classList.remove('flash-amber-0', 'flash-amber-1', 'flash-amber-2', 'flash-amber-3', 'flash-amber-4');
             });
             btnElement.style.background = '#1B2B28';
             btnElement.style.color = '#ffffff';
