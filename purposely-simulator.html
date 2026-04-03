@@ -407,9 +407,7 @@
                 <div id="masteryProgress" style="font-size: 13px; color: #D2B48C; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-right: 12px; font-family: monospace;">
                     <i class="fas fa-chart-line"></i> Mastery: <span id="masteryText">0 / 0</span>
                 </div>
-                <button onclick="resetMastery()" class="text-white hover:text-[#ef4444] transition-colors" title="Wipe History" style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                    <i class="fas fa-trash-alt text-lg"></i>
-                </button>
+                <!-- Master reset removed -->
                 <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors"
                     title="Restart Assessment"
                     style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
@@ -423,6 +421,16 @@
                         <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.6; font-style: italic;">The Governance Kit bridges the gap between theory and reality. By framing complex Charity Code principles as recognizable everyday scenarios, it accelerates intuitive learning. Crucially, its blind-reveal workflow enables honest evaluations before exposing the best practices—ensuring objective self-assessment and instantly shareable gap analyses.</p>
                         <div style="font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
                             App Version: V2.6 | Last Updated: 03 April 2026
+                        </div>
+                        <div style="margin-top: 24px; font-size: 14px; color: #8B7355; line-height: 1.6; font-weight: 500;">
+                            <ul style="list-style-type: decimal; padding-left: 20px; margin-bottom: 12px;">
+                                <li>Select from 5 areas</li>
+                                <li>77 scenarios</li>
+                                <li>Covering all GEC code IDs</li>
+                            </ul>
+                            <div style="font-size: 12px; color: #cf6679; display: flex; align-items: center; gap: 6px; margin-top: 12px; background: #FDFBF7; padding: 8px 12px; border-left: 3px solid #cf6679; border-radius: 4px;">
+                                <i class="fas fa-info-circle"></i> Mastery level is reset when your browser is closed.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -592,20 +600,12 @@
             }
         };
 
-        let progressData = JSON.parse(localStorage.getItem('charityops_mastery_v1')) || { scenarios: [], codes: [] };
+        let progressData = JSON.parse(sessionStorage.getItem('charityops_mastery_v1')) || { scenarios: [], codes: [] };
         let totalUniqueCodes = 0;
 
         function updateMasteryUI() {
             let el = document.getElementById('masteryText');
             if(el) el.innerText = `${progressData.codes.length} / ${totalUniqueCodes}`;
-        }
-
-        function resetMastery() {
-            if(confirm("Are you sure you want to completely wipe your completed GEC progress history?")) {
-                progressData = { scenarios: [], codes: [] };
-                localStorage.setItem('charityops_mastery_v1', JSON.stringify(progressData));
-                location.reload();
-            }
         }
 
         let chatHistory = [];
@@ -708,6 +708,16 @@
                         <div style="font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
                             App Version: V2.6 | Last Updated: 03 April 2026
                         </div>
+                        <div style="margin-top: 24px; font-size: 14px; color: #8B7355; line-height: 1.6; font-weight: 500;">
+                            <ul style="list-style-type: decimal; padding-left: 20px; margin-bottom: 12px;">
+                                <li>Select from 5 areas</li>
+                                <li>77 scenarios</li>
+                                <li>Covering all GEC code IDs</li>
+                            </ul>
+                            <div style="font-size: 12px; color: #cf6679; display: flex; align-items: center; gap: 6px; margin-top: 12px; background: #FDFBF7; padding: 8px 12px; border-left: 3px solid #cf6679; border-radius: 4px;">
+                                <i class="fas fa-info-circle"></i> Mastery level is reset when your browser is closed.
+                            </div>
+                        </div>
                     </div>
                 </div>`;
             currentScenarioObj = null;
@@ -756,7 +766,7 @@
                 if (codeId && !progressData.codes.includes(codeId)) {
                     progressData.codes.push(codeId);
                 }
-                localStorage.setItem('charityops_mastery_v1', JSON.stringify(progressData));
+                sessionStorage.setItem('charityops_mastery_v1', JSON.stringify(progressData));
                 updateMasteryUI();
 
                 // Instantly update the checkmark in the left pane
