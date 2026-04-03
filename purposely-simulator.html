@@ -256,12 +256,12 @@
         }
         
         @keyframes amberGlow {
-            0% { box-shadow: 0 0 0px 0px rgba(210, 180, 140, 0); border-color: #D2B48C; transform: scale(1); }
-            50% { box-shadow: 0 0 15px 4px rgba(210, 180, 140, 0.8); border-color: #B08968; transform: scale(1.02); }
-            100% { box-shadow: 0 0 0px 0px rgba(210, 180, 140, 0); border-color: #D2B48C; transform: scale(1); }
+            0% { box-shadow: 0 0 0px 0px rgba(255, 102, 0, 0); border-color: #D2B48C; transform: scale(1); }
+            50% { box-shadow: 0 0 20px 6px rgba(255, 102, 0, 0.85); border-color: #ff6600; transform: scale(1.03); opacity: 1; }
+            100% { box-shadow: 0 0 0px 0px rgba(255, 102, 0, 0); border-color: #D2B48C; transform: scale(1); }
         }
         .flash-amber {
-            animation: amberGlow 2s infinite ease-in-out;
+            animation: amberGlow 1.5s infinite ease-in-out;
         }
 
         /* Responsiveness */
@@ -370,8 +370,8 @@
                 </div>
             </a>
             <div style="margin-bottom: 24px;">
-                <p class="tagline"><i class="fas fa-gem"></i> A Really Useful Thing</p>
-                <h1 style="margin-bottom:0;">Charity Code of Governance Learning & Assessment Kit</h1>
+                <p class="tagline"><i class="fas fa-gem"></i> A Really Useful Thing for charities</p>
+                <h1 style="margin-bottom:0;">Code of Governance Learning & Assessment Kit</h1>
             </div>
 
             <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
@@ -418,31 +418,8 @@
             <div class="chat-window" id="chatWindow">
                 <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%; opacity: 1;">
                     <div style="max-width: 480px; margin: 0 auto; width: 100%;">
-                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Welcome to the CharityOps Evaluator. This kit skips the abstract theory and plunges you straight into real-world operational testing to objectively measure your organisation's governance maturity.</p>
-                        
-                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
-                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #D2B48C; color: #1B2B28; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; animation-duration: 3s;">1</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">LEARN</strong>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
-                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #B08968; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; animation-duration: 3s; animation-delay: 500ms;">2</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">ASSESS</strong>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 16px;">
-                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; transition: all 0.3s; animation-duration: 3s; animation-delay: 1000ms;">3</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #25D366; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">SHARE</strong>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
-                            App Version: V2.5 | Last Updated: 03 April 2026
+                        <div style="font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
+                            App Version: V2.6 | Last Updated: 03 April 2026
                         </div>
                     </div>
                 </div>
@@ -664,12 +641,11 @@
                 const btn = document.createElement('div');
                 btn.className = 'text-left cursor-pointer transition-colors duration-200 leading-relaxed py-3 px-3 rounded-xl flex gap-3 items-start group hover:bg-[#F2EFE9] border border-transparent hover:border-[#D2B48C]';
                 
-                let snippet = item.scenario.substring(0, 90) + '...';
+                let snippet = item.scenario.substring(0, 110) + '...';
                 
                 btn.innerHTML = `<div style="font-size: 12px; color: #D2B48C; margin-top: 4px;">●</div> 
                                  <div style="flex-grow: 1;">
-                                    <strong style="color: #1B2B28; font-size:13px; font-family: Georgia, serif;">${item.gec.split(':')[0]}</strong><br>
-                                    <span style="color: #5E5A4B; font-size: 12px;">${snippet}</span>
+                                    <span style="color: #1B2B28; font-size: 13px; font-weight: 500; line-height: 1.4;">${snippet}</span>
                                  </div>`;
                 
                 btn.onclick = () => {
@@ -699,31 +675,8 @@
         function resetAssessment() {
             document.getElementById('chatWindow').innerHTML = `<div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%; opacity: 1;">
                     <div style="max-width: 480px; margin: 0 auto; width: 100%;">
-                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Welcome to the CharityOps Evaluator. This kit skips the abstract theory and plunges you straight into real-world operational testing to objectively measure your organisation's governance maturity.</p>
-                        
-                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
-                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #D2B48C; color: #1B2B28; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; animation-duration: 3s;">1</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">LEARN</strong>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
-                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #B08968; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; animation-duration: 3s; animation-delay: 500ms;">2</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">ASSESS</strong>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 16px;">
-                            <div class="animate-pulse" style="width: 28px; height: 28px; border-radius: 50%; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; transition: all 0.3s; animation-duration: 3s; animation-delay: 1000ms;">3</div>
-                            <div style="display: flex; align-items: center;">
-                                <strong style="color: #25D366; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">SHARE</strong>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
-                            App Version: V2.5 | Last Updated: 03 April 2026
+                        <div style="font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
+                            App Version: V2.6 | Last Updated: 03 April 2026
                         </div>
                     </div>
                 </div>`;
