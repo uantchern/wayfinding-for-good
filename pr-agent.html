@@ -185,6 +185,7 @@
         .glow-trigger-1 { animation: sequentialPurpleGlow 2.5s infinite 0.5s; }
         .glow-trigger-2 { animation: sequentialPurpleGlow 2.5s infinite 1.0s; }
         .glow-trigger-3 { animation: sequentialPurpleGlow 2.5s infinite 1.5s; }
+        .glow-trigger-4 { animation: sequentialPurpleGlow 2.5s infinite 2.0s; }
 
         .primary-btn {
             background-color: #A855F7;
@@ -249,40 +250,43 @@
             </div>
 
             <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. DESIRED TONE</span>
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. WHERE WILL YOUR STORY COME FROM</span>
             </div>
-            <div class="category-pills flex flex-wrap gap-2 mb-6" id="tonePills">
-                <button class="pill glow-trigger-0 active" onclick="selectTone('Inspiring', this)">INSPIRING</button>
-                <button class="pill glow-trigger-1" onclick="selectTone('Professional', this)">PROFESSIONAL</button>
-                <button class="pill glow-trigger-2" onclick="selectTone('Gratitude', this)">GRATITUDE</button>
-                <button class="pill glow-trigger-3" onclick="selectTone('Urgent', this)">URGENT</button>
-            </div>
-
-            <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. TOPIC OR MILESTONE</span>
-            </div>
-            <div style="margin-bottom: 24px; flex-shrink: 0;" class="flex flex-col gap-1">
-                <textarea id="topicInput" rows="3" oninput="checkDraftStatus()" placeholder="e.g. Annual Gala Dinner, Successful Beach Cleanup..." style="width: 100%; padding: 14px; font-size: 14px; border: 1px solid #D2B48C; border-radius: 12px; background-color: #FDFBF7; color: #1B2B28; outline: none; font-family: inherit; resize: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);"></textarea>
+            <div class="category-pills flex flex-wrap gap-2 mb-6" id="categoryPills">
+                <button class="pill glow-trigger-0" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
+                <button class="pill glow-trigger-1" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
+                <button class="pill glow-trigger-2" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
+                <button class="pill glow-trigger-3" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
+                <button class="pill glow-trigger-4" onclick="selectArea('STAFF', this)">STAFF</button>
             </div>
 
-            <button id="draftBtn" class="primary-btn mt-2" onclick="generateDraft()" disabled style="opacity: 0.5;">
-                <i class="fas fa-magic"></i> DRAFT STORY
-            </button>
+            <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. SHARE THE TYPE OF STORY</span>
+            </div>
+            <div id="impactTilesContainer" class="flex flex-col gap-1 mb-6" style="max-height: 480px; overflow-y: auto; padding-right: 8px;">
+                <!-- Javascript will inject impact tiles here -->
+            </div>
 
              <div id="mobileUserGuide" style="padding: 12px 0; background: transparent; box-sizing: border-box; width: 100%; margin-top: 16px;" class="mobile-only">
                  <div style="max-width: 480px; margin: 0 auto; border: 2px dashed #EAE5D8; padding: 20px; border-radius: 12px; background: #FFFBF7;">
-                     <p style="font-size: 13px; color: #5E5A4B; margin-bottom: 20px; line-height: 1.5;">Stop staring at a blank page. Choose a tone and enter your core milestone, and our AI will automatically draft a compelling social media narrative and fetch a beautiful visual asset in seconds.</p>
+                     <p style="font-size: 13px; color: #5E5A4B; margin-bottom: 20px; line-height: 1.5;">Stop staring at a blank page. Choose a scenario and let our AI automatically draft a compelling social media narrative and fetch a beautiful visual asset in seconds.</p>
                      
                      <div style="display: flex; gap: 12px; margin-bottom: 16px;">
                          <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">1</div>
                          <div style="display: flex; align-items: center;">
-                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">CHOOSE TONE</strong>
+                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">WHERE WILL YOUR STORY COME FROM</strong>
+                         </div>
+                     </div>
+                     <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                         <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">2</div>
+                         <div style="display: flex; align-items: center;">
+                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">SHARE THE TYPE OF STORY</strong>
                          </div>
                      </div>
                      <div style="display: flex; gap: 12px;">
-                         <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">2</div>
+                         <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">3</div>
                          <div style="display: flex; align-items: center;">
-                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">DRAFT & SHARE</strong>
+                             <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">SHARE YOUR STORY</strong>
                          </div>
                      </div>
                  </div>
@@ -306,24 +310,31 @@
             <div class="chat-window" id="chatWindow">
                 <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%;">
                     <div style="max-width: 480px; margin: 0 auto;">
-                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Stop staring at a blank page. Choose a tone and enter your core milestone, and our AI will automatically draft a compelling social media narrative and fetch a beautiful visual asset in seconds.</p>
+                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.5;">Stop staring at a blank page. Choose a scenario and let our AI automatically draft a compelling social media narrative and fetch a beautiful visual asset in seconds.</p>
                         
                         <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">1</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">CHOOSE TONE</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">WHERE WILL YOUR STORY COME FROM</strong>
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 16px;">
+                        <div style="display: flex; gap: 16px; margin-bottom: 24px;">
                             <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">2</div>
                             <div style="display: flex; align-items: center;">
-                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">DRAFT & SHARE</strong>
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">SHARE THE TYPE OF STORY</strong>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 16px;">
+                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">3</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #1B2B28; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">SHARE YOUR STORY</strong>
                             </div>
                         </div>
 
                         <div style="margin-top: 32px; padding-top: 16px; border-top: 1px dashed #EAE5D8; font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
-                            App Version: V2.0 | Last Updated: 02 April 2026
+                            App Version: V3.0 | Last Updated: 03 April 2026
                         </div>
                     </div>
                 </div>
@@ -332,56 +343,102 @@
     </div>
 
     <script>
-        const PROMPT_TEMPLATES = {
-            "Inspiring": [
-                `🌟 Reflecting on an incredible milestone at our recent {topic}! The energy and commitment from our community have been nothing short of inspiring.\n\nEvery day, we strive to create meaningful impact, and this moment reminds us exactly why we do what we do. It takes a village, and we are so grateful for ours. 🤝\n\nTo everyone who participated, volunteered, and supported us—thank you. Let's keep building a brighter, more inclusive future together! 🚀\n\n#SocialImpact #Nonprofit #CommunityStrong #CharityOps {hashtag} #MakeADifference`,
-                `📢 Big news from the frontlines of our mission! We just wrapped up {topic} and the results exceeded our wildest expectations. 🎉\n\nWhen we first planned this, we knew the challenges were steep. But seeing our team and supporters rally together to drive real, tangible change is a powerful reminder of what's possible when purpose meets action. 💡\n\nThis isn't just a win for us; it's a win for the entire community we serve. Onward and upward! 💪\n\n#PurposeDriven #Leadership #Philanthropy #InnovationForGood {hashtag}`,
-                `We often talk about impact, but today we want to show it. During our {topic}, we witnessed firsthand the transformative power of compassion combined with strategy. 🌱\n\nA huge shoutout to our dedicated volunteers and generous partners who worked tirelessly behind the scenes. You are the backbone of our organization. Here's to more milestones, deeper connections, and sustainable change! ✨\n\n#Volunteering #SocialGood #TeamWork #CharityOps #CommunityFirst {hashtag}`
+        const impactDB = {
+            "FUND RAISING": [
+                { type: "Attitude (Mindset)", title: "Donor Mindset Shift", desc: "We successfully changed a donor's mindset and perspective on our core cause.", align: "Collaborative Ecosystem" },
+                { type: "Ability (Skills)", title: "Team Upskilling", desc: "Our fundraising team learned and successfully adopted a new digital tool or technique.", align: "Collaborative Ecosystem" },
+                { type: "Access (Barriers)", title: "New Giving Channel", desc: "We opened a brand new giving channel to reach a wider pool of potential donors.", align: "Collaborative Ecosystem" },
+                { type: "Action (Behavior)", title: "Sustained Giving", desc: "We successfully converted a one-time donor into a long-term recurring supporter.", align: "Collaborative Ecosystem" }
             ],
-            "Professional": [
-                `📊 At CharityOps, we believe that rigorous strategy drives sustainable social impact. Our latest engagement, {topic}, perfectly exemplifies this ethos.\n\nBy leveraging data-driven approaches and strategic partnerships, we successfully delivered key outcomes that advance our core mission. We remain committed to maximizing operational efficiency while scaling our grassroots impact. 📈\n\nThank you to our stakeholders for your continued trust and collaboration. 🤝\n\n#SocialImpact #Governance #NonprofitLeadership #CharityOps {hashtag}`,
-                `We are pleased to announce the successful conclusion of {topic}. 🏢\n\nEffective social sector work requires more than just goodwill; it demands operational excellence and transparent accountability. This initiative demonstrated our team's capacity to execute complex projects that deliver measurable value to our beneficiaries.\n\n#ImpactMeasurement #OperationalExcellence #Philanthropy #CharityOps {hashtag}`
+            "GOVERNANCE": [
+                { type: "Attitude (Mindset)", title: "Culture of Compliance", desc: "Our staff now actively value and support internal audit and compliance measures.", align: "Impactful Entities" },
+                { type: "Ability (Skills)", title: "Governance Training", desc: "We conducted comprehensive training on Conflict of Interest and strict Audit processes.", align: "Impactful Entities" },
+                { type: "Access (Barriers)", title: "Digital Workflows", desc: "We implemented simpler, more efficient digital workflows for daily governance tasks.", align: "Impactful Entities" },
+                { type: "Action (Behavior)", title: "Clean Audit", desc: "We achieved a zero-finding completion on our recent external audit review.", align: "Impactful Entities" }
             ],
-            "Gratitude": [
-                `🙏 We are simply overwhelmed with gratitude today. Looking back at {topic}, we are reminded that our charity is nothing without the incredible people who power it.\n\nTo our tireless volunteers who gave up their weekends, and to the donors who believed in this vision before it was a reality: YOU are the heroes of this story. ❤️ Every single hour and every single dollar contributed made a profound difference today.\n\nFrom the bottom of our hearts, thank you. 🌻\n\n#Gratitude #VolunteerHeroes #DonorAppreciation #CharityOps {hashtag}`,
-                `There are no words to fully capture the depth of our appreciation following {topic}. 🥺\n\nWe witnessed pure kindness in action. We saw strangers working side-by-side, united by a shared desire to uplift those in need. To everyone who played a part—whether large or small—please know that your contribution has rippled out and changed lives. 🌊\n\nThank you for being the heartbeat of our organization. ❤️\n\n#ThankYou #CommunityLove #SocialWork #CharityOps {hashtag}`
+            "BOARD MATTERS": [
+                { type: "Attitude (Mindset)", title: "Ground Level Exposure", desc: "The Board of Directors gained direct, meaningful exposure to our ground-level realities.", align: "Impactful Entities" },
+                { type: "Ability (Skills)", title: "Strategic Upskilling", desc: "Our Board members actively upskilled their capabilities, such as learning about AI tooling.", align: "Impactful Entities" },
+                { type: "Access (Barriers)", title: "Enhanced Transparency", desc: "We facilitated better and more transparent communication channels between staff and the Board.", align: "Impactful Entities" },
+                { type: "Action (Behavior)", title: "Roadmap Approval", desc: "The Board successfully reviewed and approved our comprehensive 3-year strategic roadmap.", align: "Impactful Entities" }
             ],
-            "Urgent": [
-                `⚠️ We need your attention right now. The situation regarding {topic} is reaching a critical turning point.\n\nOur teams are on the ground working relentlessly, but the scale of the challenge has grown. We cannot do this alone. If you have ever considered supporting our mission, the moment to step up is today. ⏱️\n\nEvery hour counts. Please share this post, donate if you can, and help us spread the word before it's too late. 🆘\n\n#UrgentCall #ActionNeeded #EmergencyResponse #CharityOps {hashtag}`,
-                `🚨 Time is of the essence. Our current efforts surrounding {topic} require immediate community intervention.\n\nWe are facing unprecedented demand, and our resources are being stretched to their absolute limits. We are calling on our corporate partners, our dedicated volunteers, and the wider public to rally behind us immediately. 🛑\n\nDo not look away. We need hands on deck and voices amplified.\n\n#CrisisResponse #CommunityAlert #TakeAction #CharityOps {hashtag}`
+            "PROGRAMMES": [
+                { type: "Attitude (Mindset)", title: "Renewed Hope", desc: "A beneficiary expressed feeling a renewed sense of long-term hope and optimism.", align: "Empowered Individuals" },
+                { type: "Ability (Skills)", title: "Skill Acquisition", desc: "A beneficiary successfully learned and independently demonstrated a new, valuable skill.", align: "Empowered Individuals" },
+                { type: "Access (Barriers)", title: "Barrier Removal", desc: "We successfully removed a key logistical barrier that was preventing access to our programs.", align: "Empowered Individuals" },
+                { type: "Action (Behavior)", title: "Giving Back", desc: "A former beneficiary took proactive action and became an active volunteer with us.", align: "Empowered Individuals" }
+            ],
+            "STAFF": [
+                { type: "Attitude (Mindset)", title: "Improved Morale", desc: "We proactively improved overall team morale and workplace satisfaction this month.", align: "Empowered Individuals" },
+                { type: "Ability (Skills)", title: "Professional Development", desc: "Our staff members actively attended and completed a professional training milestone.", align: "Empowered Individuals" },
+                { type: "Access (Barriers)", title: "Knowledge Centralization", desc: "We successfully created and centralized a comprehensive staff knowledge and SOP bank.", align: "Empowered Individuals" },
+                { type: "Action (Behavior)", title: "Process Innovation", desc: "We successfully piloted a much faster and more efficient client intake process.", align: "Empowered Individuals" }
             ]
         };
 
-        const state = {
-            tone: 'Inspiring',
-            topic: '',
+        const PROMPT_TEMPLATES = [
+            `🌟 Reflecting on an incredible milestone! The energy and commitment from our team have been nothing short of inspiring.\n\nToday's highlight: {title}\n\n"{desc}"\n\nEvery day, we strive to create meaningful impact, and this moment reminds us exactly why we do what we do. It takes a village, and we are so grateful for ours. 🤝\n\nTo everyone who contributed—thank you. Let's keep building a brighter, more inclusive future together! 🚀\n\n#SocialImpact #Nonprofit #CommunityStrong #CharityOps #MakeADifference`,
+            
+            `📢 Big news from the frontlines of our mission! 💡\n\nWe love sharing stories of real operational progress. Recently, we achieved a significant breakthrough: {title}.\n\nSpecifically: {desc}\n\nWhen we first planned this, we knew the challenges were steep. But seeing our team and supporters rally together to drive real, tangible change is a powerful reminder of what's possible when purpose meets action. This isn't just a win for us; it's a win for the entire community we serve. Onward and upward! 💪\n\n#PurposeDriven #Leadership #Philanthropy #InnovationForGood`,
+            
+            `📊 At CharityOps, we believe that rigorous strategy drives sustainable social impact. 🌱\n\nWe are incredibly proud to share a major milestone today: {title}.\n\nWhat this means on the ground: {desc}\n\nBy leveraging strategic alignment and deep community focus, we successfully delivered key outcomes that advance our core mission. We remain committed to maximizing operational efficiency while scaling our grassroots impact. 📈\n\nThank you to our stakeholders for your continued trust and collaboration. 🤝\n\n#SocialImpact #NonprofitLeadership #CharityOps`,
+            
+            `🙏 We are simply overwhelmed with gratitude today. Looking back at our journey, we are reminded that our charity is nothing without the incredible people who power it.\n\nToday, we celebrate: {title}.\n\nThe impact: {desc}\n\nTo our tireless volunteers, staff, and donors who believed in this vision before it was a reality: YOU are the heroes of this story. ❤️ Every single effort contributed made a profound difference today.\n\nFrom the bottom of our hearts, thank you. 🌻\n\n#Gratitude #VolunteerHeroes #DonorAppreciation #CharityOps`
+        ];
+
+        let appState = {
+            area: '',
+            scenarioObj: null,
             generatedPost: null,
             lastTemplate: null
         };
 
-        function selectTone(tone, btn) {
-            document.querySelectorAll('#tonePills .pill').forEach(b => {
-                b.classList.remove('active');
+        function selectArea(areaKey, btn) {
+            document.querySelectorAll('.pill').forEach(el => {
+                el.classList.remove('active', 'glow-trigger-0', 'glow-trigger-1', 'glow-trigger-2', 'glow-trigger-3', 'glow-trigger-4');
             });
             if(btn) btn.classList.add('active');
-            state.tone = tone;
-            checkDraftStatus();
+            
+            document.getElementById('stepTwoHeader').style.display = 'flex';
+            if (document.getElementById('mobileUserGuide')) {
+                document.getElementById('mobileUserGuide').style.display = 'none';
+            }
+            appState.area = areaKey;
+            
+            drawImpactTiles();
         }
 
-        function checkDraftStatus() {
-            state.topic = document.getElementById('topicInput').value.trim();
-            const btn = document.getElementById('draftBtn');
-            if(state.topic) {
-                btn.disabled = false;
-                btn.style.opacity = '1';
-            } else {
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-            }
+        function drawImpactTiles() {
+            const container = document.getElementById('impactTilesContainer');
+            container.innerHTML = '';
+            
+            if (!appState.area) return;
+
+            const scenarios = impactDB[appState.area];
+            
+            scenarios.forEach((item) => {
+                const btn = document.createElement('div');
+                btn.className = 'text-left cursor-pointer transition-colors duration-200 leading-relaxed py-3 px-4 rounded-xl flex gap-3 items-start group hover:bg-[#F2EFE9] border border-transparent hover:border-[#D2B48C]';
+                
+                btn.innerHTML = `<div style="font-size: 14px; color: #A855F7; margin-top: 2px;">●</div> 
+                                 <div style="flex-grow: 1;">
+                                    <strong style="color: #1B2B28;">${item.type}</strong><br>
+                                    <span class="group-hover:text-[#9333EA] transition-colors" style="color: #4A463B; font-size: 14px;">${item.title}: ${item.desc}</span>
+                                 </div>`;
+                
+                btn.onclick = () => {
+                    Array.from(container.children).forEach(child => child.classList.remove('bg-[#F2EFE9]', 'border-[#D2B48C]'));
+                    btn.classList.add('bg-[#F2EFE9]', 'border-[#D2B48C]');
+
+                    appState.scenarioObj = item;
+                    generateDraft();
+                };
+                container.appendChild(btn);
+            });
         }
 
         function generateDraft() {
-            if(!state.topic) return;
+            if(!appState.scenarioObj) return;
 
             document.getElementById('setupDrawer').classList.add('started');
             document.getElementById('chatContainer').classList.add('started');
@@ -413,35 +470,32 @@
         }
 
         function shareLinkedIn() {
-            window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(state.generatedPost.text)}`);
+            window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(appState.generatedPost.text)}`);
         }
         function shareWA() {
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(state.generatedPost.text)}`);
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(appState.generatedPost.text)}`);
         }
         function shareFB() {
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(state.generatedPost.text)}`);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(appState.generatedPost.text)}`);
         }
 
         function completeDraft() {
-            let availableTemplates = PROMPT_TEMPLATES[state.tone];
-            let possibleTemplates = availableTemplates;
-            if (availableTemplates.length > 1 && state.lastTemplate) {
-                possibleTemplates = availableTemplates.filter(t => t !== state.lastTemplate);
+            let possibleTemplates = PROMPT_TEMPLATES;
+            if (PROMPT_TEMPLATES.length > 1 && appState.lastTemplate) {
+                possibleTemplates = PROMPT_TEMPLATES.filter(t => t !== appState.lastTemplate);
             }
             const template = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
-            state.lastTemplate = template;
+            appState.lastTemplate = template;
 
-            let personalizedText = template.replace(/\{topic\}/g, state.topic);
-            const hashtagSubject = state.topic.split(' ')[0].replace(/[^a-zA-Z0-9]/g, '');
-            const hashtagStr = hashtagSubject ? '#' + hashtagSubject : '';
-            personalizedText = personalizedText.replace(/\{hashtag\}/g, hashtagStr);
+            let personalizedText = template.replace(/\{title\}/g, appState.scenarioObj.title);
+            personalizedText = personalizedText.replace(/\{desc\}/g, appState.scenarioObj.desc);
 
-            const seedStr = encodeURIComponent(state.topic.replace(/\s+/g, '') + Date.now());
+            const seedStr = encodeURIComponent(appState.scenarioObj.title.replace(/\s+/g, '') + Date.now());
             const imageUrl = `https://picsum.photos/seed/${seedStr}/800/450`;
 
             const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-            state.generatedPost = {
+            appState.generatedPost = {
                 text: personalizedText,
                 imageUrl: imageUrl,
                 date: dateStr
