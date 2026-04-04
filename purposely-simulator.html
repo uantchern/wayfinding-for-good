@@ -441,20 +441,27 @@
         <!-- Chat / Assessment Pane -->
         <div class="chat-pane" id="chatContainer">
             <div class="chat-header">
+                <!-- Mobile only 'Back' button -->
                 <button onclick="goBackToSummary()" class="md:hidden text-white hover:text-[#D2B48C] mr-2"
-                    style="background:transparent; border:none; cursor:pointer;">
-                    <i class="fas fa-home text-xl"></i>
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fas fa-chevron-left text-lg"></i> Back
+                </button>
+                
+                <!-- Desktop only 'Close' button to clear current scenario -->
+                <button onclick="closeScenario()" class="hidden md:flex text-white hover:text-[#D2B48C] mr-2 transition-colors"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; align-items: center; gap: 6px; font-weight: 500;">
+                    <i class="fas fa-times text-lg"></i> Close Scenario
                 </button>
 
                 <div style="flex-grow: 1;"></div>
                 <div id="masteryProgress" style="font-size: 13px; color: #D2B48C; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-right: 12px; font-family: monospace;">
                     <i class="fas fa-chart-line"></i> Knowledge: <span id="masteryText">0 / 0</span>
                 </div>
-                <!-- Master reset removed -->
-                <button onclick="resetAssessment()" class="text-white hover:text-[#D2B48C] transition-colors"
-                    title="Restart Assessment"
+                
+                <button onclick="resetAssessment()" class="text-white hover:text-[#e11d48] transition-colors"
+                    title="Clear Everything"
                     style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
-                    <i class="fas fa-redo text-lg"></i> Restart
+                    <i class="fas fa-trash-alt text-lg"></i> Reset App
                 </button>
             </div>
 
@@ -741,6 +748,31 @@
             document.getElementById('chatContainer').classList.remove('started');
         }
 
+        function closeScenario() {
+            document.getElementById('chatWindow').innerHTML = `<div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%; opacity: 1;">
+                    <div style="max-width: 480px; margin: 0 auto; width: 100%;">
+                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.6; font-style: italic;">The Governance Kit bridges theory and practice by contextualising Charity Code principles into daily scenarios. Its ‘blind-reveal’ workflow ensures objective self-assessment, providing immediate, shareable gap analyses to facilitate informed decision-making.</p>
+                        <div style="font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
+                            App Version: V2.6 | Last Updated: 03 April 2026
+                        </div>
+                        <div style="margin-top: 24px; font-size: 14px; color: #8B7355; line-height: 1.6; font-weight: 500;">
+                            <ul style="list-style-type: decimal; padding-left: 20px; margin-bottom: 12px;">
+                                <li>Select an operational area</li>
+                                <li>Select a scenario and assess how your charity deals with it</li>
+                                <li>Comment and share via WhatsApp</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>`;
+            currentScenarioObj = null;
+            // Deselect list items visually
+            document.querySelectorAll('#impactTilesContainer > div').forEach(child => child.classList.remove('bg-[#F2EFE9]'));
+            
+            if(window.innerWidth <= 850 || screen.width <= 850) {
+                goBackToSummary();
+            }
+        }
+
         function resetAssessment() {
             document.getElementById('chatWindow').innerHTML = `<div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%; opacity: 1;">
                     <div style="max-width: 480px; margin: 0 auto; width: 100%;">
@@ -840,6 +872,12 @@
                 <button onclick="shareViaWhatsApp('${compliance}')" style="width: 100%; padding: 12px; border-radius: 8px; background: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.2);">
                     <i class="fab fa-whatsapp text-lg"></i> SHARE VIA WHATSAPP
                 </button>
+
+                <div style="margin-top: 16px; text-align: center;">
+                    <button onclick="closeScenario()" class="hover:text-[#1B2B28]" style="background:transparent; border:none; cursor:pointer; color: #8B7355; font-size: 13px; font-weight: bold; text-decoration: none; transition: color 0.2s;">
+                        No thanks, next scenario <i class="fas fa-arrow-right" style="margin-left: 4px;"></i>
+                    </button>
+                </div>
             </div>
             `;
             chatWindow.insertAdjacentHTML('beforeend', content);
