@@ -619,9 +619,9 @@
 
                 <div class="flex-grow"></div>
                 <button onclick="location.reload()" class="text-white hover:text-[#D2B48C] transition-colors"
-                    title="Restart"
-                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; font-weight: 500;">
-                    <i class="fas fa-redo text-lg"></i> Reset
+                    title="Home"
+                    style="background:transparent; border:none; cursor:pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-home text-xl"></i>
                 </button>
             </div>
 
@@ -951,10 +951,8 @@
             let content = `
             <div class='action-text-content' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; box-shadow: inset 0 0 0 1px #EAE5D8;'>
 
-                <h3 style="font-family: Georgia, serif; font-size: 15px; font-weight: bold; color: #8B7355; margin-top: 0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #F2EFE9; padding-bottom: 8px;">3. Recommend Improvements</h3>
-
                 <!-- STRONGER PULSE & COMBINED AREA/SCENARIO -->
-                <div class="urgent-pulse-glow" style="margin-bottom: 12px; padding: 12px; border: 2px solid #DC3545; border-radius: 8px; background-color: #FFF5F5; box-shadow: 0 0 15px rgba(220, 53, 69, 0.4);">
+                <div class="urgent-pulse-glow" style="margin-bottom: 20px; padding: 12px; border: 2px solid #DC3545; border-radius: 8px; background-color: #FFF5F5; box-shadow: 0 0 15px rgba(220, 53, 69, 0.4);">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
                         <span style="background: #DC3545; color: white; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em;">${appState.areaLabel}</span>
                         <strong style="color: #DC3545; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">FIREFIGHTING SCENARIO</strong>
@@ -962,8 +960,10 @@
                     <div style="color: #4A463B; font-weight: bold; font-size: 14px;">${data.scenario}</div>
                 </div>
 
+                <h3 style="font-family: Georgia, serif; font-size: 15px; font-weight: bold; color: #8B7355; margin-top: 0; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 2px solid #F2EFE9; padding-bottom: 8px;">3. Recommend Improvements</h3>
+
                 <!-- COMPACTED INTEGRATED ACTION PLAN -->
-                <div style="color: #4A463B; margin: 0 0 12px 0;">
+                <div style="color: #4A463B; margin: 0 0 20px 0;">
                     <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                         <span style="font-weight: bold; flex-shrink: 0;">a)</span>
                         <span>${data.fire}</span>
@@ -974,20 +974,16 @@
                     </div>
                 </div>
 
-                <!-- COMPACTED WHATSAPP CAPTURE -->
-                <div style="margin-bottom: 12px;">
-                    <textarea id="userRedFlags" rows="3" placeholder="I also noticed that... (Document your own near misses, pain points, or realities for this scenario here)" style="width: 100%; padding: 10px; border: 1px solid #D2B48C; border-radius: 8px; outline: none; font-family: inherit; font-size: 13px; resize: vertical; box-sizing: border-box; background: #FDFBF7;"></textarea>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <button onclick="shareViaWhatsApp()" class="w-full py-3 px-6 rounded-xl text-white font-bold tracking-widest text-sm transition-all duration-300 flex items-center justify-center gap-3 shadow-md hover:shadow-lg hover:-translate-y-0.5" style="background-color: #25D366; border: none; cursor: pointer;">
-                        <i class="fab fa-whatsapp text-lg"></i> SHARE VIA WHATSAPP
+                <!-- COMPACTED WHATSAPP CAPTURE & BUTTONS -->
+                <div style="display: flex; gap: 8px; margin-top:16px;">
+                    <button onclick="shareViaWhatsApp()" style="flex:1; padding: 12px 4px; border-radius: 8px; background: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2);">
+                        <i class="fab fa-whatsapp text-lg"></i> Comment & WA
                     </button>
-                    <div style="text-align: center; color: #8B7355; font-size: 11px; font-style: italic; line-height: 1.3;">
-                        Send recommendations to a WhatsApp Group setup by your charity to analyse trends and improve the next version of Looking for Trouble.
-                    </div>
-                </div>
 
+                    <button onclick="location.reload()" style="flex:1; padding: 12px 4px; border-radius: 8px; background: white; color: #8B7355; border: 1px solid #D2B48C; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; text-align: center; text-transform: uppercase; line-height: 1.3;">
+                        1. Where Are You<br>Firefighting?
+                    </button>
+                </div>
             </div>`;
 
             // Remove indentation and newlines to prevent addMessage's <br> replacement from bloating the bubble
