@@ -8,17 +8,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
         body {
             background-color: #F2EFE9;
             color: #1B2B28;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 20px 20px 100px 20px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
 
         .app-container {
@@ -29,6 +36,7 @@
             max-height: 850px;
             min-height: 600px;
             margin: 0 auto;
+            flex-shrink: 0;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -36,6 +44,23 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             border-radius: 24px;
             overflow: hidden;
+            position: relative;
+        }
+        
+        .scroll-indicator {
+            margin-top: 40px;
+            font-size: 11px;
+            color: #8B7355;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.2s;
+            text-align: center;
+        }
+        
+        .scroll-indicator:hover {
+            color: #5E5A4B;
         }
 
         /* Setup / Instructions Pane */
@@ -386,7 +411,11 @@
                 <button class="pill flash-amber-3" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('STAFF', this)">STAFF</button>
                 <button class="pill flash-amber-4" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
             </div>
-
+            
+            <!-- Insert Full GEC Action Link -->
+            <a href="https://www.charities.gov.sg/Documents/Code%20of%20Governance%20for%20Charities%20and%20IPCs%202023.pdf" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: transparent; border: 1px dashed #D2B48C; color: #8B7355; font-size: 12px; font-weight: bold; border-radius: 8px; text-decoration: none; margin-bottom: 24px; transition: all 0.2s;" onmouseover="this.style.background='#FDFBF7'; this.style.opacity='0.8';" onmouseout="this.style.background='transparent'; this.style.opacity='1';">
+                <i class="fas fa-file-pdf text-lg"></i> READ THE FULL GEC DOCUMENT
+            </a>
             <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
                 <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. SELECT SCENARIO</span>
             </div>
@@ -744,9 +773,6 @@
                     <button onclick="handleAssess('No', this)" class="assess-btn" style="flex:1; padding:10px; background:#ef4444; color:white; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 14px;">No</button>
                     <button onclick="handleAssess('Partial Compliance', this)" class="assess-btn" style="flex:1; padding:10px; background:#D2B48C; color:#1B2B28; border-radius:8px; font-weight:bold; cursor:pointer; font-size: 13px;">Partial</button>
                 </div>
-                <div style="text-align: center; margin-top: 24px; font-size: 11px; color: #A09D94; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">
-                    <i class="fas fa-arrow-down"></i> Scroll down to reveal the GEC
-                </div>
             </div>
             `;
             chatWindow.insertAdjacentHTML('beforeend', content);
@@ -831,7 +857,19 @@
         }
 
         // Drawer starts naturally visible in new layout
+        // Drawer starts naturally visible in new layout
     </script>
+    
+    <div class="scroll-indicator" onclick="document.getElementById('gecAppendix').scrollIntoView({behavior: 'smooth'})">
+        <span class="blink-text"><i class="fas fa-arrow-down"></i> Scroll down to reveal the GEC</span>
+    </div>
+
+    <div id="gecAppendix" style="width: 100%; max-width: 1024px; padding: 40px 0; display: flex; flex-direction: column; gap: 40px; margin-top: 20px;">
+        <h2 style="font-size: 24px; color: #1B2B28; text-align: center; margin: 0; letter-spacing: -0.02em;">Governance Evaluation Checklist (Appendix)</h2>
+        <img src="assets/gec-overview.png" alt="GEC Tier Overview" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.08);">
+        <img src="assets/gec-scoring.png" alt="GEC Scoring Matrix" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.08);">
+        <img src="assets/gec-checklist.png" alt="GEC Checklist Sample" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.08);">
+    </div>
 </body>
 
 </html>
