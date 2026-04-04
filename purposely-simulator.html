@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Governance Kit - Charity Code of Governance Learning Simulator</title>
-    
+
     <!-- Favicon and Social Media Tags -->
     <link rel="icon" type="image/png" href="assets/og-image.png">
     <link rel="apple-touch-icon" href="assets/og-image.png">
     <meta property="og:title" content="Governance Kit - Charity Code Learning Simulator">
-    <meta property="og:description" content="A Really Useful Thing for Charities. Bridge the gap between theory and reality with our interactive Charity Code simulator.">
+    <meta property="og:description"
+        content="A Really Useful Thing for Charities. Bridge the gap between theory and reality with our interactive Charity Code simulator.">
     <meta property="og:image" content="https://uantchern.github.io/wayfinding-for-good/assets/og-image.png">
     <meta property="og:url" content="https://uantchern.github.io/wayfinding-for-good/purposely-simulator.html">
     <meta name="twitter:card" content="summary_large_image">
@@ -18,7 +19,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -55,7 +57,7 @@
             overflow: hidden;
             position: relative;
         }
-        
+
         .scroll-indicator {
             margin-top: 40px;
             font-size: 11px;
@@ -67,7 +69,7 @@
             transition: color 0.2s;
             text-align: center;
         }
-        
+
         .scroll-indicator:hover {
             color: #5E5A4B;
         }
@@ -288,17 +290,47 @@
                 opacity: 0;
             }
         }
-        
+
         @keyframes amberGlow {
-            0% { box-shadow: 0 0 0px 0px rgba(255, 102, 0, 0); border-color: #D2B48C; transform: scale(1); }
-            50% { box-shadow: 0 0 20px 6px rgba(255, 102, 0, 0.85); border-color: #ff6600; transform: scale(1.03); opacity: 1; }
-            100% { box-shadow: 0 0 0px 0px rgba(255, 102, 0, 0); border-color: #D2B48C; transform: scale(1); }
+            0% {
+                box-shadow: 0 0 0px 0px rgba(255, 102, 0, 0);
+                border-color: #D2B48C;
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 6px rgba(255, 102, 0, 0.85);
+                border-color: #ff6600;
+                transform: scale(1.03);
+                opacity: 1;
+            }
+
+            100% {
+                box-shadow: 0 0 0px 0px rgba(255, 102, 0, 0);
+                border-color: #D2B48C;
+                transform: scale(1);
+            }
         }
-        .flash-amber-0 { animation: amberGlow 1.5s infinite ease-in-out 0s; }
-        .flash-amber-1 { animation: amberGlow 1.5s infinite ease-in-out 0.3s; }
-        .flash-amber-2 { animation: amberGlow 1.5s infinite ease-in-out 0.6s; }
-        .flash-amber-3 { animation: amberGlow 1.5s infinite ease-in-out 0.9s; }
-        .flash-amber-4 { animation: amberGlow 1.5s infinite ease-in-out 1.2s; }
+
+        .flash-amber-0 {
+            animation: amberGlow 1.5s infinite ease-in-out 0s;
+        }
+
+        .flash-amber-1 {
+            animation: amberGlow 1.5s infinite ease-in-out 0.3s;
+        }
+
+        .flash-amber-2 {
+            animation: amberGlow 1.5s infinite ease-in-out 0.6s;
+        }
+
+        .flash-amber-3 {
+            animation: amberGlow 1.5s infinite ease-in-out 0.9s;
+        }
+
+        .flash-amber-4 {
+            animation: amberGlow 1.5s infinite ease-in-out 1.2s;
+        }
 
         /* Responsiveness */
         @media (max-width: 850px) {
@@ -365,8 +397,6 @@
         .hover\:bg-slate-600:hover {
             background-color: #EAE5D8 !important;
         }
-
-
     </style>
 </head>
 
@@ -375,7 +405,8 @@
     <div class="app-container">
         <!-- Setup Pane -->
         <div class="setup-pane" id="setupDrawer">
-            <a href="https://www.charityops.org" target="_blank" class="font-serif text-3xl leading-none cursor-pointer select-none group"
+            <a href="https://www.charityops.org" target="_blank"
+                class="font-serif text-3xl leading-none cursor-pointer select-none group"
                 style="font-family: Georgia, serif; margin-bottom: 2rem; display:flex; justify-content:space-between; align-items:center; text-decoration: none;">
                 <div>
                     <span class="relative inline-block" style="position: relative; display: inline-block;">
@@ -390,7 +421,11 @@
             <div style="margin-bottom: 24px;">
                 <p class="tagline">A Really Useful Thing for charities</p>
                 <h1 style="margin-bottom:0;">Governance Learning & Assessment Kit</h1>
-                <p id="mobile-only-header" style="font-size: 14px; color: #5E5A4B; margin-top: 16px; line-height: 1.5; font-style: italic; display: none;">The Governance Kit bridges theory and practice by contextualising Charity Code principles into daily scenarios. Its ‘blind-reveal’ workflow ensures objective self-assessment, providing immediate, shareable gap analyses to facilitate informed decision-making.</p>
+                <p id="mobile-only-header"
+                    style="font-size: 14px; color: #5E5A4B; margin-top: 16px; line-height: 1.5; font-style: italic; display: none;">
+                    The Governance Kit bridges theory and practice by contextualising Charity Code principles into daily
+                    scenarios. Its ‘blind-reveal’ workflow ensures objective self-assessment, providing immediate,
+                    shareable gap analyses to facilitate informed decision-making.</p>
                 <script>
                     // Use a bulletproof JS check that runs immediately upon rendering this block, 
                     // completely avoiding any CSS specificity issues or mobile WebView CSS bugs.
@@ -401,21 +436,37 @@
             </div>
 
             <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. SELECT OPERATIONAL AREA</span>
+                <span
+                    style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1.
+                    SELECT OPERATIONAL AREA</span>
             </div>
-            <div class="category-pills" id="categoryPills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;">
-                <button class="pill flash-amber-0" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
-                <button class="pill flash-amber-1" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
-                <button class="pill flash-amber-2" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
-                <button class="pill flash-amber-3" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('STAFF', this)">STAFF</button>
-                <button class="pill flash-amber-4" style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
+            <div class="category-pills" id="categoryPills"
+                style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;">
+                <button class="pill flash-amber-0"
+                    style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;"
+                    onclick="selectArea('PROGRAMMES', this)">PROGRAMMES</button>
+                <button class="pill flash-amber-1"
+                    style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;"
+                    onclick="selectArea('BOARD MATTERS', this)">BOARD MATTERS</button>
+                <button class="pill flash-amber-2"
+                    style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;"
+                    onclick="selectArea('GOVERNANCE', this)">GOVERNANCE</button>
+                <button class="pill flash-amber-3"
+                    style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;"
+                    onclick="selectArea('STAFF', this)">STAFF</button>
+                <button class="pill flash-amber-4"
+                    style="background:#FDFBF7; border:1px solid #D2B48C; color:#8B7355; padding:8px 12px; font-size:11px; border-radius:20px; font-weight:bold; cursor:pointer;"
+                    onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
             </div>
-            
+
 
             <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
-                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. SELECT SCENARIO</span>
+                <span
+                    style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2.
+                    SELECT SCENARIO</span>
             </div>
-            <div id="impactTilesContainer" class="flex flex-col gap-2 mb-6" style="max-height: 480px; overflow-y: auto; padding-right: 8px;">
+            <div id="impactTilesContainer" class="flex flex-col gap-2 mb-6"
+                style="max-height: 480px; overflow-y: auto; padding-right: 8px;">
                 <!-- Javascript will inject here -->
             </div>
         </div>
@@ -438,13 +489,20 @@
             </div>
 
             <div class="chat-window" id="chatWindow">
-                <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%; opacity: 1;">
+                <div class="empty-state" id="emptyStatePlaceholder"
+                    style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%; opacity: 1;">
                     <div style="max-width: 480px; margin: 0 auto; width: 100%;">
-                        <p style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.6; font-style: italic;">The Governance Kit bridges theory and practice by contextualising Charity Code principles into daily scenarios. Its ‘blind-reveal’ workflow ensures objective self-assessment, providing immediate, shareable gap analyses to facilitate informed decision-making.</p>
-                        <div style="font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
+                        <p
+                            style="font-size: 15px; color: #5E5A4B; margin-bottom: 32px; line-height: 1.6; font-style: italic;">
+                            The Governance Kit bridges theory and practice by contextualising Charity Code principles
+                            into daily scenarios. Its ‘blind-reveal’ workflow ensures objective self-assessment,
+                            providing immediate, shareable gap analyses to facilitate informed decision-making.</p>
+                        <div
+                            style="font-size: 11px; color: #A09D94; font-family: monospace; letter-spacing: 0.05em; text-transform: uppercase; text-align: left;">
                             App Version: V2.7 | Last Updated: 04 April 2026
                         </div>
-                        <div style="margin-top: 24px; font-size: 14px; color: #8B7355; line-height: 1.6; font-weight: 500;">
+                        <div
+                            style="margin-top: 24px; font-size: 14px; color: #8B7355; line-height: 1.6; font-weight: 500;">
                             <ul style="list-style-type: decimal; padding-left: 20px; margin-bottom: 12px;">
                                 <li>Select an operational area</li>
                                 <li>Select a scenario and assess how your charity deals with it</li>
@@ -616,7 +674,7 @@
 
         function updateMasteryUI() {
             let el = document.getElementById('masteryText');
-            if(el) el.innerText = `${progressData.codes.length} / ${totalUniqueCodes}`;
+            if (el) el.innerText = `${progressData.codes.length} / ${totalUniqueCodes}`;
         }
 
         let chatHistory = [];
@@ -638,20 +696,20 @@
             Object.keys(scenarios).forEach(key => {
                 scenarios[key].pool.forEach(item => {
                     let m = item.gec.match(/CODE ID ([\d\.]+)[a-z]?/);
-                    if(m) allCodes.add(m[1]);
+                    if (m) allCodes.add(m[1]);
 
                     let assigned = false;
-                    for(let area of ['STAFF', 'PROGRAMMES', 'FUND RAISING', 'BOARD MATTERS', 'GOVERNANCE']) {
-                        if(assigned) break;
-                        for(let keyword of areaMapping[area]) {
-                            if(item.gec.includes(keyword)) {
+                    for (let area of ['STAFF', 'PROGRAMMES', 'FUND RAISING', 'BOARD MATTERS', 'GOVERNANCE']) {
+                        if (assigned) break;
+                        for (let keyword of areaMapping[area]) {
+                            if (item.gec.includes(keyword)) {
                                 mappedScenarios[area].push(item);
                                 assigned = true;
                                 break;
                             }
                         }
                     }
-                    if(!assigned) mappedScenarios['GOVERNANCE'].push(item); // Fallback
+                    if (!assigned) mappedScenarios['GOVERNANCE'].push(item); // Fallback
                 });
             });
             totalUniqueCodes = 38;
@@ -669,16 +727,16 @@
 
             currentArea = area;
             document.getElementById('stepTwoHeader').style.display = 'flex';
-            
+
             const container = document.getElementById('impactTilesContainer');
             container.innerHTML = '';
 
             mappedScenarios[area].forEach((item, idx) => {
                 const btn = document.createElement('div');
                 btn.className = 'text-left cursor-pointer transition-colors duration-200 leading-relaxed py-3 px-3 rounded-xl flex gap-3 items-start group hover:bg-[#F2EFE9] border border-transparent hover:border-[#D2B48C]';
-                
+
                 let snippet = item.scenario.replace(/{charityType}/g, 'charity').substring(0, 110) + '...';
-                
+
                 let isCompleted = progressData.scenarios.includes(item.scenario);
                 let stateIcon = isCompleted ? `<i class="fas fa-check-circle" style="color: #4CAF50; font-size: 14px; margin-top: 2px;"></i>` : `<div style="font-size: 12px; color: #D2B48C; margin-top: 4px;">●</div>`;
                 let opac = isCompleted ? `opacity: 0.6;` : ``;
@@ -687,12 +745,12 @@
                                  <div style="flex-grow: 1; ${opac}">
                                     <span style="color: #1B2B28; font-size: 13px; font-weight: 500; line-height: 1.4;">${snippet}</span>
                                  </div>`;
-                
+
                 btn.onclick = () => {
                     Array.from(container.children).forEach(child => child.classList.remove('bg-[#F2EFE9]'));
                     btn.classList.add('bg-[#F2EFE9]');
                     currentScenarioObj = item;
-                    
+
                     document.getElementById('setupDrawer').classList.add('started');
                     document.getElementById('chatContainer').classList.add('started');
                     document.getElementById('emptyStatePlaceholder').style.display = 'none';
@@ -731,8 +789,8 @@
             currentScenarioObj = null;
             // Deselect list items visually
             document.querySelectorAll('#impactTilesContainer > div').forEach(child => child.classList.remove('bg-[#F2EFE9]'));
-            
-            if(window.innerWidth <= 850 || screen.width <= 850) {
+
+            if (window.innerWidth <= 850 || screen.width <= 850) {
                 goBackToSummary();
             }
         }
@@ -786,8 +844,8 @@
         function handleAssess(compliance, btnNode) {
             document.querySelectorAll('.assess-btn').forEach(btn => {
                 btn.classList.remove('flash-amber-0', 'flash-amber-1', 'flash-amber-2');
-                btn.style.opacity = '0.4'; 
-                btn.style.transform = 'scale(0.95)'; 
+                btn.style.opacity = '0.4';
+                btn.style.transform = 'scale(0.95)';
                 btn.disabled = true;
             });
             btnNode.style.background = '#8B7355';
@@ -818,23 +876,25 @@
             const chatWindow = document.getElementById('chatWindow');
             document.querySelectorAll('.share-bubble').forEach(b => b.remove());
 
+            const evalBubble = document.querySelector('.eval-bubble');
+
             const content = `
-            <div class='bubble share-bubble ai' style='font-size: 13px; line-height: 1.4; color: #1B2B28; padding: 12px; margin-bottom: 12px; width: 100%; border: 1px solid #EAE5D8; background: white;'>
-                <strong style="color:#D2B48C; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em;">C. RELEVANT GEC PRINCIPLE:</strong>
-                <div style="background: #FDFBF7; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #D2B48C; margin-top: 4px; margin-bottom: 12px; font-size: 12px;">
+            <div class="share-bubble" style="animation: fadeIn 0.3s ease-out;">
+                <hr style="border-color: #EAE5D8; margin: 12px 0 10px 0;">
+                <strong style="color:#8B7355; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em;">C. RELEVANT GEC PRINCIPLE:</strong><br>
+                <div style="font-size: 13px; margin-top: 2px;">
                     ${currentScenarioObj.gec}
                 </div>
                 
-                <strong style="color:#D2B48C; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em;">D. BEST PRACTICES:</strong>
-                <div style="background: #FDFBF7; padding: 8px 10px; border-radius: 6px; border-left: 3px solid #D2B48C; margin-top: 4px; color: #1B2B28; font-weight: 500; font-size: 12px;">
+                <hr style="border-color: #EAE5D8; margin: 10px 0;">
+                <strong style="color:#8B7355; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em;">D. BEST PRACTICES:</strong><br>
+                <div style="font-size: 13px; margin-top: 2px;">
                     ${currentScenarioObj.bestPractice}
                 </div>
-            </div>
 
-            <div class='bubble share-bubble ai' style='font-size: 13px; line-height: 1.4; color: #1B2B28; padding: 12px; margin-bottom: 10px; width: 100%; border: 1px solid #EAE5D8; background: #FDEBD0;'>
-                <strong style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">3. ACTIONS</strong><hr style="border-color: #EAE5D8; margin: 6px 0 10px 0;">
-                
-                <div style="display:flex; gap:8px;">
+                <hr style="border-color: #EAE5D8; margin: 10px 0;">
+                <strong style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">3. ACTIONS</strong><br>
+                <div style="display:flex; gap:8px; margin-top:8px;">
                     <button onclick="shareViaWhatsApp('${compliance}')" style="flex:1; padding: 10px 4px; border-radius: 8px; background: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2);">
                         <i class="fab fa-whatsapp text-lg"></i> Comment & Share
                     </button>
@@ -845,13 +905,16 @@
                 </div>
             </div>
             `;
-            chatWindow.insertAdjacentHTML('beforeend', content);
+            
+            if (evalBubble) {
+                evalBubble.insertAdjacentHTML('beforeend', content);
+            }
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
         function shareViaWhatsApp(complianceFlag) {
             const text = `*SCENARIO:*\n${currentScenarioObj.scenario.replace(/{charityType}/g, 'charity')}\n\n*ASSESSMENT:*\nIs your charity formally prepared to deal with this scenario?\nAnswer: ${complianceFlag}\n\n*RELEVANT GEC PRINCIPLE:*\n${currentScenarioObj.gec}\n\n*BEST PRACTICES:*\n${currentScenarioObj.bestPractice}\n\n*Context/Notes:*\n`;
-            
+
             const encodedText = encodeURIComponent(text);
             const wurl = `https://wa.me/?text=${encodedText}`;
             window.open(wurl, '_blank');
