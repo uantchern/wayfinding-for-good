@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Looking for Trouble | CharityOps</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap');
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        h1, h2, h3 {
+            font-family: Georgia, serif;
+            color: #1B2B28;
+        }
+        
+        h1 { font-size: 2.25rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.5rem; }
+        h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1rem; color: #2D423F; }
+        h3 { font-size: 1.25rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        
+        p { margin-bottom: 1.25rem; color: #4A463B; }
+        
+        ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; color: #4A463B; }
+        li { margin-bottom: 0.5rem; }
+        
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(210, 180, 140, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="py-6 px-8 md:px-16 flex justify-between items-center sticky top-0 bg-[#F2EFE9]/95 backdrop-blur-sm z-50 border-b border-[#EAE5D8]">
+        <a href="index.html" class="font-serif text-3xl leading-none cursor-pointer select-none group" style="text-decoration:none;">
+            <span class="relative inline-block">
+                <span class="italic relative z-10" style="color: #1B2B28; font-weight: 500; padding-right: 0.25rem;">Charity</span>
+                <span class="absolute left-[-0.2em] right-0 bottom-[12%] h-[2px] bg-[#D2B48C] z-0 group-hover:h-[4px] transition-all"></span>
+            </span><span class="relative z-10 tracking-tight" style="color: #8B7355;">Ops</span>
+        </a>
+        <a href="index.html" class="flex items-center gap-2 text-[#8B7355] hover:text-[#1B2B28] transition-colors pb-1 border-b border-transparent hover:border-[#1B2B28]">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span class="text-sm tracking-widest uppercase font-bold">Back to Home</span>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-4xl mx-auto w-full px-6 py-12 md:py-20">
+        
+        <div class="mb-4">
+            <span class="text-xs font-bold tracking-[0.2em] uppercase text-[#8B7355] bg-[#EAE5D8] px-3 py-1 rounded-sm">Case Study</span>
+        </div>
+        
+        <h1>What Makes "Looking for Trouble" a Really Useful Thing for Charities?</h1>
+        
+        <div class="content-container p-8 md:p-12 rounded-2xl mt-8">
+            <p>Small charities in Singapore possess a distinct advantage: agility. However, operating on lean budgets means that "firefighting" unexpected crises is a daily reality. The <strong>Looking for Trouble</strong> simulator acts as an operational smoke detector, designed specifically to help non-profit organisations turn the heat of the moment into actionable, resilient data.</p>
+            <p>Built entirely around the CharityOps <strong>"Fail on Purpose"</strong> methodology, the tool allows teams to safely simulate and resolve crises so they do not fail by accident in the real world.</p>
+            <p>Here is the 3-step framework that makes this tool a "Really Useful Thing" (RUT):</p>
+            
+            <hr class="border-[#EAE5D8] my-8">
+
+            <h2>Step 1: Identify the "Silent Killers"</h2>
+            <p>The tool deliberately ignores catastrophic, once-in-a-decade crises in favour of high-probability, agonising pain points that drain a small team's time and morale on a daily basis.</p>
+            <p>By mapping the 5 core operational areas of a charity against these high-stress ground realities, teams can instantly identify where they are currently firefighting:</p>
+            <ul>
+                <li><strong>Fund Raising:</strong> Major donors withdrawing pledges right before disbursement, or missing complex Tote Board grant application deadlines.</li>
+                <li><strong>Governance:</strong> Losing access to the Charity Portal because the only staff member with the Corppass login resigned abruptly, or failing to locate physical receipts during a crucial IPC status renewal audit.</li>
+                <li><strong>Board Matters:</strong> Micromanagement fatigue, or severe approval bottlenecks stalling urgent ground operations.</li>
+                <li><strong>Programmes:</strong> Massive volunteer drop-outs on the day of a food distribution exercise, or sudden monsoon downpours forcing rapid relocations from an open-air HDB void deck into an enclosed pavilion.</li>
+                <li><strong>Staff:</strong> Urgent operational updates getting lost in casual WhatsApp chatter, or single points of failure (e.g., the only person who knows how to access the payroll system takes urgent medical leave).</li>
+            </ul>
+
+            <h2>Step 2: Fix (Triage vs. Systemic Resolution)</h2>
+            <p>When a crisis hits, panicking is a natural response. The simulator forces teams into a structured, dual-action response framework designed to move them swiftly from panic to strategy.</p>
+            <p>Every scenario delivers both an immediate band-aid and a long-term cure, emphasising agility over heavy corporate bureaucracy:</p>
+            <ul>
+                <li>🔥 <strong>The Firefighting Action (Quick Triage):</strong> What is the most pragmatic, realistic thing you can do in the next 5 minutes to stop the bleeding? 
+                    <br><span class="italic indent-4 inline-block mt-1">Example (Missing Receipts): Inform the external auditor immediately. Do not waste executive time searching through boxes for small amounts.</span></li>
+                <li class="mt-4">🏗️ <strong>The Opportunity (Long-Term Fix):</strong> What policy or behavioural change guarantees this never happens again?
+                    <br><span class="italic indent-4 inline-block mt-1">Example (Missing Receipts): Implement a strict policy: No receipt photo uploaded on the same day means no reimbursement. Stop accepting physical paper claims entirely and transition to digital claims.</span></li>
+            </ul>
+
+            <h2>Step 3: Share & Learn (AI-Enhanced WhatsApp Integration)</h2>
+            <p>Solving the problem in a vacuum does not build institutional memory. The final and most crucial step of the simulator is the <strong>Action Plan formulation and routing</strong>.</p>
+            <p>Instead of generating a formal PDF that gets buried in an email inbox, the simulator exports the customised action plan directly to the team's primary communication channel: <strong>WhatsApp</strong>.</p>
+            <ol class="list-decimal pl-5 space-y-3 mb-6 color-[#4A463B]">
+                <li><strong>Customisation:</strong> Users can edit the generated triage and systemic fixes to fit their exact organisational context before sending.</li>
+                <li><strong>Frictionless Sharing:</strong> The plan is pushed directly to a dedicated WhatsApp group, ensuring immediate visibility among frontline staff and management.</li>
+                <li><strong>AI Analysis & Continuous Evolution:</strong> Because the data now resides in a standard text format inside a WhatsApp chat log, teams can periodically export these chat histories. By feeding these logs back into an AI assistant, the charity can detect recurring trends and identify which systemic fixes are actually effective.</li>
+                <li><strong>Creating a Better Smoke Detector:</strong> Over time, the AI analyses these ground-level chat logs to spot emerging operational bottlenecks that were not originally programmed into the simulator. It can then generate entirely new, hyper-realistic firefighting scenarios based on the charity's <em>actual</em> evolving realities, continuously updating the simulator.
+                    <div class="bg-[#F2EFE9] border-l-4 border-[#2D423F] p-4 mt-3 rounded-r-lg text-sm">
+                        <strong class="text-[#1B2B28]">Example in Action:</strong> After processing a month of WhatsApp logs, the AI notices repeated complaints about "local logistics vendors refusing to accept delayed 60-day credit terms." The AI automatically extracts this trend and proposes a new scenario for the 'Finance/Governance' operations area: <em>"Vendor Standoff: A critical event logistics provider threatens to pull out 48 hours before your major fundraising gala because your standard 60-day payment term is too slow."</em> The simulator thus becomes an evolving feedback loop, getting sharper and more tailored to the local charity landscape every month.
+                    </div>
+                </li>
+            </ol>
+
+            <div class="mt-10 p-6 border-2 border-dashed border-[#D2B48C] rounded-xl text-center bg-[#FDFBF7]">
+                <p class="mb-0 text-lg font-serif italic text-[#8B7355]">By structuring operational crises through Identify, Fix, and Share & Learn, <br><strong class="text-[#1B2B28]">Looking for Trouble</strong> ensures that every fire fought today builds the fireproof foundation of tomorrow.</p>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer Layer -->
+    <footer class="mt-auto py-8 bg-[#1B2B28] text-[#F2EFE9] text-center border-t-4 border-[#D2B48C]">
+        <div class="max-w-4xl mx-auto px-6">
+            <p class="font-serif italic text-lg mb-4 opacity-90">"No maps required. Just intent."</p>
+            <div class="text-xs tracking-widest uppercase opacity-60 font-mono">
+                &copy; 2026 CharityOps | A Social Enterprise Project
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
