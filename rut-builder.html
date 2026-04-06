@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUT Builder | CharityOps</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 { font-family: Georgia, serif; }
+
+        .input-field {
+            width: 100%;
+            background: #FFF;
+            border: 1px solid #D2B48C;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 14px;
+            margin-bottom: 16px;
+            color: #1B2B28;
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #2D423F;
+            box-shadow: 0 0 0 2px rgba(45, 66, 63, 0.1);
+        }
+
+        .primary-btn {
+            background-color: #2D423F;
+            color: #F2EFE9;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        
+        .primary-btn:hover { background-color: #1B2B28; }
+
+        .output-code {
+            background: #1B2B28;
+            color: #D2B48C;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            width: 100%;
+            height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="py-4 px-6 flex justify-between items-center bg-[#F2EFE9] border-b border-[#EAE5D8] sticky top-0 z-50">
+        <div class="font-serif text-2xl select-none flex items-center gap-4">
+            <span class="italic font-medium text-[#1B2B28]">Charity</span><span class="text-[#8B7355]">Ops</span>
+            <span class="text-sm font-sans tracking-widest text-[#5E5A4B] uppercase border-l border-[#D2B48C] pl-4">RUT Builder (Alpha)</span>
+        </div>
+        <a href="index.html" class="flex items-center gap-2 text-[#8B7355] hover:text-[#1B2B28] text-sm uppercase font-bold tracking-wider">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Home
+        </a>
+    </header>
+
+    <main class="flex-grow flex flex-col md:flex-row w-full max-w-[1600px] mx-auto p-6 gap-8">
+        
+        <!-- Left: Configuration Form -->
+        <div class="w-full md:w-1/2 bg-white/50 border border-[#D2B48C]/40 rounded-2xl p-8 overflow-y-auto" style="max-height: calc(100vh - 100px);">
+            <h2 class="text-2xl font-bold mb-6 text-[#2D423F]">Tool Configuration</h2>
+            
+            <label class="block text-sm font-bold text-[#5E5A4B] mb-2 uppercase tracking-wide">1. App Name</label>
+            <input type="text" id="appName" class="input-field" placeholder="e.g. Incident Reporter" value="My New Tool">
+
+            <label class="block text-sm font-bold text-[#5E5A4B] mb-2 uppercase tracking-wide">2. App Description</label>
+            <textarea id="appDesc" class="input-field" rows="3" placeholder="A single-purpose tool for a persistent issue.">A Really Useful Thing that helps small charities resolve daily friction.</textarea>
+
+            <label class="block text-sm font-bold text-[#5E5A4B] mb-2 uppercase tracking-wide">3. Workflow Layout</label>
+            <select id="appLayout" class="input-field">
+                <option value="split">Split Screen Navigation (Left Menu, Right Chat/Content)</option>
+                <option value="stepper">Linear Stepper (Similar to Looking for Trouble)</option>
+            </select>
+
+            <div class="border-t border-[#D2B48C]/40 pt-6 mt-2 mb-6">
+                <h3 class="text-xl font-bold mb-4 text-[#2D423F]">Steps / Sections</h3>
+                <div id="stepsContainer" class="space-y-4">
+                    <!-- Steps injected dynamically -->
+                </div>
+                <button onclick="addStep()" class="mt-4 text-sm font-bold text-[#8B7355] border-2 border-dashed border-[#8B7355] w-full py-2 rounded-lg hover:bg-[#8B7355]/10">+ Add Step</button>
+            </div>
+
+            <div class="border-t border-[#D2B48C]/40 pt-6 mt-2 mb-8">
+                <label class="block text-sm font-bold text-[#5E5A4B] mb-2 uppercase tracking-wide">4. Final Export Target</label>
+                <select id="appExport" class="input-field">
+                    <option value="whatsapp">WhatsApp Export</option>
+                    <option value="pdf">PDF Generation</option>
+                    <option value="none">None (Read Only)</option>
+                </select>
+            </div>
+
+            <button onclick="generateRUT()" class="primary-btn">
+                <i data-lucide="code"></i> Assemble Application Code
+            </button>
+        </div>
+
+        <!-- Right: Code Output -->
+        <div class="w-full md:w-1/2 flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-[#2D423F]">Generated Code</h2>
+                <button onclick="downloadCode()" class="text-sm font-bold text-[#8B7355] flex items-center gap-2 hover:text-[#1B2B28] transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i> Download .html
+                </button>
+            </div>
+            <textarea id="codeOutput" class="output-code" spellcheck="false" readonly>Configuration required. Fill the form to the left and click "Assemble Application Code"...</textarea>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        let stepCount = 0;
+
+        function addStep() {
+            stepCount++;
+            const container = document.getElementById('stepsContainer');
+            const stepHtml = `
+                <div class="bg-[#F2EFE9] p-4 rounded-lg border border-[#D2B48C]/30 relative group" id="step-${stepCount}">
+                    <label class="block text-xs font-bold text-[#5E5A4B] mb-1 uppercase">Step ${stepCount} Title</label>
+                    <input type="text" class="input-field mb-2" value="Step ${stepCount}">
+                    <button onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100 hover:text-red-600 transition-opacity">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', stepHtml);
+            lucide.createIcons();
+        }
+
+        // Initialize with default steps
+        addStep();
+        addStep();
+
+        function generateRUT() {
+            const title = document.getElementById('appName').value;
+            const desc = document.getElementById('appDesc').value;
+            const stepsDivs = document.getElementById('stepsContainer').children;
+            
+            let stepHtmlList = '';
+            for (let i = 0; i < stepsDivs.length; i++) {
+                const stepTitle = stepsDivs[i].querySelector('input').value;
+                stepHtmlList += `
+                        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #F2EFE9; color: #8B7355; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px;">${i+1}</div>
+                            <div style="display: flex; align-items: center;">
+                                <strong style="color: #1B2B28; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em;">${stepTitle}</strong>
+                            </div>
+                        </div>`;
+            }
+
+            const template = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} | CharityOps</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <script src="https://unpkg.com/lucide@latest"><\/script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        body { font-family: 'Playfair Display', serif; background-color: #FFFBF7; color: #1B2B28; margin: 0; padding: 0;}
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header style="padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; background: #F2EFE9; border-bottom: 1px solid #EAE5D8;">
+        <div style="font-size: 24px; display: flex; gap: 8px;">
+            <span style="font-style: italic; color: #1B2B28;">Charity</span><span style="color: #8B7355;">Ops</span>
+        </div>
+        <a href="index.html" style="color: #8B7355; text-decoration: none; font-family: sans-serif; font-size: 12px; text-transform: uppercase; font-weight: bold;">Back</a>
+    </header>
+
+    <main style="flex: 1; max-width: 800px; margin: 40px auto; padding: 20px;">
+        <h1 style="font-family: Georgia, serif; font-size: 32px; margin-bottom: 8px;">${title}</h1>
+        <p style="color: #5E5A4B; margin-bottom: 32px; font-size: 16px; line-height: 1.5;">${desc}</p>
+        
+        <div style="border: 2px dashed #EAE5D8; padding: 32px; border-radius: 12px; background: #FFF;">
+            ${stepHtmlList}
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    <\/script>
+</body>
+</html>`;
+            
+            document.getElementById('codeOutput').value = template;
+        }
+
+        function downloadCode() {
+            const code = document.getElementById('codeOutput').value;
+            if (code.includes('Configuration required')) return alert('Please generate code first.');
+            
+            const blob = new Blob([code], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = document.getElementById('appName').value.toLowerCase().replace(/\\s+/g, '-') + '.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
