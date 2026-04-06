@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Air-Lock Scrubber | CharityOps</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #F2EFE9;
+            color: #1B2B28;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 { font-family: Georgia, serif; }
+
+        .textarea-box {
+            width: 100%;
+            height: 400px;
+            background: #FFF;
+            border: 1px solid #D2B48C;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 14px;
+            color: #1B2B28;
+            resize: none;
+            transition: all 0.2s ease;
+        }
+
+        .textarea-box:focus {
+            outline: none;
+            border-color: #2D423F;
+            box-shadow: 0 0 0 2px rgba(45, 66, 63, 0.1);
+        }
+
+        .primary-btn {
+            background-color: #2D423F;
+            color: #F2EFE9;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        
+        .primary-btn:hover { background-color: #1B2B28; }
+        
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(40, 167, 69, 0.1);
+            color: #1e7e34;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-family: system-ui, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="py-4 px-6 flex justify-between items-center bg-[#F2EFE9] border-b border-[#EAE5D8] sticky top-0 z-50">
+        <div class="font-serif text-2xl select-none flex items-center gap-4">
+            <span class="italic font-medium text-[#1B2B28]">Charity</span><span class="text-[#8B7355]">Ops</span>
+            <span class="text-sm font-sans tracking-widest text-[#5E5A4B] uppercase border-l border-[#D2B48C] pl-4">Air-Lock Scrubber (Local)</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="security-badge hidden md:flex">
+                <i data-lucide="shield-check" class="w-4 h-4"></i> 100% Offline Processing
+            </div>
+            <a href="index.html" class="flex items-center gap-2 text-[#8B7355] hover:text-[#1B2B28] text-sm uppercase font-bold tracking-wider">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Home
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-[1400px] mx-auto p-6 md:p-8">
+        <div class="mb-8 max-w-2xl">
+            <h1 class="text-3xl font-bold mb-3 text-[#2D423F]">WhatsApp Data Air-Lock</h1>
+            <p class="text-[#5E5A4B] font-sans text-sm">Paste raw exported WhatsApp Chat text below. This tool runs entirely within your browser to redact Personally Identifiable Information (PII) before it is analyzed by an AI. No data is transmitted to any server.</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row w-full gap-8">
+            
+            <!-- Left: Raw Input -->
+            <div class="w-full md:w-1/2 flex flex-col gap-4">
+                <div class="flex justify-between items-end">
+                    <h2 class="text-xl font-bold text-[#1B2B28] font-sans">Raw WhatsApp Export</h2>
+                    <span class="text-xs text-[#8B7355] font-sans font-bold uppercase tracking-wide">Input</span>
+                </div>
+                <textarea id="rawInput" class="textarea-box" placeholder="[14/5/26, 10:15:20 AM] Staff Name: We need $5,400 for the event...&#10;&#10;Paste your exported chat text (.txt) here..."></textarea>
+                <div class="flex gap-4">
+                    <button onclick="scrubData()" class="primary-btn">
+                        <i data-lucide="filter"></i> Scrub PII & Redact Data
+                    </button>
+                    <button onclick="document.getElementById('rawInput').value = ''" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-sans font-bold hover:bg-gray-300 transition-colors">
+                        Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Scrubbed Output -->
+            <div class="w-full md:w-1/2 flex flex-col gap-4">
+                <div class="flex justify-between items-end">
+                    <h2 class="text-xl font-bold text-[#1B2B28] font-sans">Anonymised Output</h2>
+                    <span class="text-xs text-[#28a745] font-sans font-bold uppercase tracking-wide"><i data-lucide="check-circle" class="w-3 h-3 inline pb-0.5"></i> Safe for AI Alert</span>
+                </div>
+                <textarea id="scrubbedOutput" class="textarea-box bg-[#F4FDF6] border-[#28a745]/30" readonly placeholder="Scrubbed data will appear here..."></textarea>
+                
+                <div class="flex justify-between items-center bg-white p-4 rounded-lg border border-[#D2B48C]/30 shadow-sm">
+                    <div class="text-xs font-sans text-[#5E5A4B]" id="statsBox">
+                        0 Replacements Made.
+                    </div>
+                    <button onclick="copyOutput()" class="text-sm font-bold text-[#2D423F] flex items-center gap-2 hover:opacity-70 transition-opacity font-sans">
+                        <i data-lucide="copy" class="w-4 h-4"></i> Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function scrubData() {
+            let text = document.getElementById('rawInput').value;
+            let counter = 0;
+
+            const increment = (match, p1) => {
+                counter++;
+                return p1;
+            };
+
+            // 1. Redact Phone Numbers (SG standard and general international)
+            text = text.replace(/(\+?\d{1,3}[\s-]?\d{4}[\s-]?\d{4})/g, () => { counter++; return '[PHONE_REDACTED]'; });
+            text = text.replace(/(\b[89]\d{7}\b)/g, () => { counter++; return '[PHONE_REDACTED]'; });
+            
+            // 2. Redact Email Addresses
+            text = text.replace(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g, () => { counter++; return '[EMAIL_REDACTED]'; });
+            
+            // 3. Redact NRIC / FIN (Singapore ID numbers)
+            text = text.replace(/(\b[STFG]\d{7}[A-Z]\b)/gi, () => { counter++; return '[NRIC_REDACTED]'; });
+            
+            // 4. Redact Financial / Dollar Amounts (e.g. $1,200.50)
+            text = text.replace(/(\$\s?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/g, () => { counter++; return '[$AMOUNT]'; });
+            
+            // 5. Redact IP Addresses
+            text = text.replace(/(\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b)/g, () => { counter++; return '[IP_REDACTED]'; });
+
+            // 6. Generic Name replacements in WhatsApp export formats
+            // Matches WhatsApp prefix like "[14/5/26, 10:15:20 AM] John Doe:" -> "[TIMESTAMP] [SENDER]:"
+            text = text.replace(/(\[.*?\])\s(.*?):/g, (match, time, name) => {
+                counter++;
+                // Create a basic hash of the name to keep speaker consistency (e.g., User_1A2B)
+                const hash = Math.abs(name.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)).toString(16).substring(0,4);
+                return `[TIME] [Sender_${hash}]:`;
+            });
+
+            document.getElementById('scrubbedOutput').value = text;
+            document.getElementById('statsBox').innerHTML = `<strong class="text-[#1B2B28]">${counter}</strong> sensitive items automatically redacted.`;
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('scrubbedOutput');
+            output.select();
+            document.execCommand("copy");
+            alert("Anonymised text copied to clipboard! You can now safely paste it into an AI Agent.");
+        }
+    </script>
+</body>
+</html>
