@@ -125,15 +125,23 @@
             </button>
         </div>
 
-        <!-- Right: Code Output -->
-        <div class="w-full md:w-1/2 flex flex-col gap-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-[#2D423F]">Generated Code</h2>
-                <button onclick="downloadCode()" class="text-sm font-bold text-[#8B7355] flex items-center gap-2 hover:text-[#1B2B28] transition-colors">
-                    <i data-lucide="download" class="w-4 h-4"></i> Download .html
+        <!-- Right: Mobile Preview -->
+        <div class="w-full md:w-1/2 flex flex-col items-center gap-4 bg-[#EAE5D8]/30 border border-[#D2B48C]/40 rounded-2xl p-6 overflow-y-auto" style="max-height: calc(100vh - 100px);">
+            <div class="w-full flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-[#2D423F]">Smartphone Preview</h2>
+                <button onclick="downloadCode()" class="text-sm font-bold text-[#F2EFE9] bg-[#2D423F] px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#1B2B28] transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export RUT (.html)
                 </button>
             </div>
-            <textarea id="codeOutput" class="output-code" spellcheck="false" readonly>Configuration required. Fill the form to the left and click "Assemble Application Code"...</textarea>
+            
+            <!-- Smartphone Shell -->
+            <div class="relative bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800 flex-shrink-0" style="width: 375px; height: 812px;">
+                <!-- Notch simulation -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-6 bg-black rounded-b-3xl z-20"></div>
+                <!-- Iframe -->
+                <iframe id="previewFrame" class="w-full h-full bg-[#FFFBF7] rounded-[30px] border-none" sandbox="allow-scripts allow-same-origin"></iframe>
+            </div>
+            <textarea id="codeOutput" style="display:none;"></textarea>
         </div>
 
     </main>
@@ -218,6 +226,7 @@
 </html>`;
             
             document.getElementById('codeOutput').value = template;
+            document.getElementById('previewFrame').srcdoc = template;
         }
 
         function downloadCode() {
