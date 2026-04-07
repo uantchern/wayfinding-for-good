@@ -456,10 +456,10 @@
                 <!-- CHECKBOXES (Yes/No) -->
                 <div style="display: flex; gap: 32px; align-items: center; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 2px solid #F2EFE9; justify-content: flex-start;">
                     <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-family: Georgia, serif; font-size: 24px; font-weight: bold; color: #DC3545;">
-                        <input type="checkbox" style="width: 28px; height: 28px; accent-color: #DC3545;" checked> Yes
+                        <input id="cb-yes" onchange="if(this.checked) document.getElementById('cb-no').checked = false;" type="checkbox" style="width: 28px; height: 28px; accent-color: #DC3545;" checked> Yes
                     </label>
                     <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; font-family: Georgia, serif; font-size: 24px; font-weight: bold; color: #DC3545;">
-                        <input type="checkbox" style="width: 28px; height: 28px; accent-color: #DC3545;"> No
+                        <input id="cb-no" onchange="if(this.checked) document.getElementById('cb-yes').checked = false;" type="checkbox" style="width: 28px; height: 28px; accent-color: #DC3545;"> No
                     </label>
                 </div>
 
@@ -482,10 +482,12 @@
             if (!appState.area || !appState.scenarioObj) return;
             
             const userContext = document.getElementById('userContext') ? document.getElementById('userContext').value.trim() : '';
+            const madeDifference = document.getElementById('cb-yes') && document.getElementById('cb-yes').checked ? 'Yes' : 'No';
             
             let message = `*🌟 Daily Impact Pulse*\n\n`;
             message += `*Area:* ${appState.area}\n`;
             message += `*Type:* ${appState.scenarioObj.type}\n`;
+            message += `*Have we made a difference?:* ${madeDifference}\n`;
             message += `*Impact:* ${appState.scenarioObj.title}: ${appState.scenarioObj.desc}\n\n`;
             
             if (userContext) {
