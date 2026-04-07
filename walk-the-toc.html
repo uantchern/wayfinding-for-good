@@ -465,7 +465,7 @@
 
                 <!-- COMPACTED WHATSAPP CAPTURE -->
                 <div style="margin-bottom: 16px;">
-                    <textarea id="userContext" rows="4" placeholder="I also noticed that... (Document your context, brief notes, or realities for this impact here)" style="width: 100%; padding: 12px; border: 1px solid #D2B48C; border-radius: 8px; outline: none; font-family: inherit; font-size: 14px; resize: vertical; box-sizing: border-box; background: #FDFBF7;"></textarea>
+                    <textarea id="userContext" rows="4" placeholder="I also noticed that... (Document your context, brief notes, or realities for this impact here)" oninput="this.style.border='1px solid #D2B48C'; this.style.backgroundColor='#FDFBF7';" style="width: 100%; padding: 12px; border: 1px solid #D2B48C; border-radius: 8px; outline: none; font-family: inherit; font-size: 14px; resize: vertical; box-sizing: border-box; background: #FDFBF7; transition: all 0.2s;"></textarea>
                 </div>
 
                 <div style="display: flex;">
@@ -481,7 +481,18 @@
         function shareViaWhatsApp() {
             if (!appState.area || !appState.scenarioObj) return;
             
-            const userContext = document.getElementById('userContext') ? document.getElementById('userContext').value.trim() : '';
+            const userContextEl = document.getElementById('userContext');
+            const userContext = userContextEl ? userContextEl.value.trim() : '';
+
+            if (!userContext) {
+                if (userContextEl) {
+                    userContextEl.style.border = '2px solid #DC3545';
+                    userContextEl.style.backgroundColor = '#FFF5F5';
+                    userContextEl.focus();
+                }
+                alert("Please add your context or notes before sharing.");
+                return;
+            }
             const madeDifference = document.getElementById('cb-yes') && document.getElementById('cb-yes').checked ? 'Yes' : 'No';
             
             let message = `*🌟 Daily Impact Pulse*\n\n`;
