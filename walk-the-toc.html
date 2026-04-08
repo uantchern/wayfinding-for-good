@@ -232,7 +232,7 @@
             </div>
 
             <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. START OF JOURNEY</span>
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">1. THE GOAL</span>
             </div>
             <div class="category-pills" id="categoryPills">
                 <button class="pill glow-trigger-0" onclick="selectArea('FUND RAISING', this)">FUND RAISING</button>
@@ -243,7 +243,7 @@
             </div>
 
             <div style="margin-bottom: 12px; display: none; align-items: center; gap: 8px;" id="stepTwoHeader">
-                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. OUR ACTIVITIES</span>
+                <span style="font-size: 12px; font-weight: 700; color: #8B7355; text-transform: uppercase; letter-spacing: 0.1em;">2. THE ACTIONS</span>
             </div>
             <div id="impactTilesContainer" class="flex flex-col gap-1 mb-6" style="max-height: 480px; overflow-y: auto; padding-right: 8px;">
                 <!-- Javascript will inject 4A impact tiles here -->
@@ -252,13 +252,10 @@
              <div id="mobileUserGuide" style="padding: 12px 0; background: transparent; box-sizing: border-box; width: 100%;" class="mobile-only">
                  <div style="max-width: 480px; margin: 0 auto; border: 2px dashed #EAE5D8; padding: 20px; border-radius: 12px; background: #FFFBF7;">
                      <div style="font-size: 15px; color: #1B2B28; margin-bottom: 24px; line-height: 1.5;">
-                         <ul style="list-style-type: none; padding-left: 0; margin: 0; color: #1B2B28; font-weight: normal;">
-                             <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>This tool helps you treat your Theory of Change (TOC) as a working model, rather than a fixed plan.</span></li>
-                             <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>A TOC is not a guarantee of success, but a shared framework for organisational learning.</span></li>
-                             <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>It helps to clearly map out your assumptions and clarify why you believe your programme works.</span></li>
-                             <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>Use it to test your ideas in the real world, learn from safe experiments, and identify unintended outcomes early.</span></li>
-                             <li style="display: flex; gap: 8px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>Remember that impact is a milestone for review, not just a final reporting metric.</span></li>
-                         </ul>
+                         <div style="text-align: center; margin-bottom: 24px;">
+                             <strong style="display: block; font-size: 16px; margin-bottom: 8px;">Welcome to Walk the TOC.</strong>
+                             <span style="font-size: 14px; opacity: 0.85;">Your interactive tool to build and test your Theory of Change without the jargon.</span>
+                         </div>
                      </div>
 
                      <div style="margin-bottom: 16px; display: flex; justify-content: center;">
@@ -288,13 +285,10 @@
                 <div class="empty-state" id="emptyStatePlaceholder" style="align-items: flex-start; text-align: left; padding: 40px 24px; background: transparent; box-sizing: border-box; width: 100%;">
                     <div style="max-width: 480px; margin: 0 auto;">
                          <div style="font-size: 15px; color: #1B2B28; margin-bottom: 24px; line-height: 1.5;">
-                             <ul style="list-style-type: none; padding-left: 0; margin: 0; color: #1B2B28; font-weight: normal;">
-                                 <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>This tool helps you treat your Theory of Change (TOC) as a working model, rather than a fixed plan.</span></li>
-                                 <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>A TOC is not a guarantee of success, but a shared framework for organisational learning.</span></li>
-                                 <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>It helps to clearly map out your assumptions and clarify why you believe your programme works.</span></li>
-                                 <li style="display: flex; gap: 8px; margin-bottom: 4px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>Use it to test your ideas in the real world, learn from safe experiments, and identify unintended outcomes early.</span></li>
-                                 <li style="display: flex; gap: 8px;"><span style="color: #DC3545; font-weight: bold;">-</span> <span>Remember that impact is a milestone for review, not just a final reporting metric.</span></li>
-                             </ul>
+                             <div style="text-align: center; margin-bottom: 24px;">
+                                 <strong style="display: block; font-size: 16px; margin-bottom: 8px;">Welcome to Walk the TOC.</strong>
+                                 <span style="font-size: 14px; opacity: 0.85;">Your interactive tool to build and test your Theory of Change without the jargon.</span>
+                             </div>
                          </div>
 
                          <div style="margin-bottom: 16px; display: flex; justify-content: center;">
@@ -412,7 +406,7 @@
             const content = `
             <div class='bubble' style='font-size: 14px; line-height: 1.5; color: #1B2B28; background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #EAE5D8;'>
 
-                <h3 style="font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: #DC3545; margin-top: 0; margin-bottom: 20px; text-align: left;">3. Have we made a Difference?</h3>
+                <h3 style="font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: #DC3545; margin-top: 0; margin-bottom: 20px; text-align: left;">3. THE REALITY CHECK</h3>
 
                 <!-- STRONGER PULSE & COMBINED AREA/SCENARIO -->
                 <div class="urgent-pulse-glow" style="margin-bottom: 20px; padding: 16px; border: 2px solid #3B82F6; border-radius: 8px; background-color: #EFF6FF; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);">
@@ -468,7 +462,7 @@
             let message = `*🌟 Daily Impact Pulse*\n\n`;
             message += `*Area:* ${appState.area}\n`;
             message += `*Type:* ${appState.scenarioObj.type}\n`;
-            message += `*Have we made a difference?:* ${madeDifference}\n`;
+            message += `*The Reality Check:* ${madeDifference}\n`;
             message += `*Impact:* ${appState.scenarioObj.title}: ${appState.scenarioObj.desc}\n\n`;
             
             if (userContext) {
