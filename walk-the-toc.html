@@ -339,11 +339,6 @@
                     btn.classList.add('bg-[#F2EFE9]');
 
                     appState.scenarioObj = item;
-                    
-                    document.getElementById('setupDrawer').classList.add('started');
-                    document.getElementById('chatContainer').classList.add('started');
-                    document.getElementById('emptyStatePlaceholder').style.display = 'none';
-
                     presentActionPlan();
                 };
                 container.appendChild(btn);
@@ -351,8 +346,7 @@
         }
 
         function goBackToSetup() {
-            document.getElementById('setupDrawer').classList.remove('started');
-            document.getElementById('chatContainer').classList.remove('started');
+            // Not needed in single column view
         }
 
         function handleRealityCheck(isYes) {
