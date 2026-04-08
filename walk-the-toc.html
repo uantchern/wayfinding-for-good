@@ -425,12 +425,18 @@
                         <textarea id="userContext" rows="3" placeholder="Document any brief notes or context for this outcome here..." oninput="this.style.border='1px solid #D2B48C'; this.style.backgroundColor='#FFFBF7';" style="width: 100%; padding: 12px; border: 1px solid #D2B48C; border-radius: 8px; outline: none; font-family: inherit; font-size: 14px; resize: vertical; box-sizing: border-box; background: #FFFBF7; transition: all 0.2s;"></textarea>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <button onclick="shareViaWhatsApp()" style="width: 100%; padding: 16px; border-radius: 8px; background: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2);">
+                        <button onclick="shareViaWhatsApp()" style="width: 100%; padding: 16px; border-radius: 8px; background: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 16px; box-shadow: 0 2px 4px rgba(37, 211, 102, 0.2); position: relative; z-index: 2;">
                             <i class="fab fa-whatsapp text-xl"></i> Share Insight to WhatsApp
                         </button>
-                        <button onclick="location.reload()" style="width: 100%; padding: 12px; border-radius: 8px; background: transparent; color: #8B7355; border: 2px dashed #D2B48C; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px;">
-                            <i class="fas fa-redo"></i> Start New Assessment
-                        </button>
+                        
+                        <div style="position: relative;">
+                            <!-- T-Junction Connector Line -->
+                            <div style="position: absolute; left: -24px; top: 50%; width: 24px; border-top: 2px dashed #1B2B28; z-index: 1;"></div>
+                            
+                            <button onclick="location.reload()" style="position: relative; z-index: 2; width: 100%; padding: 12px; border-radius: 8px; background: #FFFBF7; color: #8B7355; border: 2px dashed #D2B48C; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px;">
+                                <i class="fas fa-redo"></i> Start New Assessment
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>`;
