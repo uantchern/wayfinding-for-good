@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Action Center | CharityOps</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #F2EFE9; 
+            color: #1B2B28; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
+        }
+        .input-field { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #D2B48C; 
+            background: #FFFBF7; 
+            outline: none; 
+            transition: border-color 0.2s; 
+        }
+        .input-field:focus { 
+            border-color: #2D423F; 
+        }
+        .btn-primary { 
+            background: #2D423F; 
+            color: #F2EFE9; 
+            font-weight: bold; 
+            padding: 16px; 
+            border-radius: 12px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em; 
+            transition: transform 0.1s; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary:active { 
+            transform: scale(0.98); 
+        }
+        .btn-whatsapp { 
+            background: #25D366; 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            font-weight: bold; 
+            padding: 16px; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            transition: transform 0.1s;
+        }
+        .btn-whatsapp:active { 
+            transform: scale(0.98); 
+        }
+        #toast { 
+            position: fixed; 
+            top: -100px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: #1B2B28; 
+            color: #FFF; 
+            padding: 12px 24px; 
+            border-radius: 30px; 
+            font-weight: bold; 
+            font-size: 14px; 
+            transition: top 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            z-index: 100; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+        #toast.show { 
+            top: 20px; 
+        }
+    </style>
+</head>
+<body class="pb-24">
+    <!-- Toast -->
+    <div id="toast"><i class="fas fa-check-circle text-[#25D366] mr-2"></i> Copied! Routing to WhatsApp...</div>
+
+    <div class="max-w-md mx-auto p-4 space-y-6">
+        
+        <!-- Header -->
+        <div class="text-center mt-4 mb-8">
+            <h1 class="text-2xl font-black text-[#1B2B28] tracking-tight uppercase" id="charityNameLabel">Action Center</h1>
+            <p class="text-[13px] text-[#8B7355] font-medium mt-1">Zero-Database VMS</p>
+        </div>
+
+        <!-- Tab Navigation (Setup / Actions / Broadcaster) -->
+        <div class="flex bg-white rounded-xl p-1 shadow-sm border border-[#EAE5D8]">
+             <button onclick="switchTab('actions')" id="tab-actions" class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-[#2D423F] text-white transition-colors">Volunteers</button>
+             <button onclick="switchTab('admin')" id="tab-admin" class="flex-1 py-2.5 text-sm font-bold rounded-lg text-[#8B7355] hover:bg-gray-50 transition-colors">Admin</button>
+             <button onclick="switchTab('setup')" id="tab-setup" class="px-4 py-2.5 text-sm font-bold rounded-lg text-[#8B7355] hover:bg-gray-50 transition-colors"><i class="fas fa-cog"></i></button>
+        </div>
+
+        <!-- Setup View -->
+        <div id="view-setup" class="hidden space-y-4">
+            <div class="glass-panel p-6 rounded-2xl">
+                <h2 class="text-lg font-bold mb-4 flex items-center text-[#1B2B28]"><i class="fas fa-id-card mr-2 text-[#8B7355]"></i> Profile Setup</h2>
+                <p class="text-[#5E5A4B] text-xs mb-4 leading-relaxed">Changes are saved securely on your device. URL links sent by your coordinator will automatically fill this out.</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Charity Name</label>
+                        <input type="text" id="setup-charity" class="input-field" placeholder="e.g. Food Bank SG">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Your Name</label>
+                        <input type="text" id="setup-name" class="input-field" placeholder="e.g. John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Coordinator Phone (WhatsApp)</label>
+                        <input type="tel" id="setup-phone" class="input-field" placeholder="e.g. 6581234567">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Group Invite Link</label>
+                        <input type="url" id="setup-group" class="input-field" placeholder="e.g. https://chat.whatsapp.com/...">
+                    </div>
+                    <button onclick="saveSetup()" class="btn-primary w-full mt-4"><i class="fas fa-save"></i> Save Profile</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions View -->
+        <div id="view-actions" class="space-y-4">
+            <!-- Alert if setup missing -->
+            <div id="setup-alert" class="hidden bg-red-50 border border-red-200 text-red-800 p-4 rounded-xl text-sm font-medium flex items-start shadow-sm mt-2">
+                <i class="fas fa-exclamation-triangle mt-0.5 mr-3 text-red-500"></i>
+                <div class="leading-snug">Please tap the gear icon to complete your profile setup (Name & Phone).</div>
+            </div>
+
+            <!-- Feature A: Check-In -->
+            <div class="glass-panel p-6 rounded-2xl relative overflow-hidden">
+                <h2 class="text-lg font-bold mb-2 flex items-center text-[#1B2B28]"><i class="fas fa-map-marker-alt mr-2 text-[#25D366]"></i> Fast Check-In</h2>
+                <p class="text-[#5E5A4B] text-xs mb-4">Ping the coordinator that you have arrived and are ready.</p>
+                <button onclick="sendCheckIn()" class="btn-whatsapp w-full shadow-md shadow-[#25D366]/20">
+                    <i class="fab fa-whatsapp"></i> Send Check-In
+                </button>
+            </div>
+
+            <!-- Feature B: Impact Report -->
+            <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-[#3B82F6]">
+                <h2 class="text-lg font-bold mb-2 flex items-center text-[#1B2B28]"><i class="fas fa-chart-bar mr-2 text-[#3B82F6]"></i> Impact Report</h2>
+                <p class="text-[#5E5A4B] text-xs mb-4">Log your hours and achievements to the volunteer group for easy tracking.</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Hours Volunteered</label>
+                        <input type="number" id="report-hours" class="input-field py-3" placeholder="e.g. 3.5">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">What was achieved?</label>
+                        <textarea id="report-achieved" rows="3" class="input-field resize-none py-3" placeholder="e.g. Sorted 500kg of canned food and prepared 20 packages."></textarea>
+                    </div>
+                    
+                    <button onclick="sendImpactReport()" class="w-full bg-[#1B2B28] text-white flex items-center justify-center gap-2 font-bold py-4 rounded-xl uppercase text-xs mt-2 active:scale-95 transition-transform shadow-md">
+                        <i class="fas fa-copy"></i> Copy & Jump to Group
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin / Shift Broadcaster View -->
+        <div id="view-admin" class="hidden space-y-4">
+            <div class="glass-panel p-6 rounded-2xl border-t-4 border-t-[#EAB308]">
+                <h2 class="text-lg font-bold mb-2 flex items-center text-[#1B2B28]"><i class="fas fa-bullhorn mr-2 text-[#EAB308]"></i> Shift Broadcaster</h2>
+                <p class="text-[#5E5A4B] text-xs mb-4">Generate structured shift calls for the WhatsApp group to keep formatting clean.</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Date & Time</label>
+                        <input type="text" id="shift-datetime" class="input-field" placeholder="e.g. Sat 12 Nov, 9am - 1pm">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Role Needed</label>
+                        <input type="text" id="shift-role" class="input-field" placeholder="e.g. Delivery Driver (2 pax)">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">Location & Brief Details</label>
+                        <input type="text" id="shift-location" class="input-field" placeholder="e.g. HQ Loading Bay">
+                    </div>
+                    
+                    <button onclick="broadcastShift()" class="w-full bg-[#1B2B28] text-white flex items-center justify-center gap-2 font-bold py-4 rounded-xl uppercase text-xs mt-2 active:scale-95 transition-transform shadow-md">
+                        <i class="fas fa-copy"></i> Copy & Jump to Group
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- The actual core logic Engine -->
+    <script>
+        // Copy to clipboard fallback logic
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast();
+                return true;
+            } catch (err) {
+                // Fallback for older browsers / webview shells
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast();
+                    document.body.removeChild(textArea);
+                    return true;
+                } catch (e) {
+                    document.body.removeChild(textArea);
+                    alert("Clipboard access blocked. Please manually select and copy the text.\n\n" + text);
+                    return false;
+                }
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function switchTab(tabId) {
+            ['setup', 'actions', 'admin'].forEach(id => {
+                document.getElementById('view-' + id).classList.add('hidden');
+                
+                let btn = document.getElementById('tab-' + id);
+                if(btn && id !== 'setup') {
+                    btn.className = 'flex-1 py-2.5 text-sm font-bold rounded-lg text-[#8B7355] hover:bg-gray-50 transition-colors';
+                } else if(btn && id === 'setup') {
+                    btn.className = 'px-4 py-2.5 text-sm font-bold rounded-lg text-[#8B7355] hover:bg-gray-50 transition-colors';
+                }
+            });
+            
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            let activeBtn = document.getElementById('tab-' + tabId);
+            
+            if(tabId !== 'setup') {
+                activeBtn.className = 'flex-1 py-2.5 text-sm font-bold rounded-lg bg-[#2D423F] text-white shadow-sm transition-colors';
+            } else {
+                activeBtn.className = 'px-4 py-2.5 text-sm font-bold rounded-lg bg-[#2D423F] text-white shadow-sm transition-colors';
+            }
+        }
+
+        // URL Parsing & State
+        function loadParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lsCharity = localStorage.getItem('vm_charity');
+            const lsPhone = localStorage.getItem('vm_phone');
+            const lsGroup = localStorage.getItem('vm_group');
+            const lsName = localStorage.getItem('vm_name');
+            
+            // Priority: URL Param > Local Storage > Empty String
+            // This enables the "One URL per charity" protocol
+            const charity = urlParams.get('charity') || lsCharity || '';
+            const phone = urlParams.get('phone') || lsPhone || '';
+            const group = urlParams.get('group') || lsGroup || '';
+            
+            // Populate Setup Form Fields
+            document.getElementById('setup-charity').value = charity;
+            document.getElementById('setup-phone').value = phone;
+            document.getElementById('setup-group').value = group;
+            if(lsName) document.getElementById('setup-name').value = lsName;
+            
+            if (charity) document.getElementById('charityNameLabel').innerText = charity;
+
+            // If URL params exist but aren't in local storage yet, auto-save them
+            if (urlParams.get('charity') || urlParams.get('phone') || urlParams.get('group')) {
+                localStorage.setItem('vm_charity', charity);
+                localStorage.setItem('vm_phone', phone);
+                localStorage.setItem('vm_group', group);
+            }
+
+            checkSetup(phone, lsName);
+        }
+
+        function saveSetup() {
+            const charity = document.getElementById('setup-charity').value;
+            const name = document.getElementById('setup-name').value;
+            const phone = document.getElementById('setup-phone').value;
+            const group = document.getElementById('setup-group').value;
+
+            if(!name || !phone) {
+                alert("Please fill in your Name and Coordinator Phone.");
+                return;
+            }
+
+            // Write explicitly to browser's client-side persistent storage
+            localStorage.setItem('vm_charity', charity);
+            localStorage.setItem('vm_name', name);
+            localStorage.setItem('vm_phone', phone);
+            localStorage.setItem('vm_group', group);
+
+            document.getElementById('charityNameLabel').innerText = charity || "Action Center";
+            
+            checkSetup(phone, name);
+            showToast();
+            setTimeout(() => switchTab('actions'), 600);
+        }
+
+        function checkSetup(phone, name) {
+            const alertBox = document.getElementById('setup-alert');
+            if(!phone || !name) {
+                alertBox.classList.remove('hidden');
+            } else {
+                alertBox.classList.add('hidden');
+            }
+        }
+
+        function getTimestamp() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " on " + now.toLocaleDateString();
+        }
+
+        // --- THE WHATSAPP LOGIC ENGINE ---
+
+        // Feature A: Check-in (Direct API to Coordinator)
+        function sendCheckIn() {
+            const name = localStorage.getItem('vm_name');
+            const phone = localStorage.getItem('vm_phone');
+            if(!name || !phone) { alert("Please complete setup first. Tap the gear icon."); return; }
+
+            const time = getTimestamp();
+            const msg = `*📍 VOLUNTEER CHECK-IN*\n\n*WHO:* ${name}\n*TIME:* ${time}\n\n_Checked in via Action Center_`;
+            
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            window.location.assign(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`);
+        }
+
+        // Feature B: Impact Report (Copy-and-Jump Protocol)
+        async function sendImpactReport() {
+            const name = localStorage.getItem('vm_name');
+            const group = localStorage.getItem('vm_group');
+            
+            if(!name) { alert("Please complete setup. Tap the gear icon."); return; }
+            if(!group) { alert("Group link missing! The coordinator needs to provide the WhatsApp group invite link."); return; }
+
+            const hours = document.getElementById('report-hours').value || "0";
+            const achieved = document.getElementById('report-achieved').value || "N/A";
+            
+            const msg = `*📊 IMPACT REPORT*\n\n*WHO:* ${name}\n*HOURS:* ${hours} hrs\n*ACHIEVEMENT:* ${achieved}\n\n_Logged via Action Center_`;
+            
+            const copied = await copyToClipboard(msg);
+            if(copied) {
+                // Wait for the toast, then fire the redirect to the Group Invite link
+                setTimeout(() => {
+                    window.location.assign(group);
+                }, 1000);
+            }
+        }
+
+        // Feature C: Shift Broadcaster (Copy-and-Jump Protocol)
+        async function broadcastShift() {
+            const group = localStorage.getItem('vm_group');
+            if(!group) { alert("Group link missing! Please provide a Group Invite Link in Setup."); switchTab('setup'); return; }
+
+            const dt = document.getElementById('shift-datetime').value || "TBD";
+            const role = document.getElementById('shift-role').value || "General Volunteer";
+            const loc = document.getElementById('shift-location').value || "TBD";
+
+            const msg = `*📢 SHIFT AVAILABLE*\n\n*WHEN:* ${dt}\n*ROLE:* ${role}\n*WHERE:* ${loc}\n\n_Reply to this message if you can make it!_`;
+            
+            const copied = await copyToClipboard(msg);
+            if(copied) {
+                setTimeout(() => {
+                    window.location.assign(group);
+                }, 1000);
+            }
+        }
+
+        // Execute initialization on load
+        loadParams();
+    </script>
+</body>
+</html>
