@@ -1,620 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharityOps Wayfinding Statement</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./favicon.png">
-    <!-- Open Graph for Social Sharing -->
-    <meta property="og:title" content="CharityOps Wayfinding Statement" />
-    <meta property="og:description"
-        content="We discover Really Useful Things for Charities. No maps required. Just intent." />
-    <meta property="og:image" content="https://uantchern.github.io/wayfinding-for-good/social-preview.jpg" />
-    <meta property="og:url" content="https://www.charityops.org/" />
-    <meta property="og:type" content="website" />
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap');
-
-        body {
-            font-family: 'Playfair Display', serif;
-            background-color: #F2EFE9;
-            color: #1B2B28;
-            margin: 0;
-            padding: 0;
-        }
-
-        .mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .faq-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out;
-            opacity: 0;
-        }
-
-        .faq-item.active .faq-content {
-            max-height: 4000px;
-            opacity: 100;
-            margin-top: 1.5rem;
-        }
-
-        .faq-item.active .chevron {
-            transform: rotate(180deg);
-        }
-
-        .faq-item.active .icon-bg {
-            background-color: #2D423F;
-            color: #F2EFE9;
-        }
-
-        .chevron {
-            transition: transform 0.5s ease;
-        }
-
-        /* Smooth reveal for Wix entry */
-        .fade-in {
-            animation: fadeIn 1.2s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .project-link {
-            font-weight: 700;
-            text-decoration: underline;
-            text-decoration-color: #D2B48C;
-            transition: text-decoration-color 0.3s;
-        }
-
-        .project-link:hover {
-            text-decoration-color: #1B2B28;
-        }
-
-        /* Journey Animations */
-        @keyframes float-leaf {
-            0% {
-                transform: translate(0px, 0px) rotate(0deg);
-                opacity: 0.6;
-            }
-
-            33% {
-                transform: translate(-10px, 15px) rotate(-15deg);
-                opacity: 0.4;
-            }
-
-            66% {
-                transform: translate(10px, 30px) rotate(15deg);
-                opacity: 0.8;
-            }
-
-            100% {
-                transform: translate(0px, 45px) rotate(0deg);
-                opacity: 0.6;
-            }
-        }
-
-        .leaf-animate {
-            animation: float-leaf 12s ease-in-out infinite alternate;
-        }
-
-        /* Gentle Floating Falling Leaves */
-        @keyframes fall-down {
-            0% {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-
-            5% {
-                opacity: 0.6;
-            }
-
-            90% {
-                opacity: 0.6;
-            }
-
-            100% {
-                transform: translateY(110vh);
-                opacity: 0;
-            }
-        }
-
-        @keyframes sway {
-            0% {
-                transform: translateX(-40px) rotate(-45deg);
-            }
-
-            100% {
-                transform: translateX(40px) rotate(45deg);
-            }
-        }
-
-        .falling-leaf-container {
-            position: fixed;
-            top: 0;
-            color: #D2B48C;
-            pointer-events: none;
-            z-index: 50;
-            animation: fall-down linear forwards;
-            will-change: transform, opacity;
-        }
-
-        .falling-leaf-sway {
-            animation: sway 4s ease-in-out infinite alternate;
-            will-change: transform;
-        }
-
-        @keyframes ripple-word {
-            0% {
-                transform: scale(1);
-                text-shadow: 0px 0px 0px rgba(210, 180, 140, 0);
-                color: inherit;
-            }
-
-            50% {
-                transform: scale(1.03);
-                text-shadow: 0px 0px 8px rgba(210, 180, 140, 0.6);
-                color: #8B7355;
-            }
-
-            100% {
-                transform: scale(1);
-                text-shadow: 0px 0px 0px rgba(210, 180, 140, 0);
-                color: inherit;
-            }
-        }
-
-        .ripple-animate {
-            display: inline-block;
-            animation: ripple-word 5s ease-in-out infinite;
-        }
-
-        @keyframes rustle-sentence {
-            0% {
-                transform: rotate(0deg) skewX(0deg);
-            }
-
-            25% {
-                transform: rotate(0.2deg) skewX(0.5deg);
-            }
-
-            50% {
-                transform: rotate(-0.1deg) skewX(-0.5deg);
-            }
-
-            75% {
-                transform: rotate(0.1deg) skewX(0.2deg);
-            }
-
-            100% {
-                transform: rotate(0deg) skewX(0deg);
-            }
-        }
-
-        .rustle-animate:hover {
-            animation: rustle-sentence 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse-heart {
-            0% {
-                transform: scale(1);
-            }
-
-            15% {
-                transform: scale(1.3);
-            }
-
-            30% {
-                transform: scale(1);
-            }
-
-            45% {
-                transform: scale(1.3);
-            }
-
-            60% {
-                transform: scale(1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .pulse-heart {
-            display: inline-block;
-            animation: pulse-heart 1.5s ease-in-out infinite;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CharityOps | Useful Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Outfit:wght@900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
+<body>
 
-<body class="selection:bg-[#D2B48C] selection:text-[#1B2B28] fade-in overflow-x-hidden">
+  <!-- Header -->
+  <header style="padding: 1.5rem; text-align: center;">
+    <div style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: bold; color: var(--text-main);">
+      CharityOps 
+    </div>
+  </header>
 
-
-
-    <!-- Hero Section -->
-    <section class="pt-12 pb-4 md:pt-16 md:pb-6 flex flex-col justify-center items-center px-8 relative overflow-hidden">
-        <div class="absolute inset-0 pointer-events-none opacity-[0.05] flex items-center justify-center">
-            <div class="w-[150%] h-[1px] bg-[#1B2B28] -rotate-12 transform"></div>
-        </div>
-        <div class="max-w-5xl w-full z-10 text-center">
-            <h1 class="text-4xl md:text-6xl lg:text-[5rem] font-light leading-[1.1] text-[#1B2B28] max-w-4xl mx-auto">
-                Using AI, we <span class="text-[#2D423F] border-b border-[#D2B48C]">discover</span> Really Useful Things
-                for charities in Singapore.
-            </h1>
-        </div>
+  <!-- Hero Section -->
+  <main>
+    <section class="section container" style="padding-top: 1rem; padding-bottom: 3rem;">
+      <h1 style="font-size: 1.45rem; line-height: 1.5; color: var(--text-main); font-weight: 600; margin-bottom: 0;">
+        Using AI, we discover Really Useful Things for charities in Singapore to handle the heavy lifting of charities’ operations. By AI-enabling the "boring but important" tasks, we give you back the most valuable resource of all: time to spend with your beneficiaries.
+      </h1>
     </section>
 
-    <!-- Finding Clarity Section -->
-    <section id="path" class="pt-2 pb-2 md:pt-4 md:pb-4 px-8 bg-[#FDFBF7] border-t border-[#EAE5D8]">
-                <div class="max-w-4xl mx-auto">
+    <!-- App Grid -->
+    <section id="ruts" class="section container" style="padding-top: 0;">
+      <div class="grid">
+        
+        <!-- App 1: Charity Governance (CG) -->
+        <a href="#" class="card" style="background: #F0F4E8; border-color: #E2E8D5;">
+          <div class="card-icon" style="font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; color: #4A5D23; display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 0.5rem;">
+            CG
+          </div>
+          <h3 class="card-title">Charity Governance</h3>
+          <p class="card-desc">A Really Useful Thing for Charities</p>
+        </a>
 
+        <!-- App 2: Question Stormer (QS) -->
+        <a href="#" class="card" style="background: #FAEDEB; border-color: #F0DEDC;">
+          <div class="card-icon" style="font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; color: #B24A3E; display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 0.5rem;">
+            QS
+          </div>
+          <h3 class="card-title">Question Stormer</h3>
+          <p class="card-desc">A Really Useful Thing for Charities</p>
+        </a>
 
-                    <div class="space-y-0" id="faq-container">
+        <!-- App 3: Story Teller (ST) -->
+        <a href="#" class="card" style="background: #EAF2F8; border-color: #DDE8F2;">
+          <div class="card-icon" style="font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; color: #2C3E50; display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 0.5rem;">
+            ST
+          </div>
+          <h3 class="card-title">Story Teller</h3>
+          <p class="card-desc">A Really Useful Thing for Charities</p>
+        </a>
 
-                        <!-- 1. Who We Are -->
-                        <div class="faq-item border-b border-[#E0D7C6] py-1 md:py-2">
-                            <button class="w-full flex justify-between items-center text-left group outline-none"
-                                onclick="toggleFaq(this)">
-                                <div class="flex items-center gap-6">
-                                    <div
-                                        class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
-                                        <i data-lucide="users" class="w-4 h-4"></i>
-                                    </div>
-                                    <h3
-                                        class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
-                                        1. Who Are We
-                                    </h3>
-                                </div>
-                                <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
-                            </button>
-                            <div class="faq-content text-left pl-12 md:pl-16 text-[#5E5A4B] space-y-4">
-                                <p>CharityOps is a social enterprise.</p>
-                            </div>
-                        </div>
+        <!-- App 4: Impact Reporter (IR) -->
+        <a href="#" class="card" style="background: #FFF4E0; border-color: #F2E3C6;">
+          <div class="card-icon" style="font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; color: #C99A2E; display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 0.5rem;">
+            IR
+          </div>
+          <h3 class="card-title">Impact Reporter</h3>
+          <p class="card-desc">A Really Useful Thing for Charities</p>
+        </a>
 
-                        <!-- 2. What we Do -->
-                        <div class="faq-item border-b border-[#E0D7C6] py-1 md:py-2">
-                            <button class="w-full flex justify-between items-center text-left group outline-none"
-                                onclick="toggleFaq(this)">
-                                <div class="flex items-center gap-6">
-                                    <div
-                                        class="icon-bg p-2 rounded-full bg-[#EAE5D8] text-[#8B7355] transition-colors duration-500">
-                                        <i data-lucide="sparkles" class="w-4 h-4"></i>
-                                    </div>
-                                    <h3
-                                        class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide group-hover:text-[#2D423F]">
-                                        2. What we Do
-                                    </h3>
-                                </div>
-                                <i data-lucide="chevron-down" class="chevron w-5 h-5 text-[#D2B48C]"></i>
-                            </button>
-                            <div class="faq-content text-left pl-12 md:pl-16 text-[#5E5A4B] space-y-4">
-                                <p>We use AI to discover Really Useful Things that handle the heavy lifting of charities’ operations.</p>
-                                <p>By AI-enabling the "boring but important" tasks, we give you back the most valuable resource of all: time to spend with your beneficiaries.</p>
-                                <p>We find Really Useful Things across all charity functions:</p>
-                                <ul class="list-disc pl-5 space-y-2">
-                                    <li><strong>Governance & Compliance:</strong> Board assessment and risk management.</li>
-                                    <li><strong>Finance & Admin:</strong> Claims processing and simple bookkeeping.</li>
-                                    <li><strong>Fundraising & Grants:</strong> Grant summaries and donor engagement.</li>
-                                    <li><strong>Volunteer & HR:</strong> Seamless matching, onboarding, and training.</li>
-                                    <li><strong>Marketing & Communications:</strong> Quick impact stories and community insights.</li>
-                                </ul>
-                            </div>
-                        </div>
+        <!-- App 5: War Games (WG) -->
+        <a href="#" class="card" style="background: #F7F0F5; border-color: #EBE0E8;">
+           <div class="card-icon" style="font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; color: #5E4057; display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 0.5rem;">
+            WG
+          </div>
+          <h3 class="card-title">War Games</h3>
+          <p class="card-desc">A Really Useful Thing for Charities</p>
+        </a>
 
-                        <!-- 3. Test Drive Our RUTs! -->
-                        <div class="border-b border-[#E0D7C6] py-1 md:py-2">
-                            <div class="w-full flex justify-between items-center text-left py-2">
-                                <div class="flex items-center gap-6">
-                                    <div
-                                        class="p-2 rounded-full bg-[#2D423F] text-[#F2EFE9] transition-colors duration-500">
-                                        <i data-lucide="wrench" class="w-4 h-4"></i>
-                                    </div>
-                                    <h3
-                                        class="text-lg md:text-xl font-light text-[#1B2B28] tracking-wide">
-                                        3. Test drive these Really Useful Things
-                                    </h3>
-                                </div>
-                            </div>
-                            <div class="text-left pl-12 md:pl-16 text-[#5E5A4B] space-y-4 pt-4 pb-6">
-                                <div class="bg-[#F2EFE9] p-6 border-l-2 border-[#D2B48C] space-y-4 not-italic">
+        <!-- App 6: Smoke Detector (SD) -->
+        <a href="#" class="card" style="background: #FDF0E6; border-color: #EFE0D4;">
+          <div class="card-icon" style="font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 900; line-height: 1; letter-spacing: -2px; color: #A95C3E; display: flex; align-items: center; justify-content: center; height: 70px; margin-bottom: 0.5rem;">
+            SD
+          </div>
+          <h3 class="card-title">Smoke Detector</h3>
+          <p class="card-desc">A Really Useful Thing for Charities</p>
+        </a>
 
-                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 pt-4 pb-4">
-                                        <a href="https://uantchern.github.io/wayfinding-for-good/purposely-simulator.html?update=notcache" target="_blank" title="Charity Code of Governance Learning & Assessment Kit" class="group block overflow-hidden rounded-xl border border-[#D2B48C] hover:border-[#2D423F] transition-all hover:-translate-y-1 shadow-sm hover:shadow-md aspect-square relative bg-[#F4F1ED]">
-                                            <img src="./governance-banner.png" alt="Governance Kit" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                        </a>
+      </div>
+    </section>
 
-                                        <a href="https://uantchern.github.io/question-storming/index.html" target="_blank" title="Question Stormer" class="group block overflow-hidden rounded-xl border border-[#D2B48C] hover:border-[#2D423F] transition-all hover:-translate-y-1 shadow-sm hover:shadow-md aspect-square relative bg-[#F4F1ED]">
-                                            <img src="./question-stormer-banner.png" alt="Question Stormer" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                        </a>
+    <!-- The Rules -->
+    <section id="manifesto" class="section container">
+      <div class="manifesto">
+        <h2 style="font-size: 1.8rem;">Our Promise.</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Every tool here is built with these strict rules:</p>
 
-                                        <a href="https://uantchern.github.io/wayfinding-for-good/pr-agent.html" target="_blank" title="The Storyteller" class="group block overflow-hidden rounded-xl border border-[#D2B48C] hover:border-[#2D423F] transition-all hover:-translate-y-1 shadow-sm hover:shadow-md aspect-square relative bg-[#F4F1ED]">
-                                            <img src="./storyteller-banner.png" alt="The Storyteller" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                        </a>
+        <ul class="manifesto-list">
+          <li class="manifesto-item">
+            <div class="manifesto-number">1</div>
+            <div>
+              <strong>Built in 24 Hours</strong>
+              <p>Made fast to solve real problems now. No fluff.</p>
+            </div>
+          </li>
+          <li class="manifesto-item">
+            <div class="manifesto-number">2</div>
+            <div>
+              <strong>Does One Thing Only</strong>
+              <p>Simple tools. They target one task and do it very well.</p>
+            </div>
+          </li>
+          <li class="manifesto-item">
+            <div class="manifesto-number">3</div>
+            <div>
+              <strong>Done in 3 Steps</strong>
+              <p>Zero training needed. Results in 3 clicks.</p>
+            </div>
+          </li>
+          <li class="manifesto-item">
+            <div class="manifesto-number">4</div>
+            <div>
+              <strong>Updated Monthly</strong>
+              <p>Fresh data every month so you are always updated.</p>
+            </div>
+          </li>
+          <li class="manifesto-item">
+            <div class="manifesto-number">5</div>
+            <div>
+              <strong>No Login, No Database</strong>
+              <p>Your privacy is absolute. We do not keep any data.</p>
+            </div>
+          </li>
+          <li class="manifesto-item">
+            <div class="manifesto-number">6</div>
+            <div>
+              <strong>Works with WhatsApp</strong>
+              <p>Share reports instantly to your team group chat.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
 
-                                        <a href="https://uantchern.github.io/wayfinding-for-good/walk-the-toc.html" target="_blank" title="Impact Reporting Kit" class="group block overflow-hidden rounded-xl border border-[#D2B48C] hover:border-[#2D423F] transition-all hover:-translate-y-1 shadow-sm hover:shadow-md aspect-square relative bg-[#F4F1ED]">
-                                            <img src="./walk-the-toc-banner-square.png" alt="Impact Reporting Kit" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                        </a>
+    <!-- Volunteer Section -->
+    <section class="section container" style="text-align: left; padding-bottom: 4rem;">
+      <h2>Need a new tool?</h2>
+      <p class="subtitle" style="margin-bottom: 1.5rem;">Tell us what bottlenecks your charity is facing. Our volunteers will build a tool for you.</p>
+      
+      <a href="#" class="btn btn-outline">Suggest a Tool</a>
+      <a href="#" class="btn btn-outline" style="border: none; text-decoration: underline; color: var(--accent-primary);">I want to volunteer to code</a>
+    </section>
+  </main>
 
-                                        <a href="https://wargames-cybercrimes.vercel.app" target="_blank" title="Wargames: Vol 1 Cybercrimes" class="group block overflow-hidden rounded-xl border border-[#D2B48C] hover:border-[#2D423F] transition-all hover:-translate-y-1 shadow-sm hover:shadow-md aspect-square relative bg-[#F4F1ED]">
-                                            <img src="./wargames-banner.png" alt="Wargames" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                        </a>
-
-                                        <a href="./looking-for-trouble-standalone.html" target="_blank" title="Looking for Trouble" class="group block overflow-hidden rounded-xl border border-[#D2B48C] hover:border-[#2D423F] transition-all hover:-translate-y-1 shadow-sm hover:shadow-md aspect-square relative bg-[#F4F1ED]">
-                                            <img src="./lft-banner-square.png" alt="Looking for Trouble" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-            <!-- Form Section -->
-            <section class="py-4 md:py-6 px-8 bg-[#F2EFE9] border-t border-[#EAE5D8]">
-                <div class="max-w-4xl mx-auto">
-                    <div id="contact-form-container"
-                        class="bg-[#FDFBF7] p-4 md:p-6 rounded-sm border border-[#EAE5D8] shadow-sm">
-                        <form action="https://formsubmit.co/29393160c1ac01b653865c5d9fc0b6c9" method="POST"
-                            target="_blank" class="space-y-0"
-                            onsubmit="setTimeout(() => { document.getElementById('submit-btn').innerHTML = 'SENT!'; document.getElementById('submit-btn').disabled = true; }, 100);">
-                            <!-- FormSubmit Configuration -->
-                            <input type="hidden" name="_subject" value="New CharityOps Intent">
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_next" value="https://uantchern.github.io/wayfinding-for-good/">
-                            <div class="flex flex-wrap flex-row items-center justify-between gap-4 mb-4">
-                                <h3 class="text-2xl font-light text-[#1B2B28] italic shrink-0">Begin a conversation</h3>
-                                <button type="submit" id="submit-btn"
-                                    class="group shrink-0 flex items-center gap-2 bg-[#2D423F] text-[#F2EFE9] px-6 py-2 rounded-sm tracking-[0.3em] uppercase text-[10px] font-bold hover:bg-[#1B2B28] transition-all shadow-md shadow-[#EAE5D8]">
-                                    SEND
-                                    <i data-lucide="send"
-                                        class="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                                </button>
-                            </div>
-
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <div class="space-y-1">
-                                    <label
-                                        class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Your
-                                        Name</label>
-                                    <input name="name" required type="text" placeholder="Name"
-                                        class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-2 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
-                                </div>
-                                <div class="space-y-1">
-                                    <label
-                                        class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">Email
-                                        Address</label>
-                                    <input name="email" required type="email" placeholder="Email"
-                                        class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-2 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic">
-                                </div>
-                            </div>
-
-                            <div class="space-y-1 mt-4">
-                                <label class="text-[10px] tracking-[0.3em] uppercase text-[#8B7355] font-bold ml-1">What
-                                    would
-                                    you like to do?</label>
-                                <textarea name="message" required rows="2"
-                                    placeholder="Tell us about your interest in wayfinding RUTs..."
-                                    class="w-full bg-[#F2EFE9] border-b border-[#EAE5D8] px-4 py-2 focus:outline-none focus:border-[#2D423F] transition-all text-[#1B2B28] italic resize-none"></textarea>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Pathway Reveal Section -->
-            <section class="h-64 md:h-80 relative flex items-center justify-center bg-[#F2EFE9]">
-                <!-- Background Image Layer with Edge Blending -->
-                <div class="absolute inset-0 z-0 bg-cover bg-center"
-                    style="background-image: url('pathway_to_nowhere.png');">
-                    <!-- Soft Edges Overlays - Must be fully opaque at the very edges to blend seamlessly -->
-                    <div
-                        class="absolute inset-y-0 left-0 w-32 md:w-1/3 bg-gradient-to-r from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
-                    </div>
-                    <div
-                        class="absolute inset-y-0 right-0 w-32 md:w-1/3 bg-gradient-to-l from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
-                    </div>
-                    <div
-                        class="absolute inset-x-0 top-0 h-24 md:h-32 bg-gradient-to-b from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
-                    </div>
-                    <div
-                        class="absolute inset-x-0 bottom-0 h-24 md:h-32 bg-gradient-to-t from-[#F2EFE9] via-[#F2EFE9]/70 to-transparent">
-                    </div>
-                </div>
-
-                <!-- Discover Text Overlay -->
-                <div id="discover-text"
-                    class="absolute inset-0 z-0 flex items-center justify-center opacity-0 pointer-events-none"
-                    style="transition: opacity 2.5s ease-in-out;">
-                    <span class="text-4xl md:text-6xl tracking-[0.4em] font-light text-[#F2EFE9]/90 drop-shadow-lg"
-                        style="font-family: Georgia, serif;">DISCOVER</span>
-                </div>
-
-                <!-- Fallen Leaves Layer -->
-                <div id="fallen-leaves-layer" class="absolute -inset-10 z-10 pointer-events-none"></div>
-            </section>
-
-            <script>
-                // Initialize Icons
-                lucide.createIcons();
-
-                // Falling Leaves Logic
-                function createFallingLeaf() {
-                    const container = document.createElement('div');
-                    container.className = 'falling-leaf-container';
-                    container.style.left = Math.random() * 100 + 'vw';
-                    container.style.animationDuration = Math.random() * 15 + 25 + 's'; // 25s to 40s drop (floating)
-
-                    const sway = document.createElement('div');
-                    sway.className = 'falling-leaf-sway';
-                    sway.style.animationDuration = (Math.random() * 3 + 4) + 's'; // 4s to 7s sway
-                    sway.style.animationDelay = (Math.random() * 2) + 's';
-
-                    const scaler = document.createElement('div');
-                    const scale = Math.random() * 0.5 + 0.8;
-                    scaler.style.transform = `scale(${scale})`;
-
-                    const leafIcon = document.createElement('i');
-                    leafIcon.setAttribute('data-lucide', 'leaf');
-                    leafIcon.className = 'w-6 h-6 opacity-60';
-
-                    scaler.appendChild(leafIcon);
-                    sway.appendChild(scaler);
-                    container.appendChild(sway);
-
-                    document.body.appendChild(container);
-
-                    lucide.createIcons({ name: 'leaf', attrs: { class: 'w-6 h-6 opacity-60' } });
-
-                    // Clean up after 50 seconds maximally
-                    setTimeout(() => {
-                        container.remove();
-                    }, 50000);
-                }
-
-                // Initial 3 leaves
-                for (let i = 0; i < 3; i++) {
-                    setTimeout(createFallingLeaf, Math.random() * 5000);
-                }
-
-                // Drop a new leaf every 4 seconds to maintain roughly 3 on screen
-                setInterval(createFallingLeaf, 4000);
-
-                // FAQ Toggle Logic
-                function toggleFaq(button) {
-                    const item = button.parentElement;
-                    const isActive = item.classList.contains('active');
-
-                    // Close others for cleaner wayfinding
-                    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
-
-                    if (!isActive) {
-                        item.classList.add('active');
-                    }
-                }
-
-                // Form Submit
-                // Handled natively by HTML <form> action to ensure FormSubmit activation email triggers reliably.
-
-                // Pathway Leaves Logic
-                function initPathway() {
-                    const layer = document.getElementById('fallen-leaves-layer');
-                    if (!layer) return;
-
-                    const numLeaves = 120; // Denser cover
-                    const leaves = [];
-
-                    for (let i = 0; i < numLeaves; i++) {
-                        const leaf = document.createElement('div');
-                        leaf.className = 'absolute';
-
-                        // Base resting positions
-                        const baseX = Math.random() * 100; // %
-                        const baseY = Math.random() * 100; // % inside the container
-                        const baseRot = Math.random() * 360;
-                        const scale = Math.random() * 0.8 + 0.6;
-
-                        // Store properties for reset
-                        leaf.dataset.baseX = baseX;
-                        leaf.dataset.baseY = baseY;
-                        leaf.dataset.baseRot = baseRot;
-                        leaf.dataset.scale = scale;
-
-                        leaf.style.left = baseX + '%';
-                        leaf.style.top = baseY + '%';
-                        leaf.style.transform = `rotate(${baseRot}deg) scale(${scale})`;
-
-                        // Pick colors that contrast with dark background
-                        const colors = ['#D2B48C', '#B08968', '#8B7355', '#EAE5D8'];
-                        leaf.style.color = colors[Math.floor(Math.random() * colors.length)];
-
-                        const icon = document.createElement('i');
-                        icon.setAttribute('data-lucide', 'leaf');
-                        icon.className = 'w-10 h-10 opacity-100 fill-current'; // Solid leaves
-
-                        leaf.appendChild(icon);
-                        layer.appendChild(leaf);
-                        leaves.push(leaf);
-                    }
-
-                    // Render lucide icons specifically in this layer
-                    lucide.createIcons({ root: layer });
-
-                    function animateCycle() {
-                        const discoverText = document.getElementById('discover-text');
-
-                        // 1. Gust of wind blows leaves rightwards and slightly up
-                        // Reveal Discover text
-                        if (discoverText) discoverText.style.opacity = '1';
-
-                        leaves.forEach((leaf, idx) => {
-                            const windDuration = Math.random() * 1.5 + 2.0; // 2s - 3.5s
-                            leaf.style.transition = `all ${windDuration}s cubic-bezier(0.4, 0, 0.2, 1)`;
-
-                            // Make them blow off screen to the right
-                            const windDx = 50 + Math.random() * 100; // vw right
-                            const windDy = -20 - Math.random() * 50; // vh up
-
-                            leaf.style.transform = `translate(${windDx}vw, ${windDy}vh) rotate(${parseFloat(leaf.dataset.baseRot) + 360 + Math.random() * 360}deg) scale(${leaf.dataset.scale})`;
-                            leaf.style.opacity = '0';
-                        });
-
-                        // 2. Reveal pathway for ~5 seconds, then prepare falling leaves (reset to top)
-                        setTimeout(() => {
-                            leaves.forEach(leaf => {
-                                leaf.style.transition = 'none';
-                                const windowHeightInVH = (window.innerHeight / window.innerWidth) * 100; // rough approx
-                                const startY = -150 - Math.random() * 100; // start way above the container to fall from top of page
-                                const currentRot = parseFloat(leaf.dataset.baseRot);
-                                leaf.style.transform = `translate(0, ${startY}vh) rotate(${currentRot - 180}deg) scale(${leaf.dataset.scale})`;
-                            });
-
-                            // Hide Discover Text as leaves begin to fall
-                            if (discoverText) discoverText.style.opacity = '0';
-
-                            // 3. Fall down and cover the pathway (half speed)
-                            setTimeout(() => {
-                                leaves.forEach(leaf => {
-                                    const fallDuration = Math.random() * 8.0 + 9.0; // 9s - 17s for long fall
-                                    leaf.style.transition = `all ${fallDuration}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-                                    leaf.style.transform = `translate(0, 0) rotate(${leaf.dataset.baseRot}deg) scale(${leaf.dataset.scale})`;
-                                    leaf.style.opacity = '1';
-                                });
-                            }, 50); // slight delay to allow CSS reset to apply
-                        }, 5000); // 5 seconds of revealed pathway
-                    }
-
-                    // Initial wait so user sees leaves covering, then start the cycle
-                    setTimeout(() => {
-                        animateCycle();
-                        // Total cycle: ~3.5s to blow, 5s reveal, ~17s fall = ~25.5s. Update rest time.
-                        setInterval(animateCycle, 22500); // 22.5s interval
-                    }, 5000);
-                }
-
-                initPathway();
-            </script>
 </body>
-
 </html>
