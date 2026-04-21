@@ -461,9 +461,17 @@
                 </div>
 
                 <!-- Discover Text Overlay -->
+                <style>
+                    @keyframes slowly-pulse {
+                        0%, 100% { opacity: 0; }
+                        50% { opacity: 1; }
+                    }
+                    .animate-discover {
+                        animation: slowly-pulse 10s ease-in-out infinite;
+                    }
+                </style>
                 <div id="discover-text"
-                    class="absolute inset-0 z-0 flex items-center justify-center opacity-0 pointer-events-none"
-                    style="transition: opacity 2.5s ease-in-out;">
+                    class="absolute inset-0 z-0 flex items-center justify-center pointer-events-none animate-discover">
                     <span class="text-4xl md:text-6xl tracking-[0.4em] font-light text-[#F2EFE9]/90 drop-shadow-lg"
                         style="font-family: Georgia, serif;">DISCOVER</span>
                 </div>
